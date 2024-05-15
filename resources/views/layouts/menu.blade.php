@@ -19,29 +19,22 @@
 </style>
 <?php
 if (Auth::check() && Auth::user()->hasRole('super-admin')) {
-            $value = 'superadmin';
-        } else if (Auth::check() && Auth::user()->level && Auth::user()->level->id == 20) {
-            $value = 'md_user';
-        }else if (Auth::check() && Auth::user()->level && Auth::user()->level->id == 19) {
-            $value = 'ta_dashboard';
-        } else if (Auth::check() && Auth::user()->level && Auth::user()->level->id == 18)
-        {
-            $value = 's_dashboard';
-        } else if (Auth::check() && Auth::user()->level && Auth::user()->level->id == 17)
-        {
-            $value = 'gm_dashboard';
-        } else if (Auth::check() && Auth::user()->level && Auth::user()->level->id == 3)
-        {
-            $value = 'areamanager';
-        } else if (Auth::check() && Auth::user()->level && 
-        Auth::user()->level->id >= 14 && 
-        Auth::user()->level->id <= 16)
-        {
-            $value = 'range_dashboard';
-        } else {
-            $value = "home";
-            
-        }
+    $value = 'superadmin';
+} elseif (Auth::check() && Auth::user()->level && Auth::user()->level->id == 20) {
+    $value = 'md_user';
+} elseif (Auth::check() && Auth::user()->level && Auth::user()->level->id == 19) {
+    $value = 'ta_dashboard';
+} elseif (Auth::check() && Auth::user()->level && Auth::user()->level->id == 18) {
+    $value = 's_dashboard';
+} elseif (Auth::check() && Auth::user()->level && Auth::user()->level->id == 17) {
+    $value = 'gm_dashboard';
+} elseif (Auth::check() && Auth::user()->level && Auth::user()->level->id == 3) {
+    $value = 'areamanager';
+} elseif (Auth::check() && Auth::user()->level && Auth::user()->level->id >= 14 && Auth::user()->level->id <= 16) {
+    $value = 'range_dashboard';
+} else {
+    $value = 'home';
+}
 
 ?>
 <!-- partial:partials/_sidebar.html -->
@@ -63,7 +56,7 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
                     </p>
                     <p class="designation text-uppercase">
                         {{ auth()->user()->staff->rank ? auth()->user()->staff->rank->name : 'NILL' }}
-                    </p>                    
+                    </p>
                 </div>
             </div>
         </li>
@@ -78,7 +71,7 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
 
 
         @can('view user managment module')
-        {{-- @if (auth()->check() && (in_array(auth()->user()->staff->department_id, [13]) || auth()->user()->hasRole('super-admin'))) --}}
+            {{-- @if (auth()->check() && (in_array(auth()->user()->staff->department_id, [13]) || auth()->user()->hasRole('super-admin'))) --}}
             <li class="nav-item" id="myTask">
                 <a class="nav-link" href="#">
                     <i class="bi bi-tools menu-icon"></i>
@@ -104,20 +97,19 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
                 </ul>
 
             </li>
-        {{-- @endif --}}
+            {{-- @endif --}}
         @endcan
 
         @can('view service applications module')
-           {{--  @if (auth()->check() &&
-                    (in_array(auth()->user()->staff->department_id, [1, 5, 4]) || auth()->user()->hasRole('super-admin'))) --}}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('serviceApplications.index') }}">
-                        <i class="fa fa-compass menu-icon"></i>
-                        <span class="menu-title">Service Applications</span>
+            {{--  @if (auth()->check() && (in_array(auth()->user()->staff->department_id, [1, 5, 4]) || auth()->user()->hasRole('super-admin'))) --}}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('serviceApplications.index') }}">
+                    <i class="fa fa-compass menu-icon"></i>
+                    <span class="menu-title">Service Applications</span>
 
-                    </a>
-                </li>
-           {{--  @endif --}}
+                </a>
+            </li>
+            {{--  @endif --}}
         @endcan
 
         @can('view approval module')
@@ -253,37 +245,44 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
             </li>
 
         @endcan
-        @can('view mass upload module')
-        {{-- i was asked to remove the super user lock here --}}
-        <li class=" nav-item" id="myTask">
-            <a href="#" class="nav-link">
-                <i class="fas fa-columns menu-icon"></i>
-                <span class="menu-title">Mass Upload</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <ul class="nav flex-column sub-menu">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('showemplist') }}">
-                        <i class="fas fa-balance-scale menu-icon"></i>
-                        <span>Applicant Record</span>
-                    </a>
-                </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('serviceappdata') }}">
-                        <i class="fas fa-balance-scale menu-icon"></i>
-                        <span>Service Application Record</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('payhistory') }}">
-                        <i class="fas menu-icon fa-book"></i>
-                        <span>Payment Record</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-@endcan
+        @can('view mass upload module')
+            {{-- i was asked to remove the super user lock here --}}
+            <li class=" nav-item" id="myTask">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-columns menu-icon"></i>
+                    <span class="menu-title">Data Migration</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <ul class="nav flex-column sub-menu">
+                    @can('applicant massupload')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('showemplist') }}">
+                                <i class="fas fa-balance-scale menu-icon"></i>
+                                <span>Applicant Record</span>
+                            </a>
+                        </li>
+                    @endcan
+
+                    @can('service massupload')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('serviceappdata') }}">
+                                <i class="fas fa-balance-scale menu-icon"></i>
+                                <span>Service Application Record</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('payment massupload')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('payhistory') }}">
+                                <i class="fas menu-icon fa-book"></i>
+                                <span>Payment Record</span>
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcan
 
 
         @can('view my task module')
@@ -672,8 +671,7 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
                 </li> --}}
                 @can('view incoming letter and files')
                     <li class="nav-item">
-                        <a class="nav-link"
-                            href="{{ route('incoming_documents_manager.all_documents.secretary') }}">Incoming
+                        <a class="nav-link" href="{{ route('incoming_documents_manager.all_documents.secretary') }}">Incoming
                             Letters</a>
                     </li>
                     <li class="nav-item">

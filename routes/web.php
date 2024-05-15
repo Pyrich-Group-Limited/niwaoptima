@@ -55,7 +55,7 @@ use Modules\EmployerManager\Http\Controllers\EmployerController;
 //LARAVEL DEFAULT Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
-    
+
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::post('/home/clock-in', [HomeController::class, 'clockIn'])->name('clock-in');
@@ -957,3 +957,7 @@ Route::post('amplhistsa', [EmployerController::class, 'storemass'])->name('empli
 Route::get('downloademployers', [EmployerController::class, 'downloademployersample'])->name('empldownload');
 Route::get('downloadservice', [EmployerController::class, 'downloadservicesamples'])->name('savapdownload');
 Route::get('downloadpay', [EmployerController::class, 'downloadpaymentsample'])->name('paydownload');
+
+Route::get('viewapplicantrecord/{id}',[EmployerController::class,'viewapplicant'])->name('viewapplicant');
+
+Route::post('saveapplicantrecord/{id}',[EmployerController::class,'saveapplicate'])->name('apsav');

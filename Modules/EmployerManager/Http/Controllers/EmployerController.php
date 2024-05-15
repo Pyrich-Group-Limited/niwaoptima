@@ -10,6 +10,7 @@ use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Imports\EmployerImport;
+use App\Mail\ApprovevendorMail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -462,5 +463,44 @@ class EmployerController extends AppBaseController
         $employees = $employees->paginate(10);
 
         return view('employermanager::employers.employee', compact('employer', 'employees'));
+    }
+
+
+    public function viewapplicant($id)
+    {
+        $data = Employer::find($id);
+        // dd($data);
+        if (!$data) {
+            return redirect()->back()->with('error', 'Record Not Found');
+        }
+        return view('upload.viewapplicant', compact('data'));
+    }
+    public function saveapplicate(Request $request, $id)
+    {
+
+
+        $data = Employer::find($id);
+        $data->update(
+            [
+                'status'=> $request->status
+            ]
+
+        );
+        try {
+            //code...
+
+            Mail::to($data['company_email'])->send(new ApprovevendorMail($data));
+        } catch (\Throwable $th) {
+            // dd($th->getMessage());
+            return redirect()->back()->with('error',$th->getMessage());
+        }
+
+        if ($data->status==2) {
+            # code...
+            return redirect()->route('areamanager')->with('success', 'Successfully Approved Applicant');
+        } elseif ($data->status==0) {
+            return redirect()->route('areamanager')->with('success', 'Successfully Rejected Application');
+            # code...
+        }
     }
 }

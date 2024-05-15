@@ -51,7 +51,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-       
+
         if (Auth::check() && Auth::user()->hasRole('super-admin')) {
 
             return redirect()->route('superadmin'); // go to super admin dashboard
@@ -60,182 +60,183 @@ class HomeController extends Controller
 
             return redirect()->route('md_user'); // go to md dashboard
 
-        }else if (Auth::user()->level && Auth::user()->level->id == 19) {
+        } else if (Auth::user()->level && Auth::user()->level->id == 19) {
 
             return redirect()->route('ta_dashboard'); // go to ta dashboard
 
-        } else if (Auth::user()->level && Auth::user()->level->id == 18){
+        } else if (Auth::user()->level && Auth::user()->level->id == 18) {
 
-            return redirect()->route('s_dashboard'); 
-
-        } else if (Auth::user()->level && Auth::user()->level->id == 17){
+            return redirect()->route('s_dashboard');
+        } else if (Auth::user()->level && Auth::user()->level->id == 17) {
 
             return redirect()->route('gm_dashboard');
-
-        } else if (Auth::user()->level && 
-        Auth::user()->level->id >= 14 && 
-        Auth::user()->level->id <= 16){
+        } else if (
+            Auth::user()->level &&
+            Auth::user()->level->id >= 14 &&
+            Auth::user()->level->id <= 16
+        ) {
 
             return redirect()->route('range_dashboard');
-
-        } else if (Auth::user()->level && Auth::user()->level->id == 3){
+        } else if (Auth::user()->level && Auth::user()->level->id == 3) {
 
             return redirect()->route('areamanager');
-            
         } else {
 
 
-            
+
             $branch = Branch::all();
             $services = Service::where('branch_id', Auth()->user()->staff->branch_id)->get();
-            
+
             $services = $services->pluck('name', 'id'); // Pluck the values and assign it back to $services variable
-           // $services->prepend('Select Service', 0); // Add an empty option with label 'Select Service'
-           $documents12 = \App\Models\IncomingDocuments::query()
-                    ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
-                    ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
-                    ->select(
-                        'incoming_documents_categories.id as category_id',
-                        'incoming_documents_categories.name as category_name',
-                        'incoming_documents_manager.created_at as document_created_at',
-                        'incoming_documents_manager.id as d_id',
-                        'incoming_documents_manager.title',
-                        'incoming_documents_manager.full_name as sender_full_name',
-                        'incoming_documents_manager.email as sender_email',
-                        'incoming_documents_manager.phone as sender_phone',
-                        'incoming_documents_manager.document_url',
-                        'incoming_documents_categories.description as doc_description',
-                        'incoming_documents_manager.status',
-                        'incoming_documents_categories.name as cat_name',
-                        'departments.name as dep_name',
-                        //'incoming_documents_has_users.user_id',
-                        //'incoming_documents_has_users.assigned_by',
-                        //DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name')
-                        )
-                    ->where('incoming_documents_manager.status','!=', '0')
-                    ->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
-                    ->where('incoming_documents_manager.department_id', Auth()->user()->staff->department_id)
-                    ->latest('incoming_documents_manager.created_at')
-                    ->groupBy('departments.name','incoming_documents_manager.status','incoming_documents_manager.phone','incoming_documents_manager.email','incoming_documents_manager.full_name','incoming_documents_categories.description','incoming_documents_manager.document_url','incoming_documents_manager.title','incoming_documents_categories.id', 'incoming_documents_categories.name', 'incoming_documents_manager.created_at', 'incoming_documents_manager.id') // Include the nonaggregated column in the GROUP BY clause
-                    ->limit(10)
-                    ->get();
-                    $documents1 = DB::table('incoming_documents_has_users')
-                    ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
-                    ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
-                    ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
-                    ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
-                    ->select(
-                        'incoming_documents_manager.category_id',
-                        'incoming_documents_categories.id',
-                        'incoming_documents_manager.title',
-                        'incoming_documents_manager.full_name as sender_full_name',
-                        'incoming_documents_manager.email as sender_email',
-                        'incoming_documents_manager.phone as sender_phone',
-                        'incoming_documents_has_users.created_at as createdAt',
-                        'incoming_documents_categories.name as category_name',
-                        'incoming_documents_has_users.start_date',
-                        'incoming_documents_has_users.end_date',
-                        'incoming_documents_has_users.allow_share',
-                        'incoming_documents_has_users.is_download',
-                        'incoming_documents_has_users.user_id',
-                        'incoming_documents_has_users.assigned_by',
-                        'incoming_documents_manager.document_url as document_url',
-                        'incoming_documents_manager.id as d_m_id',
-                        'incoming_documents_categories.id as d_m_c_id',
-                        'incoming_documents_categories.name as cat_name',
-                        'departments.name as dep_name',
-                
-                        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
-                        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
-                        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
-                    )
-                    ->latest('incoming_documents_has_users.created_at')
-                    ->groupBy(
-                        'incoming_documents_categories.id',
-                        'incoming_documents_has_users.start_date',
-                        'incoming_documents_has_users.end_date',
-                        'incoming_documents_manager.id',
-                        'incoming_documents_manager.title',
-                        'incoming_documents_manager.document_url',
-                        'incoming_documents_has_users.id',
-                        'incoming_documents_has_users.created_at',
-                        'incoming_documents_categories.name',
-                        'incoming_documents_has_users.allow_share',
-                        'incoming_documents_has_users.is_download',
-                        'incoming_documents_has_users.user_id',
-                        'incoming_documents_has_users.assigned_by',
-                        'incoming_documents_manager.created_by',
-                        'incoming_documents_manager.category_id',
-                        'departments.name','incoming_documents_manager.status','incoming_documents_manager.phone','incoming_documents_manager.email','incoming_documents_manager.full_name',
-                    )
-                    ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
-                    //->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
-                    ->get();
-    
-                    $dept = Department::get();
-         $deptData = $dept->map(function ($dept1) {
+            // $services->prepend('Select Service', 0); // Add an empty option with label 'Select Service'
+            $documents12 = \App\Models\IncomingDocuments::query()
+                ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+                ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+                ->select(
+                    'incoming_documents_categories.id as category_id',
+                    'incoming_documents_categories.name as category_name',
+                    'incoming_documents_manager.created_at as document_created_at',
+                    'incoming_documents_manager.id as d_id',
+                    'incoming_documents_manager.title',
+                    'incoming_documents_manager.full_name as sender_full_name',
+                    'incoming_documents_manager.email as sender_email',
+                    'incoming_documents_manager.phone as sender_phone',
+                    'incoming_documents_manager.document_url',
+                    'incoming_documents_categories.description as doc_description',
+                    'incoming_documents_manager.status',
+                    'incoming_documents_categories.name as cat_name',
+                    'departments.name as dep_name',
+                    //'incoming_documents_has_users.user_id',
+                    //'incoming_documents_has_users.assigned_by',
+                    //DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name')
+                )
+                ->where('incoming_documents_manager.status', '!=', '0')
+                ->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
+                ->where('incoming_documents_manager.department_id', Auth()->user()->staff->department_id)
+                ->latest('incoming_documents_manager.created_at')
+                ->groupBy('departments.name', 'incoming_documents_manager.status', 'incoming_documents_manager.phone', 'incoming_documents_manager.email', 'incoming_documents_manager.full_name', 'incoming_documents_categories.description', 'incoming_documents_manager.document_url', 'incoming_documents_manager.title', 'incoming_documents_categories.id', 'incoming_documents_categories.name', 'incoming_documents_manager.created_at', 'incoming_documents_manager.id') // Include the nonaggregated column in the GROUP BY clause
+                ->limit(10)
+                ->get();
+            $documents1 = DB::table('incoming_documents_has_users')
+                ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
+                ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+                ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
+                ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+                ->select(
+                    'incoming_documents_manager.category_id',
+                    'incoming_documents_categories.id',
+                    'incoming_documents_manager.title',
+                    'incoming_documents_manager.full_name as sender_full_name',
+                    'incoming_documents_manager.email as sender_email',
+                    'incoming_documents_manager.phone as sender_phone',
+                    'incoming_documents_has_users.created_at as createdAt',
+                    'incoming_documents_categories.name as category_name',
+                    'incoming_documents_has_users.start_date',
+                    'incoming_documents_has_users.end_date',
+                    'incoming_documents_has_users.allow_share',
+                    'incoming_documents_has_users.is_download',
+                    'incoming_documents_has_users.user_id',
+                    'incoming_documents_has_users.assigned_by',
+                    'incoming_documents_manager.document_url as document_url',
+                    'incoming_documents_manager.id as d_m_id',
+                    'incoming_documents_categories.id as d_m_c_id',
+                    'incoming_documents_categories.name as cat_name',
+                    'departments.name as dep_name',
+
+                    DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
+                    DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
+                    DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
+                )
+                ->latest('incoming_documents_has_users.created_at')
+                ->groupBy(
+                    'incoming_documents_categories.id',
+                    'incoming_documents_has_users.start_date',
+                    'incoming_documents_has_users.end_date',
+                    'incoming_documents_manager.id',
+                    'incoming_documents_manager.title',
+                    'incoming_documents_manager.document_url',
+                    'incoming_documents_has_users.id',
+                    'incoming_documents_has_users.created_at',
+                    'incoming_documents_categories.name',
+                    'incoming_documents_has_users.allow_share',
+                    'incoming_documents_has_users.is_download',
+                    'incoming_documents_has_users.user_id',
+                    'incoming_documents_has_users.assigned_by',
+                    'incoming_documents_manager.created_by',
+                    'incoming_documents_manager.category_id',
+                    'departments.name',
+                    'incoming_documents_manager.status',
+                    'incoming_documents_manager.phone',
+                    'incoming_documents_manager.email',
+                    'incoming_documents_manager.full_name',
+                )
+                ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
+                //->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
+                ->get();
+
+            $dept = Department::get();
+            $deptData = $dept->map(function ($dept1) {
                 return [
                     'id' => $dept1->id,
                     'name' => $dept1->name,
                 ];
             });
-    
+
             $departments_data = $deptData->pluck('name', 'id');
             $departments_data->prepend('Select Department', '');
-    
+
             $departments_data1 = $deptData->pluck('name', 'id');
             //$departments_data1->prepend('Select Department', '');
-    
-            if(auth()->user()->staff && auth()->user()->staff->branch_id == 23){
+
+            if (auth()->user()->staff && auth()->user()->staff->branch_id == 23) {
                 $users1 = DB::select('
                 SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
                 FROM users
                 JOIN staff ON users.id = staff.user_id
                 WHERE users.level_id = 17
             ');
-            
-            $users2 = DB::select('
+
+                $users2 = DB::select('
             SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
             FROM users
             JOIN staff ON users.id = staff.user_id
             WHERE staff.department_id = ?
         ', [auth()->user()->staff->department_id]);
-                } else{
-                    $users1 = DB::select('
+            } else {
+                $users1 = DB::select('
                     SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
                     FROM users
                     JOIN staff ON users.id = staff.user_id
                     WHERE users.level_id = 3
                 ');
-                
+
                 $users2 = DB::select('
                 SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
                 FROM users
                 JOIN staff ON users.id = staff.user_id
                 WHERE staff.branch_id = ?
             ', [auth()->user()->staff->branch_id]);
-                }
-            
-    // Combine the results of all queries into one collection
-    $userData = collect($users1)
-        ->merge($users2)
-        ->map(function ($user) {
-            return [
-                'id' => $user->id,
-                'name' => $user->first_name . ' ' . $user->last_name,
-            ];
-        });
-    
-            
+            }
+
+            // Combine the results of all queries into one collection
+            $userData = collect($users1)
+                ->merge($users2)
+                ->map(function ($user) {
+                    return [
+                        'id' => $user->id,
+                        'name' => $user->first_name . ' ' . $user->last_name,
+                    ];
+                });
+
+
             $users123 = $userData->pluck('name', 'id');
             if (Auth()->user()->hasRole('super-admin')) {
-            $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
-            } else{
-            $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
+                $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
+            } else {
+                $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
             }
-    
+
             return view('home', compact('branch', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications'));
-        
         }
     }
 
@@ -284,7 +285,7 @@ class HomeController extends Controller
 
                 ->select(['users.id', 'first_name', 'last_name', 'name'])
                 ->get();
-                return response()->json($data);
+            return response()->json($data);
         } else {
 
             $data = DB::table('users')
@@ -295,42 +296,40 @@ class HomeController extends Controller
                 ->select(['users.id', 'first_name', 'last_name', 'name'])
                 ->get();
 
-                return response()->json($data);
-
+            return response()->json($data);
         }
     }
 
 
-    public function totalrevenue(Request $request){
+    public function totalrevenue(Request $request)
+    {
 
         $from = $request->from;
-        $to=$request->to;
+        $to = $request->to;
 
-        if($to == null){
+        if ($to == null) {
 
-            $data= DB::table('payments')
-            ->where('invoice_duration','>=',$from)
-            // ->where('invoice_duration','<=',$to)
+            $data = DB::table('payments')
+                ->where('invoice_duration', '>=', $from)
+                // ->where('invoice_duration','<=',$to)
 
-            ->sum('amount');
+                ->sum('amount');
             return response()->json($data);
+        } else if ($from == null) {
+            $data = DB::table('payments')
+                // ->where('invoice_duration','>=',$from)
+                ->where('invoice_duration', '<=', $to)
 
-        } else if($from == null){
-            $data= DB::table('payments')
-            // ->where('invoice_duration','>=',$from)
-            ->where('invoice_duration','<=',$to)
-
-            ->sum('amount');
+                ->sum('amount');
             return response()->json($data);
         }
 
-        $data= DB::table('payments')
-        ->where('invoice_duration','>=',$from)
-        ->where('invoice_duration','<=',$to)
+        $data = DB::table('payments')
+            ->where('invoice_duration', '>=', $from)
+            ->where('invoice_duration', '<=', $to)
 
-        ->sum('amount');
+            ->sum('amount');
         return response()->json($data);
-
     }
     public function aoc()
     {
@@ -403,19 +402,19 @@ class HomeController extends Controller
         $staffonleave = DB::table('leave_request')->count();
 
 
-        $totalrevenue= DB::table('payments')
-        ->where('payment_status',1)
-        ->select('amount')
-        ->sum('amount');
+        $totalrevenue = DB::table('payments')
+            ->where('payment_status', 1)
+            ->select('amount')
+            ->sum('amount');
 
 
 
         $paymentbybranch = DB::table('payments')
-        ->join('branches', 'payments.branch_id', 'branches.id')
-        ->where('payment_status',1)
-        ->selectRaw('branches.branch_name, SUM(payments.amount) as sum')
-        ->groupBy('branches.branch_name')
-        ->get();
+            ->join('branches', 'payments.branch_id', 'branches.id')
+            ->where('payment_status', 1)
+            ->selectRaw('branches.branch_name, SUM(payments.amount) as sum')
+            ->groupBy('branches.branch_name')
+            ->get();
 
 
         // dd(DB::table('services')->get());
@@ -628,90 +627,94 @@ class HomeController extends Controller
     {
         $branch = Branch::all();
         $services = Service::where('branch_id', Auth()->user()->staff->branch_id)->get();
-        
-        $services = $services->pluck('name', 'id'); // Pluck the values and assign it back to $services variable
-       // $services->prepend('Select Service', 0); // Add an empty option with label 'Select Service'
-       $documents1vv = \App\Models\IncomingDocuments::query()
-                ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
-                ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
-                ->select(
-                    'incoming_documents_categories.id as category_id',
-                    'incoming_documents_categories.name as category_name',
-                    'incoming_documents_manager.created_at as document_created_at',
-                    'incoming_documents_manager.id as d_id',
-                    'incoming_documents_manager.title',
-                    'incoming_documents_manager.full_name as sender_full_name',
-                    'incoming_documents_manager.email as sender_email',
-                    'incoming_documents_manager.phone as sender_phone',
-                    'incoming_documents_manager.document_url',
-                    'incoming_documents_categories.description as doc_description',
-                    'incoming_documents_manager.status',
-                    'incoming_documents_categories.name as cat_name',
-                    'departments.name as dep_name',
-                    //'incoming_documents_has_users.user_id',
-                    //'incoming_documents_has_users.assigned_by',
-                    //DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name')
-                    )
-                ->where('incoming_documents_manager.status','!=', '0')
-                ->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
-                ->latest('incoming_documents_manager.created_at')
-                ->groupBy('departments.name','incoming_documents_manager.status','incoming_documents_manager.phone','incoming_documents_manager.email','incoming_documents_manager.full_name','incoming_documents_categories.description','incoming_documents_manager.document_url','incoming_documents_manager.title','incoming_documents_categories.id', 'incoming_documents_categories.name', 'incoming_documents_manager.created_at', 'incoming_documents_manager.id') // Include the nonaggregated column in the GROUP BY clause
-                ->limit(10)
-                ->get();
-                $documents1 = DB::table('incoming_documents_has_users')
-                ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
-                ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
-                ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
-                ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
-                ->select(
-                    'incoming_documents_manager.category_id',
-                    'incoming_documents_categories.id',
-                    'incoming_documents_manager.title',
-                    'incoming_documents_manager.full_name as sender_full_name',
-                    'incoming_documents_manager.email as sender_email',
-                    'incoming_documents_manager.phone as sender_phone',
-                    'incoming_documents_has_users.created_at as createdAt',
-                    'incoming_documents_categories.name as category_name',
-                    'incoming_documents_has_users.start_date',
-                    'incoming_documents_has_users.end_date',
-                    'incoming_documents_has_users.allow_share',
-                    'incoming_documents_has_users.is_download',
-                    'incoming_documents_has_users.user_id',
-                    'incoming_documents_has_users.assigned_by',
-                    'incoming_documents_manager.document_url as document_url',
-                    'incoming_documents_manager.id as d_id',
-                    'incoming_documents_categories.id as d_m_c_id',
-                    'incoming_documents_categories.name as cat_name',
-                    'departments.name as dep_name',
-            
-                    DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
-                    DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
-                    DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
-                )
-                ->latest('incoming_documents_has_users.created_at')
-                ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
-                ->groupBy(
-                    'incoming_documents_manager.category_id',
-                    'incoming_documents_categories.id',
-                    'incoming_documents_has_users.start_date',
-                    'incoming_documents_has_users.end_date',
-                    'incoming_documents_manager.id',
-                    'incoming_documents_manager.title',
-                    'incoming_documents_manager.document_url',
-                    'incoming_documents_has_users.id',
-                    'incoming_documents_has_users.created_at',
-                    'incoming_documents_categories.name',
-                    'incoming_documents_has_users.allow_share',
-                    'incoming_documents_has_users.is_download',
-                    'incoming_documents_has_users.user_id',
-                    'incoming_documents_has_users.assigned_by',
-                    'incoming_documents_manager.created_by',
-                    'departments.name','incoming_documents_manager.status','incoming_documents_manager.phone','incoming_documents_manager.email','incoming_documents_manager.full_name',
-                )
-                ->get();
 
-                $dept = Department::get();
-     $deptData = $dept->map(function ($dept1) {
+        $services = $services->pluck('name', 'id'); // Pluck the values and assign it back to $services variable
+        // $services->prepend('Select Service', 0); // Add an empty option with label 'Select Service'
+        $documents1vv = \App\Models\IncomingDocuments::query()
+            ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+            ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+            ->select(
+                'incoming_documents_categories.id as category_id',
+                'incoming_documents_categories.name as category_name',
+                'incoming_documents_manager.created_at as document_created_at',
+                'incoming_documents_manager.id as d_id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.full_name as sender_full_name',
+                'incoming_documents_manager.email as sender_email',
+                'incoming_documents_manager.phone as sender_phone',
+                'incoming_documents_manager.document_url',
+                'incoming_documents_categories.description as doc_description',
+                'incoming_documents_manager.status',
+                'incoming_documents_categories.name as cat_name',
+                'departments.name as dep_name',
+                //'incoming_documents_has_users.user_id',
+                //'incoming_documents_has_users.assigned_by',
+                //DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name')
+            )
+            ->where('incoming_documents_manager.status', '!=', '0')
+            ->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
+            ->latest('incoming_documents_manager.created_at')
+            ->groupBy('departments.name', 'incoming_documents_manager.status', 'incoming_documents_manager.phone', 'incoming_documents_manager.email', 'incoming_documents_manager.full_name', 'incoming_documents_categories.description', 'incoming_documents_manager.document_url', 'incoming_documents_manager.title', 'incoming_documents_categories.id', 'incoming_documents_categories.name', 'incoming_documents_manager.created_at', 'incoming_documents_manager.id') // Include the nonaggregated column in the GROUP BY clause
+            ->limit(10)
+            ->get();
+        $documents1 = DB::table('incoming_documents_has_users')
+            ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
+            ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+            ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
+            ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+            ->select(
+                'incoming_documents_manager.category_id',
+                'incoming_documents_categories.id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.full_name as sender_full_name',
+                'incoming_documents_manager.email as sender_email',
+                'incoming_documents_manager.phone as sender_phone',
+                'incoming_documents_has_users.created_at as createdAt',
+                'incoming_documents_categories.name as category_name',
+                'incoming_documents_has_users.start_date',
+                'incoming_documents_has_users.end_date',
+                'incoming_documents_has_users.allow_share',
+                'incoming_documents_has_users.is_download',
+                'incoming_documents_has_users.user_id',
+                'incoming_documents_has_users.assigned_by',
+                'incoming_documents_manager.document_url as document_url',
+                'incoming_documents_manager.id as d_id',
+                'incoming_documents_categories.id as d_m_c_id',
+                'incoming_documents_categories.name as cat_name',
+                'departments.name as dep_name',
+
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
+            )
+            ->latest('incoming_documents_has_users.created_at')
+            ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
+            ->groupBy(
+                'incoming_documents_manager.category_id',
+                'incoming_documents_categories.id',
+                'incoming_documents_has_users.start_date',
+                'incoming_documents_has_users.end_date',
+                'incoming_documents_manager.id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.document_url',
+                'incoming_documents_has_users.id',
+                'incoming_documents_has_users.created_at',
+                'incoming_documents_categories.name',
+                'incoming_documents_has_users.allow_share',
+                'incoming_documents_has_users.is_download',
+                'incoming_documents_has_users.user_id',
+                'incoming_documents_has_users.assigned_by',
+                'incoming_documents_manager.created_by',
+                'departments.name',
+                'incoming_documents_manager.status',
+                'incoming_documents_manager.phone',
+                'incoming_documents_manager.email',
+                'incoming_documents_manager.full_name',
+            )
+            ->get();
+
+        $dept = Department::get();
+        $deptData = $dept->map(function ($dept1) {
             return [
                 'id' => $dept1->id,
                 'name' => $dept1->name,
@@ -731,37 +734,51 @@ class HomeController extends Controller
         WHERE users.level_id = 20
     ');
 
-    $users2 = DB::select('
+        $users2 = DB::select('
     SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
     FROM users
     JOIN staff ON users.id = staff.user_id
     WHERE staff.branch_id = ?
 ', [auth()->user()->staff->branch_id]);
-   
-    
-    
-    // Combine the results of all queries into one collection
-    $userData = collect($users1)
-        ->merge($users2)
-        ->map(function ($user) {
-            return [
-                'id' => $user->id,
-                'name' => $user->first_name . ' ' . $user->last_name,
-            ];
-        });
-        
 
 
 
-        
+        // Combine the results of all queries into one collection
+        $userData = collect($users1)
+            ->merge($users2)
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                ];
+            });
+
+
+
+
+
         $users123 = $userData->pluck('name', 'id');
         if (Auth()->user()->hasRole('super-admin')) {
-        $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
-        } else{
-        $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
+            $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
+        } else {
+            $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
         }
+        //for the vendor applicant section
+        $pendingvendors = Employer::where('status', '1')->where(function ($query) {
+            $query->where('user_type', 'e-promta');
+        })->get();
+        $pendingcount = Employer::where('status', '1')->where(function ($query) {
+            $query->where('user_type', 'e-promta');
+        })->count();
+        $approvecount = Employer::where('status', '2')->where(function ($query) {
+            $query->where('user_type', 'e-promta');
+        })->count();
+        // dd($pendingvendors);
+        $approvedvendors = Employer::where('status', '2')->where(function ($query) {
+            $query->where('user_type', 'e-promta');
+        })->get();
 
-        return view('am', compact('branch', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications'));
+        return view('am', compact('branch', 'approvecount', 'pendingcount', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
     }
 
     //secretary dashboard
@@ -769,91 +786,95 @@ class HomeController extends Controller
     {
         $branch = Branch::all();
         $services = Service::where('branch_id', Auth()->user()->staff->branch_id)->get();
-        
+
         $services = $services->pluck('name', 'id'); // Pluck the values and assign it back to $services variable
-       // $services->prepend('Select Service', 0); // Add an empty option with label 'Select Service'
-       $documents12 = \App\Models\IncomingDocuments::query()
-                ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
-                ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
-                ->select(
-                    'incoming_documents_categories.id as category_id',
-                    'incoming_documents_categories.name as category_name',
-                    'incoming_documents_manager.created_at as document_created_at',
-                    'incoming_documents_manager.id as d_id',
-                    'incoming_documents_manager.title',
-                    'incoming_documents_manager.full_name as sender_full_name',
-                    'incoming_documents_manager.email as sender_email',
-                    'incoming_documents_manager.phone as sender_phone',
-                    'incoming_documents_manager.document_url',
-                    'incoming_documents_categories.description as doc_description',
-                    'incoming_documents_manager.status',
-                    'incoming_documents_categories.name as cat_name',
-                    'departments.name as dep_name',
-                    //'incoming_documents_has_users.user_id',
-                    //'incoming_documents_has_users.assigned_by',
-                    //DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name')
-                    )
-                ->where('incoming_documents_manager.status','=', '0')
-                ->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
-                ->latest('incoming_documents_manager.created_at')
-                ->groupBy('departments.name','incoming_documents_manager.status','incoming_documents_manager.phone','incoming_documents_manager.email','incoming_documents_manager.full_name','incoming_documents_categories.description','incoming_documents_manager.document_url','incoming_documents_manager.title','incoming_documents_categories.id', 'incoming_documents_categories.name', 'incoming_documents_manager.created_at', 'incoming_documents_manager.id') // Include the nonaggregated column in the GROUP BY clause
-                ->limit(10)
-                ->get();
-                $documents1 = DB::table('incoming_documents_has_users')
-    ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
-    ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
-    ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
-    ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
-    ->select(
-        'incoming_documents_manager.category_id',
-        'incoming_documents_categories.id',
-        'incoming_documents_manager.title',
-        'incoming_documents_manager.full_name as sender_full_name',
-        'incoming_documents_manager.email as sender_email',
-        'incoming_documents_manager.phone as sender_phone',
-        'incoming_documents_has_users.created_at as createdAt',
-        'incoming_documents_categories.name as category_name',
-        'incoming_documents_has_users.start_date',
-        'incoming_documents_has_users.end_date',
-        'incoming_documents_has_users.allow_share',
-        'incoming_documents_has_users.is_download',
-        'incoming_documents_has_users.user_id',
-        'incoming_documents_has_users.assigned_by',
-        'incoming_documents_manager.document_url as document_url',
-        'incoming_documents_categories.description as doc_description',
-        'incoming_documents_manager.id as d_id',
-        'incoming_documents_categories.id as d_m_c_id',
-        'incoming_documents_categories.name as cat_name',
-        'departments.name as dep_name',
+        // $services->prepend('Select Service', 0); // Add an empty option with label 'Select Service'
+        $documents12 = \App\Models\IncomingDocuments::query()
+            ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+            ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+            ->select(
+                'incoming_documents_categories.id as category_id',
+                'incoming_documents_categories.name as category_name',
+                'incoming_documents_manager.created_at as document_created_at',
+                'incoming_documents_manager.id as d_id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.full_name as sender_full_name',
+                'incoming_documents_manager.email as sender_email',
+                'incoming_documents_manager.phone as sender_phone',
+                'incoming_documents_manager.document_url',
+                'incoming_documents_categories.description as doc_description',
+                'incoming_documents_manager.status',
+                'incoming_documents_categories.name as cat_name',
+                'departments.name as dep_name',
+                //'incoming_documents_has_users.user_id',
+                //'incoming_documents_has_users.assigned_by',
+                //DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name')
+            )
+            ->where('incoming_documents_manager.status', '=', '0')
+            ->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
+            ->latest('incoming_documents_manager.created_at')
+            ->groupBy('departments.name', 'incoming_documents_manager.status', 'incoming_documents_manager.phone', 'incoming_documents_manager.email', 'incoming_documents_manager.full_name', 'incoming_documents_categories.description', 'incoming_documents_manager.document_url', 'incoming_documents_manager.title', 'incoming_documents_categories.id', 'incoming_documents_categories.name', 'incoming_documents_manager.created_at', 'incoming_documents_manager.id') // Include the nonaggregated column in the GROUP BY clause
+            ->limit(10)
+            ->get();
+        $documents1 = DB::table('incoming_documents_has_users')
+            ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
+            ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+            ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
+            ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+            ->select(
+                'incoming_documents_manager.category_id',
+                'incoming_documents_categories.id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.full_name as sender_full_name',
+                'incoming_documents_manager.email as sender_email',
+                'incoming_documents_manager.phone as sender_phone',
+                'incoming_documents_has_users.created_at as createdAt',
+                'incoming_documents_categories.name as category_name',
+                'incoming_documents_has_users.start_date',
+                'incoming_documents_has_users.end_date',
+                'incoming_documents_has_users.allow_share',
+                'incoming_documents_has_users.is_download',
+                'incoming_documents_has_users.user_id',
+                'incoming_documents_has_users.assigned_by',
+                'incoming_documents_manager.document_url as document_url',
+                'incoming_documents_categories.description as doc_description',
+                'incoming_documents_manager.id as d_id',
+                'incoming_documents_categories.id as d_m_c_id',
+                'incoming_documents_categories.name as cat_name',
+                'departments.name as dep_name',
 
-        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
-        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
-        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
-    )
-    ->latest('incoming_documents_has_users.created_at')
-    ->groupBy(
-        'incoming_documents_categories.id',
-        'incoming_documents_has_users.start_date',
-        'incoming_documents_has_users.end_date',
-        'incoming_documents_manager.id',
-        'incoming_documents_manager.title',
-        'incoming_documents_manager.document_url',
-        'incoming_documents_has_users.id',
-        'incoming_documents_has_users.created_at',
-        'incoming_documents_categories.name',
-        'incoming_documents_has_users.allow_share',
-        'incoming_documents_has_users.is_download',
-        'incoming_documents_has_users.user_id',
-        'incoming_documents_has_users.assigned_by',
-        'incoming_documents_manager.created_by',
-        'departments.name','incoming_documents_manager.status','incoming_documents_manager.phone','incoming_documents_manager.email','incoming_documents_manager.full_name',
-    )
-    ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
-    //->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
-    ->get();
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
+            )
+            ->latest('incoming_documents_has_users.created_at')
+            ->groupBy(
+                'incoming_documents_categories.id',
+                'incoming_documents_has_users.start_date',
+                'incoming_documents_has_users.end_date',
+                'incoming_documents_manager.id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.document_url',
+                'incoming_documents_has_users.id',
+                'incoming_documents_has_users.created_at',
+                'incoming_documents_categories.name',
+                'incoming_documents_has_users.allow_share',
+                'incoming_documents_has_users.is_download',
+                'incoming_documents_has_users.user_id',
+                'incoming_documents_has_users.assigned_by',
+                'incoming_documents_manager.created_by',
+                'departments.name',
+                'incoming_documents_manager.status',
+                'incoming_documents_manager.phone',
+                'incoming_documents_manager.email',
+                'incoming_documents_manager.full_name',
+            )
+            ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
+            //->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
+            ->get();
 
-                $dept = Department::get();
-     $deptData = $dept->map(function ($dept1) {
+        $dept = Department::get();
+        $deptData = $dept->map(function ($dept1) {
             return [
                 'id' => $dept1->id,
                 'name' => $dept1->name,
@@ -872,24 +893,24 @@ class HomeController extends Controller
         JOIN staff ON users.id = staff.user_id
         WHERE users.level_id = 20
     ');
-    
-    // Combine the results of all queries into one collection
-    $userData = collect($users1)
-        ->map(function ($user) {
-            return [
-                'id' => $user->id,
-                'name' => $user->first_name . ' ' . $user->last_name,
-            ];
-        });
-        
+
+        // Combine the results of all queries into one collection
+        $userData = collect($users1)
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                ];
+            });
 
 
-        
+
+
         $users123 = $userData->pluck('name', 'id');
         if (Auth()->user()->hasRole('super-admin')) {
-        $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
-        } else{
-        $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
+            $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
+        } else {
+            $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
         }
 
         return view('s_dashboard', compact('branch', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications'));
@@ -900,64 +921,68 @@ class HomeController extends Controller
     {
         $branch = Branch::all();
         $services = Service::where('branch_id', Auth()->user()->staff->branch_id)->get();
-        
+
         $services = $services->pluck('name', 'id'); // Pluck the values and assign it back to $services variable
-       
-                $documents1 = DB::table('incoming_documents_has_users')
-    ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
-    ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
-    ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
-    ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
-    ->select(
-        'incoming_documents_manager.category_id',
-        'incoming_documents_categories.id',
-        'incoming_documents_manager.title',
-        'incoming_documents_manager.full_name as sender_full_name',
-        'incoming_documents_manager.email as sender_email',
-        'incoming_documents_manager.phone as sender_phone',
-        'incoming_documents_has_users.created_at as createdAt',
-        'incoming_documents_categories.name as category_name',
-        'incoming_documents_has_users.start_date',
-        'incoming_documents_has_users.end_date',
-        'incoming_documents_has_users.allow_share',
-        'incoming_documents_has_users.is_download',
-        'incoming_documents_has_users.user_id',
-        'incoming_documents_has_users.assigned_by',
-        'incoming_documents_manager.document_url as document_url',
-        'incoming_documents_categories.description as doc_description',
-        'incoming_documents_manager.id as d_m_id',
-        'incoming_documents_categories.id as d_m_c_id',
-        'incoming_documents_categories.name as cat_name',
-        'departments.name as dep_name',
 
-        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
-        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
-        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
-    )
-    ->latest('incoming_documents_has_users.created_at')
-    ->groupBy(
-        'incoming_documents_categories.id',
-        'incoming_documents_has_users.start_date',
-        'incoming_documents_has_users.end_date',
-        'incoming_documents_manager.id',
-        'incoming_documents_manager.title',
-        'incoming_documents_manager.document_url',
-        'incoming_documents_has_users.id',
-        'incoming_documents_has_users.created_at',
-        'incoming_documents_categories.name',
-        'incoming_documents_has_users.allow_share',
-        'incoming_documents_has_users.is_download',
-        'incoming_documents_has_users.user_id',
-        'incoming_documents_has_users.assigned_by',
-        'incoming_documents_manager.created_by',
-        'departments.name','incoming_documents_manager.status','incoming_documents_manager.phone','incoming_documents_manager.email','incoming_documents_manager.full_name',
-    )
-    ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
-    //->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
-    ->get();
+        $documents1 = DB::table('incoming_documents_has_users')
+            ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
+            ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+            ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
+            ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+            ->select(
+                'incoming_documents_manager.category_id',
+                'incoming_documents_categories.id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.full_name as sender_full_name',
+                'incoming_documents_manager.email as sender_email',
+                'incoming_documents_manager.phone as sender_phone',
+                'incoming_documents_has_users.created_at as createdAt',
+                'incoming_documents_categories.name as category_name',
+                'incoming_documents_has_users.start_date',
+                'incoming_documents_has_users.end_date',
+                'incoming_documents_has_users.allow_share',
+                'incoming_documents_has_users.is_download',
+                'incoming_documents_has_users.user_id',
+                'incoming_documents_has_users.assigned_by',
+                'incoming_documents_manager.document_url as document_url',
+                'incoming_documents_categories.description as doc_description',
+                'incoming_documents_manager.id as d_m_id',
+                'incoming_documents_categories.id as d_m_c_id',
+                'incoming_documents_categories.name as cat_name',
+                'departments.name as dep_name',
 
-                $dept = Department::get();
-     $deptData = $dept->map(function ($dept1) {
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
+            )
+            ->latest('incoming_documents_has_users.created_at')
+            ->groupBy(
+                'incoming_documents_categories.id',
+                'incoming_documents_has_users.start_date',
+                'incoming_documents_has_users.end_date',
+                'incoming_documents_manager.id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.document_url',
+                'incoming_documents_has_users.id',
+                'incoming_documents_has_users.created_at',
+                'incoming_documents_categories.name',
+                'incoming_documents_has_users.allow_share',
+                'incoming_documents_has_users.is_download',
+                'incoming_documents_has_users.user_id',
+                'incoming_documents_has_users.assigned_by',
+                'incoming_documents_manager.created_by',
+                'departments.name',
+                'incoming_documents_manager.status',
+                'incoming_documents_manager.phone',
+                'incoming_documents_manager.email',
+                'incoming_documents_manager.full_name',
+            )
+            ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
+            //->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
+            ->get();
+
+        $dept = Department::get();
+        $deptData = $dept->map(function ($dept1) {
             return [
                 'id' => $dept1->id,
                 'name' => $dept1->name,
@@ -970,49 +995,49 @@ class HomeController extends Controller
         $departments_data1 = $deptData->pluck('name', 'id');
         //$departments_data1->prepend('Select Department', '');
 
-        
-    $users1 = DB::select('
+
+        $users1 = DB::select('
         SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
         FROM users
         JOIN staff ON users.id = staff.user_id
         WHERE users.level_id = 20
     ');
-    
-    $users2 = DB::select('
+
+        $users2 = DB::select('
         SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
         FROM users
         JOIN staff ON users.id = staff.user_id
         WHERE users.level_id = 17
     ');
 
-    $users3 = DB::select('
+        $users3 = DB::select('
     SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
     FROM users
     JOIN staff ON users.id = staff.user_id
     WHERE staff.department_id = ?
 ', [auth()->user()->staff->department_id]);
-   
-    
-    
-    // Combine the results of all queries into one collection
-    $userData = collect($users1)
-        ->merge($users2)
-        ->merge($users3)
-        ->map(function ($user) {
-            return [
-                'id' => $user->id,
-                'name' => $user->first_name . ' ' . $user->last_name,
-            ];
-        });
-        
 
 
-        
+
+        // Combine the results of all queries into one collection
+        $userData = collect($users1)
+            ->merge($users2)
+            ->merge($users3)
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                ];
+            });
+
+
+
+
         $users123 = $userData->pluck('name', 'id');
         if (Auth()->user()->hasRole('super-admin')) {
-        $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
-        } else{
-        $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
+            $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
+        } else {
+            $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
         }
 
         return view('gm_dashboard', compact('branch', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications'));
@@ -1023,64 +1048,68 @@ class HomeController extends Controller
     {
         $branch = Branch::all();
         $services = Service::where('branch_id', Auth()->user()->staff->branch_id)->get();
-        
-        $services = $services->pluck('name', 'id'); // Pluck the values and assign it back to $services variable
-       // $services->prepend('Select Service', 0); // Add an empty option with label 'Select Service'
-       $documents1 = DB::table('incoming_documents_has_users')
-       ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
-       ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
-       ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
-       ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
-       ->select(
-           'incoming_documents_manager.category_id',
-           'incoming_documents_categories.id',
-           'incoming_documents_manager.title',
-           'incoming_documents_manager.full_name as sender_full_name',
-           'incoming_documents_manager.email as sender_email',
-           'incoming_documents_manager.phone as sender_phone',
-           'incoming_documents_has_users.created_at as createdAt',
-           'incoming_documents_categories.name as category_name',
-           'incoming_documents_has_users.start_date',
-           'incoming_documents_has_users.end_date',
-           'incoming_documents_has_users.allow_share',
-           'incoming_documents_has_users.is_download',
-           'incoming_documents_has_users.user_id',
-           'incoming_documents_has_users.assigned_by',
-           'incoming_documents_manager.document_url as document_url',
-           'incoming_documents_categories.description as doc_description',
-           'incoming_documents_manager.id as d_m_id',
-           'incoming_documents_categories.id as d_m_c_id',
-           'incoming_documents_categories.name as cat_name',
-           'departments.name as dep_name',
-   
-           DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
-           DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
-           DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
-       )
-       ->latest('incoming_documents_has_users.created_at')
-       ->groupBy(
-           'incoming_documents_categories.id',
-           'incoming_documents_has_users.start_date',
-           'incoming_documents_has_users.end_date',
-           'incoming_documents_manager.id',
-           'incoming_documents_manager.title',
-           'incoming_documents_manager.document_url',
-           'incoming_documents_has_users.id',
-           'incoming_documents_has_users.created_at',
-           'incoming_documents_categories.name',
-           'incoming_documents_has_users.allow_share',
-           'incoming_documents_has_users.is_download',
-           'incoming_documents_has_users.user_id',
-           'incoming_documents_has_users.assigned_by',
-           'incoming_documents_manager.created_by',
-           'departments.name','incoming_documents_manager.status','incoming_documents_manager.phone','incoming_documents_manager.email','incoming_documents_manager.full_name',
-       )
-       ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
-       //->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
-       ->get();
 
-                $dept = Department::get();
-     $deptData = $dept->map(function ($dept1) {
+        $services = $services->pluck('name', 'id'); // Pluck the values and assign it back to $services variable
+        // $services->prepend('Select Service', 0); // Add an empty option with label 'Select Service'
+        $documents1 = DB::table('incoming_documents_has_users')
+            ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
+            ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+            ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
+            ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+            ->select(
+                'incoming_documents_manager.category_id',
+                'incoming_documents_categories.id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.full_name as sender_full_name',
+                'incoming_documents_manager.email as sender_email',
+                'incoming_documents_manager.phone as sender_phone',
+                'incoming_documents_has_users.created_at as createdAt',
+                'incoming_documents_categories.name as category_name',
+                'incoming_documents_has_users.start_date',
+                'incoming_documents_has_users.end_date',
+                'incoming_documents_has_users.allow_share',
+                'incoming_documents_has_users.is_download',
+                'incoming_documents_has_users.user_id',
+                'incoming_documents_has_users.assigned_by',
+                'incoming_documents_manager.document_url as document_url',
+                'incoming_documents_categories.description as doc_description',
+                'incoming_documents_manager.id as d_m_id',
+                'incoming_documents_categories.id as d_m_c_id',
+                'incoming_documents_categories.name as cat_name',
+                'departments.name as dep_name',
+
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
+            )
+            ->latest('incoming_documents_has_users.created_at')
+            ->groupBy(
+                'incoming_documents_categories.id',
+                'incoming_documents_has_users.start_date',
+                'incoming_documents_has_users.end_date',
+                'incoming_documents_manager.id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.document_url',
+                'incoming_documents_has_users.id',
+                'incoming_documents_has_users.created_at',
+                'incoming_documents_categories.name',
+                'incoming_documents_has_users.allow_share',
+                'incoming_documents_has_users.is_download',
+                'incoming_documents_has_users.user_id',
+                'incoming_documents_has_users.assigned_by',
+                'incoming_documents_manager.created_by',
+                'departments.name',
+                'incoming_documents_manager.status',
+                'incoming_documents_manager.phone',
+                'incoming_documents_manager.email',
+                'incoming_documents_manager.full_name',
+            )
+            ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
+            //->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
+            ->get();
+
+        $dept = Department::get();
+        $deptData = $dept->map(function ($dept1) {
             return [
                 'id' => $dept1->id,
                 'name' => $dept1->name,
@@ -1093,141 +1122,141 @@ class HomeController extends Controller
         $departments_data1 = $deptData->pluck('name', 'id');
         //$departments_data1->prepend('Select Department', '');
 
-        if(auth()->user()->staff && auth()->user()->staff->branch_id == 23){
-        $users1 = DB::select('
+        if (auth()->user()->staff && auth()->user()->staff->branch_id == 23) {
+            $users1 = DB::select('
         SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
         FROM users
         JOIN staff ON users.id = staff.user_id
         WHERE users.level_id = 17
     ');
-    
-    $users2 = DB::select('
+
+            $users2 = DB::select('
     SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
     FROM users
     JOIN staff ON users.id = staff.user_id
     WHERE staff.department_id = ?
 ', [auth()->user()->staff->department_id]);
-        } else{
+        } else {
             $users1 = DB::select('
             SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
             FROM users
             JOIN staff ON users.id = staff.user_id
             WHERE users.level_id = 3
         ');
-        
-        $users2 = DB::select('
+
+            $users2 = DB::select('
         SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
         FROM users
         JOIN staff ON users.id = staff.user_id
         WHERE staff.branch_id = ?
     ', [auth()->user()->staff->branch_id]);
         }
-   
-    
-    
-    // Combine the results of all queries into one collection
-    $userData = collect($users1)
-        ->merge($users2)
-        ->map(function ($user) {
-            return [
-                'id' => $user->id,
-                'name' => $user->first_name . ' ' . $user->last_name,
-            ];
-        });
 
-        
+
+
+        // Combine the results of all queries into one collection
+        $userData = collect($users1)
+            ->merge($users2)
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                ];
+            });
+
+
         $users123 = $userData->pluck('name', 'id');
         if (Auth()->user()->hasRole('super-admin')) {
-        $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
-        } else{
-        $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
+            $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
+        } else {
+            $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
         }
 
         return view('range_dashboard', compact('branch', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications'));
     }
 
     public function getForAreaManager($id)
-{
-    $month = request()->input('month');
-    $year = request()->input('year');
-    
-    $pending_application_forms = ServiceApplication::whereMonth('created_at', $month)
-        ->whereYear('created_at', $year)
-        ->where('service_id', $id)
-        ->where('current_step', 4)
-        ->where('branch_id', Auth()->user()->staff->branch->id)
-        ->count();
+    {
+        $month = request()->input('month');
+        $year = request()->input('year');
 
-    $pending_inspections = ServiceApplication::whereMonth('created_at', $month)
-        ->whereYear('created_at', $year)
-        ->where('service_id', $id)
-        ->where('current_step', 8)
-        ->where('branch_id', Auth()->user()->staff->branch->id)
-        ->count();
+        $pending_application_forms = ServiceApplication::whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->where('service_id', $id)
+            ->where('current_step', 4)
+            ->where('branch_id', Auth()->user()->staff->branch->id)
+            ->count();
 
-    $total_amount = Payment::whereMonth('created_at', $month)
-        ->whereYear('created_at', $year)
-        ->where('service_id', $id)
-        ->where('branch_id', Auth()->user()->staff->branch->id)
-        ->sum('amount');
+        $pending_inspections = ServiceApplication::whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->where('service_id', $id)
+            ->where('current_step', 8)
+            ->where('branch_id', Auth()->user()->staff->branch->id)
+            ->count();
 
-    $total_permit = ServiceApplication::whereMonth('created_at', $month)
-        ->whereYear('created_at', $year)
-        ->where('service_id', $id)
-        ->where('current_step', 15)
-        ->where('branch_id', Auth()->user()->staff->branch->id)
-        ->count();
-    
-    // Return the data as JSON
-    return response()->json([
-        'pending_application_forms' => $pending_application_forms,
-        'pending_inspections' => $pending_inspections,
-        'total_amount' => '₦ '.number_format($total_amount, 2),
-        'total_permit' => $total_permit,
-    ]);
-}
+        $total_amount = Payment::whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->where('service_id', $id)
+            ->where('branch_id', Auth()->user()->staff->branch->id)
+            ->sum('amount');
 
-public function getForMD($id)
-{
-    $month = request()->input('month');
-    $year = request()->input('year');
-    $branch = request()->input('branch');
-    
-    $pending_application_forms = ServiceApplication::whereMonth('created_at', $month)
-        ->whereYear('created_at', $year)
-        ->where('service_id', $id)
-        ->where('current_step', 4)
-        ->where('branch_id', $branch)
-        ->count();
+        $total_permit = ServiceApplication::whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->where('service_id', $id)
+            ->where('current_step', 15)
+            ->where('branch_id', Auth()->user()->staff->branch->id)
+            ->count();
 
-    $pending_inspections = ServiceApplication::whereMonth('created_at', $month)
-        ->whereYear('created_at', $year)
-        ->where('service_id', $id)
-        ->where('current_step', 8)
-        ->where('branch_id', $branch)
-        ->count();
+        // Return the data as JSON
+        return response()->json([
+            'pending_application_forms' => $pending_application_forms,
+            'pending_inspections' => $pending_inspections,
+            'total_amount' => '₦ ' . number_format($total_amount, 2),
+            'total_permit' => $total_permit,
+        ]);
+    }
 
-    $total_amount = Payment::whereMonth('created_at', $month)
-        ->whereYear('created_at', $year)
-        ->where('service_id', $id)
-        ->where('branch_id', $branch)
-        ->sum('amount');
+    public function getForMD($id)
+    {
+        $month = request()->input('month');
+        $year = request()->input('year');
+        $branch = request()->input('branch');
 
-    $total_permit = ServiceApplication::whereMonth('created_at', $month)
-        ->whereYear('created_at', $year)
-        ->where('service_id', $id)
-        ->where('current_step', 15)
-        ->where('branch_id', $branch)
-        ->count();
-    
-    // Return the data as JSON
-    return response()->json([
-        'pending_application_forms' => $pending_application_forms,
-        'pending_inspections' => $pending_inspections,
-        'total_amount' => '₦ '.number_format($total_amount, 2),
-        'total_permit' => $total_permit,
-    ]);
-}
+        $pending_application_forms = ServiceApplication::whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->where('service_id', $id)
+            ->where('current_step', 4)
+            ->where('branch_id', $branch)
+            ->count();
+
+        $pending_inspections = ServiceApplication::whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->where('service_id', $id)
+            ->where('current_step', 8)
+            ->where('branch_id', $branch)
+            ->count();
+
+        $total_amount = Payment::whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->where('service_id', $id)
+            ->where('branch_id', $branch)
+            ->sum('amount');
+
+        $total_permit = ServiceApplication::whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->where('service_id', $id)
+            ->where('current_step', 15)
+            ->where('branch_id', $branch)
+            ->count();
+
+        // Return the data as JSON
+        return response()->json([
+            'pending_application_forms' => $pending_application_forms,
+            'pending_inspections' => $pending_inspections,
+            'total_amount' => '₦ ' . number_format($total_amount, 2),
+            'total_permit' => $total_permit,
+        ]);
+    }
 
 
     public function md()
@@ -1241,12 +1270,12 @@ public function getForMD($id)
         // $revenue = \DB::table('revenues')
 
         //     ->sum('amount');
-        $revenue= DB::table('payments')
-            ->where('payment_status',1)
+        $revenue = DB::table('payments')
+            ->where('payment_status', 1)
             ->select('amount')
             ->sum('amount');
 
-            // dd(DB::table('payments')->get());
+        // dd(DB::table('payments')->get());
         $ta = \DB::table('service_applications as sp')
             ->where('sp.application_form_payment_status', 1)
             ->join('staff as s', 'sp.user_id', 's.id')
@@ -1263,35 +1292,35 @@ public function getForMD($id)
             ->count();
 
 
-$data = \DB::table('documents_categories')
+        $data = \DB::table('documents_categories')
             ->join('departments', 'departments.id', 'documents_categories.department_id')
             ->selectRaw('COUNT(documents_categories.name) AS num, CONCAT(departments.name, "/", documents_categories.name) AS name')
             ->groupBy('name')
             ->get();
 
-            $data1 = \DB::table('documents_manager')
-    ->selectRaw('COUNT(documents_manager.title) AS num, MONTH(documents_manager.created_at) AS month')
-    ->whereYear('documents_manager.created_at', '=', now()->year)
-    ->groupBy('month')
-    ->orderBy('month')
-    ->get();
+        $data1 = \DB::table('documents_manager')
+            ->selectRaw('COUNT(documents_manager.title) AS num, MONTH(documents_manager.created_at) AS month')
+            ->whereYear('documents_manager.created_at', '=', now()->year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
 
-$data2 = \DB::table('incoming_documents_manager')
-    ->selectRaw('COUNT(incoming_documents_manager.title) AS num, MONTH(incoming_documents_manager.created_at) AS month')
-    ->whereYear('incoming_documents_manager.created_at', '=', now()->year)
-    ->groupBy('month')
-    ->orderBy('month')
-    ->get();
-    $data3 = \DB::table('documents_manager')
-    ->join('incoming_documents_manager', 'documents_manager.created_at', '=', 'incoming_documents_manager.created_at')
-    ->selectRaw('(COUNT(documents_manager.title) + COUNT(incoming_documents_manager.title)) AS total_count, MONTH(documents_manager.created_at) AS month')
-    ->whereYear('documents_manager.created_at', now()->year)
-    ->groupBy('month')
-    ->orderBy('month')
-    ->get();
+        $data2 = \DB::table('incoming_documents_manager')
+            ->selectRaw('COUNT(incoming_documents_manager.title) AS num, MONTH(incoming_documents_manager.created_at) AS month')
+            ->whereYear('incoming_documents_manager.created_at', '=', now()->year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+        $data3 = \DB::table('documents_manager')
+            ->join('incoming_documents_manager', 'documents_manager.created_at', '=', 'incoming_documents_manager.created_at')
+            ->selectRaw('(COUNT(documents_manager.title) + COUNT(incoming_documents_manager.title)) AS total_count, MONTH(documents_manager.created_at) AS month')
+            ->whereYear('documents_manager.created_at', now()->year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
 
 
-    $documents1vv = \App\Models\IncomingDocuments::query()
+        $documents1vv = \App\Models\IncomingDocuments::query()
             ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
             ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
             ->select(
@@ -1308,106 +1337,112 @@ $data2 = \DB::table('incoming_documents_manager')
                 'incoming_documents_manager.status',
                 'incoming_documents_categories.name as cat_name',
                 'departments.name as dep_name',
-                    )
-                ->where('incoming_documents_manager.status','!=', '0')
-                ->latest('incoming_documents_manager.created_at')
-                ->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
-                ->groupBy('departments.name','incoming_documents_manager.status','incoming_documents_manager.phone','incoming_documents_manager.email','incoming_documents_manager.full_name','incoming_documents_categories.description','incoming_documents_manager.document_url','incoming_documents_manager.title','incoming_documents_categories.id', 'incoming_documents_categories.name', 'incoming_documents_manager.created_at', 'incoming_documents_manager.id') // Include the nonaggregated column in the GROUP BY clause
-                //->where('incoming_documents_manager.department_id', '=', '15')
-                ->limit(10)
-                ->get();
-                
-                $documents1 = DB::table('incoming_documents_has_users')
-                ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
-                ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
-                ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
-                ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
-                ->select(
-                    'incoming_documents_manager.category_id',
-                    'incoming_documents_categories.id',
-                    'incoming_documents_manager.title',
-                    'incoming_documents_manager.full_name as sender_full_name',
-                    'incoming_documents_manager.email as sender_email',
-                    'incoming_documents_manager.phone as sender_phone',
-                    'incoming_documents_has_users.created_at as createdAt',
-                    'incoming_documents_categories.name as category_name',
-                    'incoming_documents_has_users.start_date',
-                    'incoming_documents_has_users.end_date',
-                    'incoming_documents_has_users.allow_share',
-                    'incoming_documents_has_users.is_download',
-                    'incoming_documents_has_users.user_id',
-                    'incoming_documents_has_users.assigned_by',
-                    'incoming_documents_manager.document_url as document_url',
-                    'incoming_documents_manager.id as d_m_id',
-                    'incoming_documents_categories.id as d_m_c_id',
-                    'incoming_documents_categories.name as cat_name',
-                    'departments.name as dep_name',
-            
-                    DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
-                    DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
-                    DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
-                )
-                ->latest('incoming_documents_has_users.created_at')
-                ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
-                ->groupBy(
-                    'incoming_documents_manager.category_id',
-                    'incoming_documents_categories.id',
-                    'incoming_documents_has_users.start_date',
-                    'incoming_documents_has_users.end_date',
-                    'incoming_documents_manager.id',
-                    'incoming_documents_manager.title',
-                    'incoming_documents_manager.document_url',
-                    'incoming_documents_has_users.id',
-                    'incoming_documents_has_users.created_at',
-                    'incoming_documents_categories.name',
-                    'incoming_documents_has_users.allow_share',
-                    'incoming_documents_has_users.is_download',
-                    'incoming_documents_has_users.user_id',
-                    'incoming_documents_has_users.assigned_by',
-                    'incoming_documents_manager.created_by',
-                    'departments.name','incoming_documents_manager.status','incoming_documents_manager.phone','incoming_documents_manager.email','incoming_documents_manager.full_name',
-                )
-                ->get();
+            )
+            ->where('incoming_documents_manager.status', '!=', '0')
+            ->latest('incoming_documents_manager.created_at')
+            ->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
+            ->groupBy('departments.name', 'incoming_documents_manager.status', 'incoming_documents_manager.phone', 'incoming_documents_manager.email', 'incoming_documents_manager.full_name', 'incoming_documents_categories.description', 'incoming_documents_manager.document_url', 'incoming_documents_manager.title', 'incoming_documents_categories.id', 'incoming_documents_categories.name', 'incoming_documents_manager.created_at', 'incoming_documents_manager.id') // Include the nonaggregated column in the GROUP BY clause
+            //->where('incoming_documents_manager.department_id', '=', '15')
+            ->limit(10)
+            ->get();
 
-    $documents2 = \App\Models\Documents::query()
-    ->join('documents_has_users', 'documents_manager.id', '=', 'documents_has_users.document_id')
-    ->join('documents_categories', 'documents_manager.category_id', '=', 'documents_categories.id')
-    ->join('users', 'documents_has_users.user_id', '=', 'users.id')
-    ->select(
-        'documents_categories.id as category_id',
-        'documents_categories.name as category_name',
-        'documents_manager.created_at as assigned_created_at',
-        'documents_manager.id as d_id',
-        'documents_manager.title',
-        'documents_manager.document_url',
-        'documents_categories.description as doc_description',
-        'documents_has_users.is_download',
-        'documents_has_users.allow_share',
-        'documents_has_users.user_id',
-        'documents_has_users.assigned_by',
-        \DB::raw('CONCAT(users.first_name, " ", users.last_name) AS assigned_to_name')
-    )
-    ->latest('documents_manager.created_at')
-    ->where('documents_has_users.assigned_by','!=', '0')
-    ->groupBy('documents_has_users.assigned_by',
-               'documents_has_users.user_id',
-               'documents_has_users.is_download',
-               'documents_has_users.allow_share',
-               'documents_has_users.user_id',
-               'documents_categories.description',
-               'documents_manager.document_url',
-               'documents_manager.title',
-               'documents_categories.id',
-               'documents_categories.name',
-               'documents_manager.created_at',
-               'documents_manager.id',
-               'assigned_to_name') // Include the nonaggregated column in the GROUP BY clause
-    ->with('createdBy')
-    ->limit(5)
-    ->get();
+        $documents1 = DB::table('incoming_documents_has_users')
+            ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
+            ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+            ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
+            ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+            ->select(
+                'incoming_documents_manager.category_id',
+                'incoming_documents_categories.id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.full_name as sender_full_name',
+                'incoming_documents_manager.email as sender_email',
+                'incoming_documents_manager.phone as sender_phone',
+                'incoming_documents_has_users.created_at as createdAt',
+                'incoming_documents_categories.name as category_name',
+                'incoming_documents_has_users.start_date',
+                'incoming_documents_has_users.end_date',
+                'incoming_documents_has_users.allow_share',
+                'incoming_documents_has_users.is_download',
+                'incoming_documents_has_users.user_id',
+                'incoming_documents_has_users.assigned_by',
+                'incoming_documents_manager.document_url as document_url',
+                'incoming_documents_manager.id as d_m_id',
+                'incoming_documents_categories.id as d_m_c_id',
+                'incoming_documents_categories.name as cat_name',
+                'departments.name as dep_name',
 
-    $dept = Department::get();
-     $deptData = $dept->map(function ($dept1) {
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
+            )
+            ->latest('incoming_documents_has_users.created_at')
+            ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
+            ->groupBy(
+                'incoming_documents_manager.category_id',
+                'incoming_documents_categories.id',
+                'incoming_documents_has_users.start_date',
+                'incoming_documents_has_users.end_date',
+                'incoming_documents_manager.id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.document_url',
+                'incoming_documents_has_users.id',
+                'incoming_documents_has_users.created_at',
+                'incoming_documents_categories.name',
+                'incoming_documents_has_users.allow_share',
+                'incoming_documents_has_users.is_download',
+                'incoming_documents_has_users.user_id',
+                'incoming_documents_has_users.assigned_by',
+                'incoming_documents_manager.created_by',
+                'departments.name',
+                'incoming_documents_manager.status',
+                'incoming_documents_manager.phone',
+                'incoming_documents_manager.email',
+                'incoming_documents_manager.full_name',
+            )
+            ->get();
+
+        $documents2 = \App\Models\Documents::query()
+            ->join('documents_has_users', 'documents_manager.id', '=', 'documents_has_users.document_id')
+            ->join('documents_categories', 'documents_manager.category_id', '=', 'documents_categories.id')
+            ->join('users', 'documents_has_users.user_id', '=', 'users.id')
+            ->select(
+                'documents_categories.id as category_id',
+                'documents_categories.name as category_name',
+                'documents_manager.created_at as assigned_created_at',
+                'documents_manager.id as d_id',
+                'documents_manager.title',
+                'documents_manager.document_url',
+                'documents_categories.description as doc_description',
+                'documents_has_users.is_download',
+                'documents_has_users.allow_share',
+                'documents_has_users.user_id',
+                'documents_has_users.assigned_by',
+                \DB::raw('CONCAT(users.first_name, " ", users.last_name) AS assigned_to_name')
+            )
+            ->latest('documents_manager.created_at')
+            ->where('documents_has_users.assigned_by', '!=', '0')
+            ->groupBy(
+                'documents_has_users.assigned_by',
+                'documents_has_users.user_id',
+                'documents_has_users.is_download',
+                'documents_has_users.allow_share',
+                'documents_has_users.user_id',
+                'documents_categories.description',
+                'documents_manager.document_url',
+                'documents_manager.title',
+                'documents_categories.id',
+                'documents_categories.name',
+                'documents_manager.created_at',
+                'documents_manager.id',
+                'assigned_to_name'
+            ) // Include the nonaggregated column in the GROUP BY clause
+            ->with('createdBy')
+            ->limit(5)
+            ->get();
+
+        $dept = Department::get();
+        $deptData = $dept->map(function ($dept1) {
             return [
                 'id' => $dept1->id,
                 'name' => $dept1->name,
@@ -1418,105 +1453,105 @@ $data2 = \DB::table('incoming_documents_manager')
         $departments_data->prepend('Select Department', '');
 
         $documents123 = DB::table('documents_has_users')
-    ->join('documents_manager', 'documents_manager.id', '=', 'documents_has_users.document_id')
-    ->join('departments', 'departments.id', '=', 'documents_manager.department_id')
-    ->join('users', 'documents_has_users.user_id', '=', 'users.id')
-    ->join('documents_categories', 'documents_manager.category_id', '=', 'documents_categories.id')
-    ->select(
-        'documents_manager.category_id',
-        'documents_categories.id',
-        'documents_manager.title',
-        'documents_has_users.created_at as createdAt',
-        'documents_categories.name as category_name',
-        'documents_has_users.start_date',
-        'documents_has_users.end_date',
-        'documents_has_users.allow_share',
-        'documents_has_users.is_download',
-        'documents_has_users.user_id',
-        'documents_has_users.assigned_by',
-        'documents_manager.document_url as document_url',
-        'documents_manager.id as d_m_id',
-        'documents_categories.id as d_m_c_id',
-        'documents_categories.name as cat_name',
-        'departments.name as dep_name',
-        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = documents_has_users.user_id) AS assigned_to_name'),
-        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = documents_has_users.assigned_by) AS assigned_by_name'),
-        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = documents_manager.created_by) AS created_by_name')
-    )
-    ->latest('documents_has_users.created_at')
-    ->groupBy(
-        'documents_manager.department_id',
-        'documents_categories.id',
-        'documents_has_users.start_date',
-        'documents_has_users.end_date',
-        'documents_manager.id',
-        'documents_manager.title',
-        'documents_manager.document_url',
-        'documents_has_users.id',
-        'documents_has_users.created_at',
-        'documents_categories.name',
-        'documents_manager.category_id',
-        'documents_has_users.allow_share',
-        'documents_has_users.is_download',
-        'documents_has_users.user_id',
-        'documents_has_users.assigned_by',
-        'departments.name',
-        'documents_manager.created_by',
-    )
-    ->where('documents_manager.department_id', '=', '1')
-    ->get();
+            ->join('documents_manager', 'documents_manager.id', '=', 'documents_has_users.document_id')
+            ->join('departments', 'departments.id', '=', 'documents_manager.department_id')
+            ->join('users', 'documents_has_users.user_id', '=', 'users.id')
+            ->join('documents_categories', 'documents_manager.category_id', '=', 'documents_categories.id')
+            ->select(
+                'documents_manager.category_id',
+                'documents_categories.id',
+                'documents_manager.title',
+                'documents_has_users.created_at as createdAt',
+                'documents_categories.name as category_name',
+                'documents_has_users.start_date',
+                'documents_has_users.end_date',
+                'documents_has_users.allow_share',
+                'documents_has_users.is_download',
+                'documents_has_users.user_id',
+                'documents_has_users.assigned_by',
+                'documents_manager.document_url as document_url',
+                'documents_manager.id as d_m_id',
+                'documents_categories.id as d_m_c_id',
+                'documents_categories.name as cat_name',
+                'departments.name as dep_name',
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = documents_has_users.user_id) AS assigned_to_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = documents_has_users.assigned_by) AS assigned_by_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = documents_manager.created_by) AS created_by_name')
+            )
+            ->latest('documents_has_users.created_at')
+            ->groupBy(
+                'documents_manager.department_id',
+                'documents_categories.id',
+                'documents_has_users.start_date',
+                'documents_has_users.end_date',
+                'documents_manager.id',
+                'documents_manager.title',
+                'documents_manager.document_url',
+                'documents_has_users.id',
+                'documents_has_users.created_at',
+                'documents_categories.name',
+                'documents_manager.category_id',
+                'documents_has_users.allow_share',
+                'documents_has_users.is_download',
+                'documents_has_users.user_id',
+                'documents_has_users.assigned_by',
+                'departments.name',
+                'documents_manager.created_by',
+            )
+            ->where('documents_manager.department_id', '=', '1')
+            ->get();
 
-    $users1 = DB::select('
+        $users1 = DB::select('
     SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
     FROM users
     JOIN staff ON users.id = staff.user_id
     WHERE users.level_id = 19
 ');
-$users2 = DB::select('
+        $users2 = DB::select('
     SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
     FROM users
     JOIN staff ON users.id = staff.user_id
     WHERE users.level_id = 18
 ');
 
-$users3 = DB::select('
+        $users3 = DB::select('
     SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
     FROM users
     JOIN staff ON users.id = staff.user_id
     WHERE users.level_id = 17
 ');
-$users4 = DB::select('
+        $users4 = DB::select('
     SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
     FROM users
     JOIN staff ON users.id = staff.user_id
     WHERE users.level_id = 3
 ');
 
-$users5 = DB::select('
+        $users5 = DB::select('
     SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
     FROM users
     JOIN staff ON users.id = staff.user_id
     WHERE staff.department_id = 19
 ');
 
-// Combine the results of all queries into one collection
-$userData = collect($users1)
-    ->merge($users2)
-    ->merge($users3)
-    ->merge($users4)
-    ->merge($users5)
-    ->map(function ($user) {
-        return [
-            'id' => $user->id,
-            'name' => $user->first_name . ' ' . $user->last_name,
-        ];
-    });
-   
+        // Combine the results of all queries into one collection
+        $userData = collect($users1)
+            ->merge($users2)
+            ->merge($users3)
+            ->merge($users4)
+            ->merge($users5)
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                ];
+            });
+
         $roles = $this->roleRepository->all()->pluck('name', 'id');
-        
+
         $users123 = $userData->pluck('name', 'id');
 
-    /* $reminder = \DB::table('reminders')
+        /* $reminder = \DB::table('reminders')
     ->join('documents_manager', 'documents_manager.id', 'reminders.documents_manager_id')
     ->selectRaw('reminders.subject, reminders.message, reminders.reminderstart_date, documents_manager.title, documents_manager.document_url')
     ->get(); */
@@ -1552,12 +1587,12 @@ $userData = collect($users1)
         // $revenue = \DB::table('revenues')
 
         //     ->sum('amount');
-        $revenue= DB::table('payments')
-            ->where('payment_status',1)
+        $revenue = DB::table('payments')
+            ->where('payment_status', 1)
             ->select('amount')
             ->sum('amount');
 
-            // dd(DB::table('payments')->get());
+        // dd(DB::table('payments')->get());
         $ta = \DB::table('service_applications as sp')
             ->where('sp.application_form_payment_status', 1)
             ->join('staff as s', 'sp.user_id', 's.id')
@@ -1574,35 +1609,35 @@ $userData = collect($users1)
             ->count();
 
 
-$data = \DB::table('documents_categories')
+        $data = \DB::table('documents_categories')
             ->join('departments', 'departments.id', 'documents_categories.department_id')
             ->selectRaw('COUNT(documents_categories.name) AS num, CONCAT(departments.name, "/", documents_categories.name) AS name')
             ->groupBy('name')
             ->get();
 
-            $data1 = \DB::table('documents_manager')
-    ->selectRaw('COUNT(documents_manager.title) AS num, MONTH(documents_manager.created_at) AS month')
-    ->whereYear('documents_manager.created_at', '=', now()->year)
-    ->groupBy('month')
-    ->orderBy('month')
-    ->get();
+        $data1 = \DB::table('documents_manager')
+            ->selectRaw('COUNT(documents_manager.title) AS num, MONTH(documents_manager.created_at) AS month')
+            ->whereYear('documents_manager.created_at', '=', now()->year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
 
-$data2 = \DB::table('incoming_documents_manager')
-    ->selectRaw('COUNT(incoming_documents_manager.title) AS num, MONTH(incoming_documents_manager.created_at) AS month')
-    ->whereYear('incoming_documents_manager.created_at', '=', now()->year)
-    ->groupBy('month')
-    ->orderBy('month')
-    ->get();
-    $data3 = \DB::table('documents_manager')
-    ->join('incoming_documents_manager', 'documents_manager.created_at', '=', 'incoming_documents_manager.created_at')
-    ->selectRaw('(COUNT(documents_manager.title) + COUNT(incoming_documents_manager.title)) AS total_count, MONTH(documents_manager.created_at) AS month')
-    ->whereYear('documents_manager.created_at', now()->year)
-    ->groupBy('month')
-    ->orderBy('month')
-    ->get();
+        $data2 = \DB::table('incoming_documents_manager')
+            ->selectRaw('COUNT(incoming_documents_manager.title) AS num, MONTH(incoming_documents_manager.created_at) AS month')
+            ->whereYear('incoming_documents_manager.created_at', '=', now()->year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+        $data3 = \DB::table('documents_manager')
+            ->join('incoming_documents_manager', 'documents_manager.created_at', '=', 'incoming_documents_manager.created_at')
+            ->selectRaw('(COUNT(documents_manager.title) + COUNT(incoming_documents_manager.title)) AS total_count, MONTH(documents_manager.created_at) AS month')
+            ->whereYear('documents_manager.created_at', now()->year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
 
 
-    $documents1vv = \App\Models\IncomingDocuments::query()
+        $documents1vv = \App\Models\IncomingDocuments::query()
             ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
             ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
             ->select(
@@ -1619,106 +1654,112 @@ $data2 = \DB::table('incoming_documents_manager')
                 'incoming_documents_manager.status',
                 'incoming_documents_categories.name as cat_name',
                 'departments.name as dep_name',
-                    )
-                ->where('incoming_documents_manager.status','!=', '0')
-                ->latest('incoming_documents_manager.created_at')
-                ->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
-                ->groupBy('departments.name','incoming_documents_manager.status','incoming_documents_manager.phone','incoming_documents_manager.email','incoming_documents_manager.full_name','incoming_documents_categories.description','incoming_documents_manager.document_url','incoming_documents_manager.title','incoming_documents_categories.id', 'incoming_documents_categories.name', 'incoming_documents_manager.created_at', 'incoming_documents_manager.id') // Include the nonaggregated column in the GROUP BY clause
-                //->where('incoming_documents_manager.department_id', '=', '15')
-                ->limit(10)
-                ->get();
-                
-                $documents1 = DB::table('incoming_documents_has_users')
-                ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
-                ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
-                ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
-                ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
-                ->select(
-                    'incoming_documents_manager.category_id',
-                    'incoming_documents_categories.id',
-                    'incoming_documents_manager.title',
-                    'incoming_documents_manager.full_name as sender_full_name',
-                    'incoming_documents_manager.email as sender_email',
-                    'incoming_documents_manager.phone as sender_phone',
-                    'incoming_documents_has_users.created_at as createdAt',
-                    'incoming_documents_categories.name as category_name',
-                    'incoming_documents_has_users.start_date',
-                    'incoming_documents_has_users.end_date',
-                    'incoming_documents_has_users.allow_share',
-                    'incoming_documents_has_users.is_download',
-                    'incoming_documents_has_users.user_id',
-                    'incoming_documents_has_users.assigned_by',
-                    'incoming_documents_manager.document_url as document_url',
-                    'incoming_documents_manager.id as d_m_id',
-                    'incoming_documents_categories.id as d_m_c_id',
-                    'incoming_documents_categories.name as cat_name',
-                    'departments.name as dep_name',
-            
-                    DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
-                    DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
-                    DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
-                )
-                ->latest('incoming_documents_has_users.created_at')
-                ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
-                ->groupBy(
-                    'incoming_documents_manager.category_id',
-                    'incoming_documents_categories.id',
-                    'incoming_documents_has_users.start_date',
-                    'incoming_documents_has_users.end_date',
-                    'incoming_documents_manager.id',
-                    'incoming_documents_manager.title',
-                    'incoming_documents_manager.document_url',
-                    'incoming_documents_has_users.id',
-                    'incoming_documents_has_users.created_at',
-                    'incoming_documents_categories.name',
-                    'incoming_documents_has_users.allow_share',
-                    'incoming_documents_has_users.is_download',
-                    'incoming_documents_has_users.user_id',
-                    'incoming_documents_has_users.assigned_by',
-                    'incoming_documents_manager.created_by',
-                    'departments.name','incoming_documents_manager.status','incoming_documents_manager.phone','incoming_documents_manager.email','incoming_documents_manager.full_name',
-                )
-                ->get();
+            )
+            ->where('incoming_documents_manager.status', '!=', '0')
+            ->latest('incoming_documents_manager.created_at')
+            ->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
+            ->groupBy('departments.name', 'incoming_documents_manager.status', 'incoming_documents_manager.phone', 'incoming_documents_manager.email', 'incoming_documents_manager.full_name', 'incoming_documents_categories.description', 'incoming_documents_manager.document_url', 'incoming_documents_manager.title', 'incoming_documents_categories.id', 'incoming_documents_categories.name', 'incoming_documents_manager.created_at', 'incoming_documents_manager.id') // Include the nonaggregated column in the GROUP BY clause
+            //->where('incoming_documents_manager.department_id', '=', '15')
+            ->limit(10)
+            ->get();
 
-    $documents2 = \App\Models\Documents::query()
-    ->join('documents_has_users', 'documents_manager.id', '=', 'documents_has_users.document_id')
-    ->join('documents_categories', 'documents_manager.category_id', '=', 'documents_categories.id')
-    ->join('users', 'documents_has_users.user_id', '=', 'users.id')
-    ->select(
-        'documents_categories.id as category_id',
-        'documents_categories.name as category_name',
-        'documents_manager.created_at as assigned_created_at',
-        'documents_manager.id as d_id',
-        'documents_manager.title',
-        'documents_manager.document_url',
-        'documents_categories.description as doc_description',
-        'documents_has_users.is_download',
-        'documents_has_users.allow_share',
-        'documents_has_users.user_id',
-        'documents_has_users.assigned_by',
-        \DB::raw('CONCAT(users.first_name, " ", users.last_name) AS assigned_to_name')
-    )
-    ->latest('documents_manager.created_at')
-    ->where('documents_has_users.assigned_by','!=', '0')
-    ->groupBy('documents_has_users.assigned_by',
-               'documents_has_users.user_id',
-               'documents_has_users.is_download',
-               'documents_has_users.allow_share',
-               'documents_has_users.user_id',
-               'documents_categories.description',
-               'documents_manager.document_url',
-               'documents_manager.title',
-               'documents_categories.id',
-               'documents_categories.name',
-               'documents_manager.created_at',
-               'documents_manager.id',
-               'assigned_to_name') // Include the nonaggregated column in the GROUP BY clause
-    ->with('createdBy')
-    ->limit(5)
-    ->get();
+        $documents1 = DB::table('incoming_documents_has_users')
+            ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
+            ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+            ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
+            ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+            ->select(
+                'incoming_documents_manager.category_id',
+                'incoming_documents_categories.id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.full_name as sender_full_name',
+                'incoming_documents_manager.email as sender_email',
+                'incoming_documents_manager.phone as sender_phone',
+                'incoming_documents_has_users.created_at as createdAt',
+                'incoming_documents_categories.name as category_name',
+                'incoming_documents_has_users.start_date',
+                'incoming_documents_has_users.end_date',
+                'incoming_documents_has_users.allow_share',
+                'incoming_documents_has_users.is_download',
+                'incoming_documents_has_users.user_id',
+                'incoming_documents_has_users.assigned_by',
+                'incoming_documents_manager.document_url as document_url',
+                'incoming_documents_manager.id as d_m_id',
+                'incoming_documents_categories.id as d_m_c_id',
+                'incoming_documents_categories.name as cat_name',
+                'departments.name as dep_name',
 
-    $dept = Department::get();
-     $deptData = $dept->map(function ($dept1) {
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
+            )
+            ->latest('incoming_documents_has_users.created_at')
+            ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
+            ->groupBy(
+                'incoming_documents_manager.category_id',
+                'incoming_documents_categories.id',
+                'incoming_documents_has_users.start_date',
+                'incoming_documents_has_users.end_date',
+                'incoming_documents_manager.id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.document_url',
+                'incoming_documents_has_users.id',
+                'incoming_documents_has_users.created_at',
+                'incoming_documents_categories.name',
+                'incoming_documents_has_users.allow_share',
+                'incoming_documents_has_users.is_download',
+                'incoming_documents_has_users.user_id',
+                'incoming_documents_has_users.assigned_by',
+                'incoming_documents_manager.created_by',
+                'departments.name',
+                'incoming_documents_manager.status',
+                'incoming_documents_manager.phone',
+                'incoming_documents_manager.email',
+                'incoming_documents_manager.full_name',
+            )
+            ->get();
+
+        $documents2 = \App\Models\Documents::query()
+            ->join('documents_has_users', 'documents_manager.id', '=', 'documents_has_users.document_id')
+            ->join('documents_categories', 'documents_manager.category_id', '=', 'documents_categories.id')
+            ->join('users', 'documents_has_users.user_id', '=', 'users.id')
+            ->select(
+                'documents_categories.id as category_id',
+                'documents_categories.name as category_name',
+                'documents_manager.created_at as assigned_created_at',
+                'documents_manager.id as d_id',
+                'documents_manager.title',
+                'documents_manager.document_url',
+                'documents_categories.description as doc_description',
+                'documents_has_users.is_download',
+                'documents_has_users.allow_share',
+                'documents_has_users.user_id',
+                'documents_has_users.assigned_by',
+                \DB::raw('CONCAT(users.first_name, " ", users.last_name) AS assigned_to_name')
+            )
+            ->latest('documents_manager.created_at')
+            ->where('documents_has_users.assigned_by', '!=', '0')
+            ->groupBy(
+                'documents_has_users.assigned_by',
+                'documents_has_users.user_id',
+                'documents_has_users.is_download',
+                'documents_has_users.allow_share',
+                'documents_has_users.user_id',
+                'documents_categories.description',
+                'documents_manager.document_url',
+                'documents_manager.title',
+                'documents_categories.id',
+                'documents_categories.name',
+                'documents_manager.created_at',
+                'documents_manager.id',
+                'assigned_to_name'
+            ) // Include the nonaggregated column in the GROUP BY clause
+            ->with('createdBy')
+            ->limit(5)
+            ->get();
+
+        $dept = Department::get();
+        $deptData = $dept->map(function ($dept1) {
             return [
                 'id' => $dept1->id,
                 'name' => $dept1->name,
@@ -1729,75 +1770,75 @@ $data2 = \DB::table('incoming_documents_manager')
         $departments_data->prepend('Select Department', '');
 
         $documents123 = DB::table('documents_has_users')
-    ->join('documents_manager', 'documents_manager.id', '=', 'documents_has_users.document_id')
-    ->join('departments', 'departments.id', '=', 'documents_manager.department_id')
-    ->join('users', 'documents_has_users.user_id', '=', 'users.id')
-    ->join('documents_categories', 'documents_manager.category_id', '=', 'documents_categories.id')
-    ->select(
-        'documents_manager.category_id',
-        'documents_categories.id',
-        'documents_manager.title',
-        'documents_has_users.created_at as createdAt',
-        'documents_categories.name as category_name',
-        'documents_has_users.start_date',
-        'documents_has_users.end_date',
-        'documents_has_users.allow_share',
-        'documents_has_users.is_download',
-        'documents_has_users.user_id',
-        'documents_has_users.assigned_by',
-        'documents_manager.document_url as document_url',
-        'documents_manager.id as d_m_id',
-        'documents_categories.id as d_m_c_id',
-        'documents_categories.name as cat_name',
-        'departments.name as dep_name',
-        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = documents_has_users.user_id) AS assigned_to_name'),
-        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = documents_has_users.assigned_by) AS assigned_by_name'),
-        DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = documents_manager.created_by) AS created_by_name')
-    )
-    ->latest('documents_has_users.created_at')
-    ->groupBy(
-        'documents_manager.department_id',
-        'documents_categories.id',
-        'documents_has_users.start_date',
-        'documents_has_users.end_date',
-        'documents_manager.id',
-        'documents_manager.title',
-        'documents_manager.document_url',
-        'documents_has_users.id',
-        'documents_has_users.created_at',
-        'documents_categories.name',
-        'documents_manager.category_id',
-        'documents_has_users.allow_share',
-        'documents_has_users.is_download',
-        'documents_has_users.user_id',
-        'documents_has_users.assigned_by',
-        'departments.name',
-        'documents_manager.created_by',
-    )
-    ->where('documents_manager.department_id', '=', '1')
-    ->get();
+            ->join('documents_manager', 'documents_manager.id', '=', 'documents_has_users.document_id')
+            ->join('departments', 'departments.id', '=', 'documents_manager.department_id')
+            ->join('users', 'documents_has_users.user_id', '=', 'users.id')
+            ->join('documents_categories', 'documents_manager.category_id', '=', 'documents_categories.id')
+            ->select(
+                'documents_manager.category_id',
+                'documents_categories.id',
+                'documents_manager.title',
+                'documents_has_users.created_at as createdAt',
+                'documents_categories.name as category_name',
+                'documents_has_users.start_date',
+                'documents_has_users.end_date',
+                'documents_has_users.allow_share',
+                'documents_has_users.is_download',
+                'documents_has_users.user_id',
+                'documents_has_users.assigned_by',
+                'documents_manager.document_url as document_url',
+                'documents_manager.id as d_m_id',
+                'documents_categories.id as d_m_c_id',
+                'documents_categories.name as cat_name',
+                'departments.name as dep_name',
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = documents_has_users.user_id) AS assigned_to_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = documents_has_users.assigned_by) AS assigned_by_name'),
+                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = documents_manager.created_by) AS created_by_name')
+            )
+            ->latest('documents_has_users.created_at')
+            ->groupBy(
+                'documents_manager.department_id',
+                'documents_categories.id',
+                'documents_has_users.start_date',
+                'documents_has_users.end_date',
+                'documents_manager.id',
+                'documents_manager.title',
+                'documents_manager.document_url',
+                'documents_has_users.id',
+                'documents_has_users.created_at',
+                'documents_categories.name',
+                'documents_manager.category_id',
+                'documents_has_users.allow_share',
+                'documents_has_users.is_download',
+                'documents_has_users.user_id',
+                'documents_has_users.assigned_by',
+                'departments.name',
+                'documents_manager.created_by',
+            )
+            ->where('documents_manager.department_id', '=', '1')
+            ->get();
 
-    $users1 = DB::select('
+        $users1 = DB::select('
     SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
     FROM users
     JOIN staff ON users.id = staff.user_id
     WHERE users.level_id = 20
 ');
 
-// Combine the results of all queries into one collection
-$userData = collect($users1)
-    ->map(function ($user) {
-        return [
-            'id' => $user->id,
-            'name' => $user->first_name . ' ' . $user->last_name,
-        ];
-    });
-   
+        // Combine the results of all queries into one collection
+        $userData = collect($users1)
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                ];
+            });
+
         $roles = $this->roleRepository->all()->pluck('name', 'id');
-        
+
         $users123 = $userData->pluck('name', 'id');
 
-    /* $reminder = \DB::table('reminders')
+        /* $reminder = \DB::table('reminders')
     ->join('documents_manager', 'documents_manager.id', 'reminders.documents_manager_id')
     ->selectRaw('reminders.subject, reminders.message, reminders.reminderstart_date, documents_manager.title, documents_manager.document_url')
     ->get(); */
@@ -1822,11 +1863,11 @@ $userData = collect($users1)
         ));
     }
 
-    public function showareaoffice(Request $request)
-    {
+    // public function showareaoffice(Request $request)
+    // {
 
-        dd($request->get('branch_id'));
-    }
+    //     dd($request->get('branch_id'));
+    // }
     public function edfinance()
     {
         $branchtotal = Branch::count();
