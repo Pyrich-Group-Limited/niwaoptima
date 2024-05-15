@@ -2,10 +2,15 @@
 
 @section('content')
 <style>
-    .nav-link{
-        font-weight: 600;
-    }
-   
+    .nav-link {
+            font-weight: 600;
+            color: blue !important;
+        }
+
+        .nav-link:hover {
+            color: green !important;
+        }
+
 </style>
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
@@ -13,9 +18,9 @@
             <h5 class="text-center mb-2">WELCOME {{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</h5>
             <h1 class="text-center text-primary mb-5 text-uppercase">LOCATION: <span class=" text-uppercase">
                 {{ auth()->user()->staff->branch ? auth()->user()->staff->branch->branch_name : '' }} </span> </h1>
-                <div class=" d-flex">
+                <div class="row">
                     <div class=" justify-content-between">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <ul class="nav nav-tabs bg-primary" id="myTab" role="tablist">
                             <li class="nav-item">
                               <a class="nav-link active" id="letter-tab" data-toggle="tab" href="#letter" role="tab" aria-controls="letter" aria-selected="true">My Departmental Document</a>
                             </li>
@@ -29,7 +34,7 @@
                                 </a>
                               </li>
                           </ul>
-                          <div class="tab-content" id="myTabContent">
+                          <div class="tab-content " id="myTabContent">
                             <div class="tab-pane fade show active" id="letter" role="tabpanel" aria-labelledby="letter-tab">
                                 <div class="row g-5 g-xl-8">
                                 <div class="row">
@@ -43,9 +48,9 @@
                                 </div>
                                    <div class="row">
                                         <div class="col-md-12 depDoc1" id="depDoc1">
-                        
+
                                             <div class="card">
-                                                
+
                                     <div class="card-body p-5">
                                         <h4 class="card-title">
                                                   <i class="fas fa-envelope"></i>
@@ -68,11 +73,11 @@
                             </tbody>
                                             </table>
                                         </div>
-                                    
-                                        
+
+
                                     </div>
-                                    
-                          {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>    --}}       
+
+                          {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>    --}}
                                    <script>
                              document.addEventListener("DOMContentLoaded", function () {
                                 // Fetch Departmental Documents based on selected department
@@ -81,12 +86,12 @@
                                     //alert(departmentId);
                                     fetchDocumentsData(departmentId);
                                 });
-                        
+
                                 // Initial Fetch on Page Load
                                 let departmentId = document.getElementById('deptSelect1').value;
                                 fetchDocumentsData(departmentId);
                             });
-                        
+
                             function fetchDocumentsData(departmentId) {
                                 fetch(`/showDepartementalDocuments/${departmentId}`)
                                     .then(response => response.json())
@@ -95,12 +100,12 @@
                                     })
                                     .catch(error => console.error('Error:', error));
                             }
-                        
+
                             function displayDocumentsData(documents) {
                             let tableBody = document.getElementById('documentsTableBody');
                             tableBody.innerHTML = '';
                             //alert(JSON.stringify(documents));
-                        
+
                             if (documents.length === 0) {
                                 let noResultsRow = `
                                     <tr>
@@ -128,11 +133,11 @@
                                 });
                             }
                         }
-                        
-                        
-                        
+
+
+
                         </script>
-                                    
+
                                 </div>
                                         </div>
                                                   <div class="modal fade" id="shareuserModal" tabindex="-1" role="dialog" aria-labelledby="shareuserModalLabel"
@@ -148,11 +153,11 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                        
+
                                         <div class="form-group">
                                             {!! Form::label('users', 'Select User(s):') !!}
                                             {!! Form::select('users[]', $users123, null, ['class' => 'form-control', 'id' => 'userSelect', 'multiple' => 'multiple']) !!}
-                        
+
                                             {!! Form::hidden('shareuser_id', null, ['id' => 'shareuser_id']) !!}
                                             {!! Form::hidden('notify_id', null, ['id' => 'notify_id']) !!}
                                         </div>
@@ -180,7 +185,7 @@
                                                     {!! Form::textarea('comment', null, ['class' => 'form-control']) !!}
                                                 </div>
                                             </div>
-                        
+
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -188,20 +193,20 @@
                                     </div>
                                     {!! Form::close() !!}
                                 </div>
-                              
+
                             </div>
                         </div>
-                        
 
-                                         
+
+
                                 </div>
                             </div>
                             </div>
-                    
+
                     <div class="tab-pane fade" id="demand" role="tabpanel" aria-labelledby="demand-tab" >
                         <div class="row" >
                             <div class="col-md-12">
-            
+
                                 <div class="card" style="width: 800px;">
                             <div class="card-body p-5">
                                 <h4 class="card-title">
@@ -222,7 +227,7 @@
                                                       </tr>
                                                   </thead>
                                                   <tbody>
-                                                      
+
                                                       @foreach ($service_applications as $index => $service_application)
                                                           @php @endphp
                                                           <tr>
@@ -232,12 +237,12 @@
 {{--                                                               <td>{{ $service_application->processingTypes ? $service_application->processingTypes->name : 'NILL' }}</td>
  --}}                                 {{-- <td><?php //$type = \App\Models\ProcessingType::where('service_id', $service_application->id)->first(); ?>
                                       {{ $type->name ?? 'NILL' }}
-                                             </td>               --}} 
-                                                         
+                                             </td>               --}}
+
 <td><?php if(isset($service_application->equipment_fees_list)){
     // Assuming $service_application->equipment_fees_list is the JSON string
     $equipment_fees_list = json_decode($service_application->equipment_fees_list, true); // Convert JSON to PHP array
-    
+
     $sum = 0;
     foreach ($equipment_fees_list as $item) {
         $sum += $item['price'];
@@ -249,7 +254,7 @@
                                                                <td>
                                                                 <a href="javascript:void(0)" onclick="confirmApproval('{{ route('approve_demand_notice', $service_application->id) }}')" class="btn btn-primary">Approve</a>
                                                             </td>
-                                                            
+
                                                           </tr>
                                                       @endforeach
                                                   </tbody>
@@ -262,7 +267,7 @@
                                         }
                                     }
                                 </script>
-                                
+
                             </div></div></div>
                         </div>
                     </div>
@@ -276,7 +281,7 @@
                                     <div class="col-3">
                                      {!! Form::select('service_id', $services, null, ['class' => 'form-select', 'id' => 'serviceSelect']) !!}
                                     </div>
-            
+
                                     <div class="col-3">
                                         <select class="form-select" id="monthSelect" name="month">
                                             <option value="1">January</option>
@@ -306,7 +311,7 @@
                     </option>
                 @endfor
             </select>
-            
+
                                     </div>
                                     <div class="col-3">        <button type="button" id="searchBtn" class="btn btn-primary">SEARCH</button>
              </div>
@@ -364,8 +369,8 @@
                                     </div>
                                     <!--end::Body-->
                                 </a>
-            
-            
+
+
                                 <!--end::Statistics Widget 5-->
                             </div>
                             <div class="col-xl-3">
@@ -382,9 +387,9 @@
                                     <path d="M14 6V5H10V6H8V5C8 3.9 8.9 3 10 3H14C15.1 3 16 3.9 16 5V6H14ZM20 15H14V16C14 16.6 13.5 17 13 17H11C10.5 17 10 16.6 10 16V15H4C3.6 15 3.3 14.9 3 14.7V18C3 19.1 3.9 20 5 20H19C20.1 20 21 19.1 21 18V14.7C20.7 14.9 20.4 15 20 15Z" fill="currentColor" />
                                    </svg>
                                    </span>
-            
+
                                         <!--end::Svg Icon-->
-            
+
                                         <div class="text-white fw-bolder fs-2 mb-2 mt-5" id="total_amount">  </div>
                                         <div class="fw-bold text-white">Total Revenue Generated</div>
                                     </div>
@@ -420,7 +425,7 @@
                                 </a>
                                 <!--end::Statistics Widget 5-->
                             </div>
-            
+
                         </div>
 </div>
 <div class="tab-pane fade" id="letter1" role="tabpanel" aria-labelledby="letter1-tab">
@@ -428,7 +433,7 @@
          {{-- <div class="col-md-3">
                      {!! Form::label('department_id', 'Click to select user department:') !!}
                      {!! Form::select('department_id', $departments_data, null, ['class' => 'form-control', 'id' => 'inDeptSelect']) !!}
-                   
+
                         </div> --}}
                             <div class="card">
                     <div class="card-body p-5">
@@ -456,7 +461,7 @@
                                               </tr>
                                           </thead>
                                           <tbody>
-                                              
+
                                               @foreach ($documents1 as $document)
                                                   @php @endphp
                                                   <tr>
@@ -466,27 +471,27 @@
                                                       <td>{{ $document->sender_email ?? 'NILL' }}</td>
                                                       <td>{{ $document->sender_phone ?? 'NILL' }}</td>
                                                       {{-- <td>{{ $document->description }}</td> --}}
-                                                      
+
                                                       <td>
                                                         <a class="document-link" target="_blank" onClick="saveData('{{ $document->document_url }}')" href="{{ asset($document->document_url) }}">{{ substr($document->document_url, 10) }}</a>
                                                     </td>
                                           <td><a class="open-modal-shareuser btn btn-primary" href="#" data-toggle="modal" data-target="#shareuserModal1"
-                                            data-shareuser={{ $document->d_m_id }}>User</a></td>  
+                                            data-shareuser={{ $document->d_id }}>User</a></td>
                                                       <td>{{ $document->doc_description ?? 'NILL' }}</td>
                                                       <td>{{ $document->document_created_at ?? 'NILL' }}</td>
-                                                     
-                                                    
+
+
                                                   </tr>
                                               @endforeach
                                           </tbody>
                                       </table>
                         </div>
-                    
-                        
+
+
                     </div>
-                    
-                    
-                    
+
+
+
                    <script>
              document.addEventListener("DOMContentLoaded", function () {
                 // Fetch Departmental Documents based on selected department
@@ -494,12 +499,12 @@
                     let departmentId = this.value;
                     fetchDocuments(departmentId);
                 });
-        
+
                 // Initial Fetch on Page Load
                 let departmentId = document.getElementById('inDeptSelect').value;
                 fetchDocuments(departmentId);
             });
-        
+
             function fetchDocuments(departmentId) {
                 fetch(`/showIncomingDepartementalDocuments/${departmentId}`)
                     .then(response => response.json())
@@ -508,11 +513,11 @@
                     })
                     .catch(error => console.error('Error:', error));
             }
-        
+
             function displayDocuments(documents) {
             let tableBody = document.getElementById('incomingDocumentsTableBody');
             tableBody.innerHTML = '';
-        
+
             documents.forEach((document, index) => {
                 var fullUrl = "{{ asset('') }}" + document.document_url;
                 let row = `
@@ -532,9 +537,9 @@
                 tableBody.insertAdjacentHTML('beforeend', row);
             });
         }
-        
+
         </script>
-                    
+
                 </div>
                         </div>
 
@@ -591,16 +596,16 @@ aria-hidden="true" data-backdrop="false">
             </div>
             {!! Form::close() !!}
         </div>
-      
+
     </div>
 </div>
                           </div>
 
                      </div>
             </div>
-            
-            
-        
+
+
+
             <br>
             <br>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -610,7 +615,7 @@ aria-hidden="true" data-backdrop="false">
         $(".modal-body #shareuser_id").val(shareuser);
         $(".modal-body #shareuser1_id").val(shareuser);
     });
-    
+
    $(document).ready(function() {
         // Function to update statistics based on selected options
         function updateStatistics() {
