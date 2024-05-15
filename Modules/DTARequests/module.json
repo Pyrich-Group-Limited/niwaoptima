@@ -1,0 +1,13 @@
+{
+    "name": "DTARequests",
+    "alias": "dtarequests",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\DTARequests\\Providers\\DTARequestsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

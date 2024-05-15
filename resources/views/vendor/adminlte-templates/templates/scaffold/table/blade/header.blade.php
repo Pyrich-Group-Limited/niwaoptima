@@ -1,0 +1,1 @@
+<th class="min-w-200px">{!! $fieldTitle !!}</th>

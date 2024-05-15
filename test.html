@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Builder</title>
+</head>
+<body>
+  <div id="form-builder">
+    <button id="add-form-field">Add field</button>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name">
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email">
+    </div>
+    <div class="form-group">
+      <label for="message">Message</label>
+      <textarea id="message" name="message"></textarea>
+    </div>
+    <button type="submit">Submit</button>
+  </div>
+
+  <script>
+    function addFormField() {
+      const form = document.getElementById("form-builder");
+      const newField = document.createElement("div");
+      newField.className = "form-group";
+
+      const label = document.createElement("label");
+      label.htmlFor = "new-field";
+      label.innerText = "New Field";
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.id = "new-field";
+      input.name = "new-field";
+
+      newField.appendChild(label);
+      newField.appendChild(input);
+
+      form.appendChild(newField);
+    }
+
+    function deleteFormField(form, fieldId) {
+      const field = form.querySelector(`[data-field-id="${fieldId}"]`);
+      if (field) {
+        field.remove();
+      }
+    }
+
+    const form = document.getElementById("form-builder");
+
+    // Add event listener for the "Add Form Field" button
+    document.getElementById("add-form-field").addEventListener("click", addFormField);
+
+    // Add event listener for the "Delete Form Field" button
+    document.querySelectorAll(".delete-form-field").forEach((button) => {
+      button.addEventListener("click", () => {
+        const fieldId = button.dataset.fieldId;
+        deleteFormField(form, fieldId);
+      });
+    });
+  </script>
+</body>
+</html>

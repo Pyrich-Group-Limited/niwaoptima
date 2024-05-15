@@ -1,0 +1,23 @@
+{
+    "name": "p2e/employermanager",
+    "description": "",
+    "authors": [
+        {
+            "name": "P2E",
+            "email": "info@p2etechnologiesltd.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\EmployerManager\\": ""
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "name": "ClaimsCompensation",
+    "alias": "claimscompensation",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ClaimsCompensation\\Providers\\ClaimsCompensationServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

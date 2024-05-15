@@ -1,0 +1,13 @@
+{
+    "name": "DocumentManager",
+    "alias": "documentmanager",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\DocumentManager\\Providers\\DocumentManagerServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

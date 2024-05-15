@@ -1,0 +1,13 @@
+{
+    "name": "WorkflowEngine",
+    "alias": "workflowengine",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\WorkflowEngine\\Providers\\WorkflowEngineServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

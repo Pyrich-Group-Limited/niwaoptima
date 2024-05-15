@@ -1,0 +1,13 @@
+{
+    "name": "EromInfo",
+    "alias": "erominfo",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\EromInfo\\Providers\\EromInfoServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

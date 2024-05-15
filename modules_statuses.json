@@ -1,0 +1,18 @@
+{
+    "WorkflowEngine": true,
+    "Shared": true,
+    "DocumentManager": true,
+    "EmployerManager": true,
+    "ClaimsCompensation": true,
+    "DTARequests": true,
+    "DtaReview": true,
+    "HumanResource": true,
+    "Leaves": true,
+    "UnitManager": true,
+    "Approval": true,
+    "FormBuilder": true,
+    "Accounting": true,
+    "HRMSystem": true,
+    "EromInfo": true,
+    "Procurement": true
+}

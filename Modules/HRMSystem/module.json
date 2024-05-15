@@ -1,0 +1,13 @@
+{
+    "name": "HRMSystem",
+    "alias": "hrmsystem",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\HRMSystem\\Providers\\HRMSystemServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

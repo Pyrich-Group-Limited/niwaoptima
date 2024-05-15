@@ -1,0 +1,13 @@
+{
+    "name": "UnitManager",
+    "alias": "unitmanager",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\UnitManager\\Providers\\UnitManagerServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

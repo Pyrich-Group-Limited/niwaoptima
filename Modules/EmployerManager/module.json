@@ -1,0 +1,13 @@
+{
+    "name": "EmployerManager",
+    "alias": "employermanager",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\EmployerManager\\Providers\\EmployerManagerServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
