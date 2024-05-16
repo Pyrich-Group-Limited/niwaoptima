@@ -49,7 +49,7 @@
 <!-- Price Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('price', 'Price:') !!}
-    {!! Form::number('price', null, ['class' => 'form-control', 'required']) !!}
+    {!! Form::text('price', null, ['class' => 'form-control', 'required']) !!}
 </div>
 
 <!-- Metric Field -->
