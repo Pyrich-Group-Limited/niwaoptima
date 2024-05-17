@@ -465,7 +465,7 @@
                         <div class="tab-pane fade" id="vendor" role="tabpanel" aria-labelledby="vendor-tab">
                             <div class=" justify-content-between">
 
-                                <ul class="nav nav-tabs bg-primary justify-content-end" id="myTab" role="tablist">
+                                <ul class="nav nav-tabs bg-primary " id="myTab" role="tablist">
                                     <li class="nav-item  mx-2">
                                         <a class="nav-link active" aria-current="page" data-toggle="tab" href="#pendingvendor">Unverified<i class=" text-danger">{{ $pendingcount }}</i></a>
                                     </li>
