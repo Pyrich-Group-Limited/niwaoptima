@@ -352,7 +352,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
 @if ($serviceApplication->current_step == 141)
     <div class="col-sm-12">
         <!-- Documents Approval -->
-        <h3>Area Officer Approval</h3>
+        <h3>HOD Marine Approval</h3>
         {!! Form::open([
             'route' => ['application.areaofficer.approval', $serviceApplication->id],
             'method' => 'post',
@@ -384,7 +384,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
 @if ($serviceApplication->current_step == 142)
     <div class="col-sm-12">
         <!-- Documents Approval -->
-        <h3>HOD Marine Approval</h3>
+        <h3>Area Officer Approval</h3>
         {!! Form::open([
             'route' => ['application.hodmarine.approval', $serviceApplication->id],
             'method' => 'post',
