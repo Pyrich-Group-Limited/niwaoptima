@@ -246,9 +246,9 @@
                                                             @php @endphp
                                                             <tr>
                                                                 <td>{{ $index + 1 }}</td>
-                                                                <td>{{ $service_application->employer() ? $service_application->employer()->company_name : 'NILL' }}
+                                                                <td>{{ $service_application->employer ? $service_application->employer->company_name : 'NILL' }}
                                                                 </td>
-                                                                <td>{{ $service_application->service ? $service_application->service->name : '' }}
+                                                                <td>{{ $service_application->theservice ? $service_application->theservice->name : '' }}
                                                                 </td>
                                                                 {{--                                                               <td>{{ $service_application->processingTypes ? $service_application->processingTypes->name : 'NILL' }}</td>
  --}} {{-- <td><?php //$type = \App\Models\ProcessingType::where('service_id', $service_application->id)->first();
