@@ -765,17 +765,17 @@ class HomeController extends Controller
         }
         //for the vendor applicant section
         $pendingvendors = Employer::where('status', '1')->where(function ($query) {
-            $query->where('user_type', 'e-promta');
+            $query->where('user_type', 'e-promota');
         })->get();
         $pendingcount = Employer::where('status', '1')->where(function ($query) {
-            $query->where('user_type', 'e-promta');
+            $query->where('user_type', 'e-promota');
         })->count();
         $approvecount = Employer::where('status', '2')->where(function ($query) {
-            $query->where('user_type', 'e-promta');
+            $query->where('user_type', 'e-promota');
         })->count();
         // dd($pendingvendors);
         $approvedvendors = Employer::where('status', '2')->where(function ($query) {
-            $query->where('user_type', 'e-promta');
+            $query->where('user_type', 'e-promota');
         })->get();
 
         return view('am', compact('branch', 'approvecount', 'pendingcount', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
