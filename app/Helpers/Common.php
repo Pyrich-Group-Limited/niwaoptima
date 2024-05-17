@@ -193,7 +193,7 @@ function enum_equipment_fees_metrics()
     $option[16] = '/litre';
     $option[17] = '/location';
     $option[18] = '/M3';
-    $option[18] = '/Metre /Annum';
+    $option[19] = '/Metre /Annum';
 
 	
     return $option;
