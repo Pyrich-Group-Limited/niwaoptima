@@ -1,16 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <style>
-       .nav-link {
-            font-weight: 600;
-            color: blue !important;
-        }
-
-        .nav-link:hover {
-            color: green !important;
-        }
-    </style>
+<style>
+    .nav-tabs .nav-link.active {
+      background-color: green !important;
+      color: white !important;
+  }
+  </style>
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
         <div id="kt_content_container" class="container-xxl">

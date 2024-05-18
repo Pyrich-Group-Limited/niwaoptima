@@ -2,14 +2,10 @@
 
 @section('content')
     <style>
-        .nav-link {
-            font-weight: 600;
-            color: green !important;
-        }
-
-        .nav-link:hover {
-            color: green !important;
-        }
+        .nav-tabs .nav-link.active {
+        background-color: green !important;
+        color: white !important;
+    }
     </style>
 
     <div class="post d-flex flex-column-fluid" id="kt_post">
@@ -28,8 +24,7 @@
                     <ul class="nav nav-tabs  bg-primary" id="myTab" role="tablist">
                         <li class="nav-item ">
                             <a class="nav-link text-primary text-hover-success active" id="letter-tab" data-toggle="tab"
-                                href="#letter" role="tab" aria-controls="letter" aria-selected="true">My Departmental
-                                Document</a>
+                                href="#letter" role="tab" aria-controls="letter" aria-selected="true">Internal Correspondece</a>
                         </li>
 
 
@@ -88,7 +83,7 @@
 
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row my-4">
                                     <div class="col-md-12 depDoc1" id="depDoc1">
 
                                         <div class="card">
