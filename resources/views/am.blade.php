@@ -50,9 +50,60 @@
                             <a class="nav-link" id="vendor-tab" data-toggle="tab" href="#vendor" role="tab"
                                 aria-controls="vendor" aria-selected="true">E-promoter </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="dta_request-tab" data-toggle="tab" href="#dta_request" role="tab"
+                                aria-controls="dta_request" aria-selected="false">DTA Requests</a>
+                        </li>
 
                     </ul>
                     <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade" id="dta_request" role="tabpanel" aria-labelledby="dta_request-tab">
+                            <div class="row grid-margin stretch-card">
+                                    
+                                <div class="card ">
+                                    <div class="card-body p-5">
+                                        <h4 class="card-title">
+                                            <i class="fas fa-envelope"></i>
+                                            Latest 10 DTA Requests
+                                        </h4>
+                                        <div class="table-responsive1" style="overflow-y: auto;">
+                                            <table class="table align-middle gs-0 gy-4" id="order-listing2">
+                                                <thead>
+                                                    <tr>
+                                                        <th>S/N</th>
+                                                        <th>Full Name</th>
+                                                        <th>Destination</th>
+                                                        <th>Number Of Days</th>
+                                                        <th>Travel Date</th>
+                                                        <th>Arrival Date</th>
+                                                        <th>Estimated Expenses</th>
+                                                        <th>Date Applied</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($dta_requests as $index => $dtarequests)
+                                                            
+                                                            <tr>
+                                                                <td>{{ $index + 1 }}</td>
+                                                                <td>{{ $dtarequests->destination }}</td>
+                            <td>{{ $dtarequests->user->first_name }} {{ $dtarequests->user->last_name }}</td>
+                            <td>{{ $dtarequests->number_days }}</td>
+                            <td>{{ $dtarequests->travel_date}}</td>
+                            <td>{{ $dtarequests->arrival_date}}</td>
+                            <td>₦{{ $dtarequests->estimated_expenses}}</td>
+                            <td>{{ $dtarequests->created_at}}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+        
+        
+                                    </div>
+        
+                                </div>
+                            </div>
+                        </div>
                         <div class="tab-pane fade show active" id="letter" role="tabpanel" aria-labelledby="letter-tab">
                             <div class="row g-5 g-xl-8">
 

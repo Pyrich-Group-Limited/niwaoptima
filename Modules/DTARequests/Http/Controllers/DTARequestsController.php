@@ -29,6 +29,7 @@ use Modules\WorkflowEngine\Models\Staff;
 
 
 
+
 class DTARequestsController extends AppBaseController
 {
 
@@ -78,23 +79,46 @@ class DTARequestsController extends AppBaseController
         $department_head_data1 = !empty($department_head_data->user_id) ? $department_head_data->user_id : 0;
         $dtarequests1 = $this->dtaRequestsRepository->getByUserId($user_id);
 
-        if (!empty($dtarequests1)) {
+       // if (!empty($dtarequests1)) {
             # code...
-            $dtarequests = $this->dtaRequestsRepository->getByUserId($user_id);
+       //     $dtarequests = $this->dtaRequestsRepository->getByUserId($user_id);
             //$dtarequests = $this->dtaRequestsRepository->paginate(10);
-            $id ="1";
-        } else {
+        //    $id ="1";
+       // } else {
             # code...
 
-            $id ="2";
+         //   $id ="2";
             //$dtarequests = $this->dtaRequestsRepository->getByUnitHeadId($unit_head_id);
-            $dtarequests = $this->dtaRequestsRepository->getByBranchId($s_branchId);
+           // $dtarequests = $this->dtaRequestsRepository->getByBranchId($s_branchId);
             //$dtarequests = $this->dtaRequestsRepository->paginate(10);
-        }
+       // }
+       if(auth()->user()->hasRole('super-admin')){
+        $dtarequests = DTARequests::paginate(10);
+       } else if(auth()->user()->level_id == 20){
+        $dtarequests = DTARequests::paginate(10);
+       }  else if(auth()->user()->level_id == 17){
+        $dtarequests = DTARequests::where('branch_id', auth()->user()->staff->branch_id)->where('department_id', auth()->user()->staff->department_id)->paginate(10);
+       }   else if(auth()->user()->level_id == 3){
+        $dtarequests = DTARequests::where('branch_id', auth()->user()->staff->branch_id)->paginate(10);
+       }   else if(auth()->user()->staff && auth()->user()->staff->department_id == 7){
+        $dtarequests = DTARequests::where('branch_id', auth()->user()->staff->branch_id)->where('department_id', auth()->user()->staff->department_id)->paginate(10);
+       }   else {
+        $dtarequests = DTARequests::where('user_id', auth()->user()->id)->paginate(10);
+       }
         //$dtarequests = $this->dtaRequestsRepository->paginate(10);
         // echo  "exh-0n ".$id." //";
         return view('dtarequests::dtarequests.index')->with(['department_head_data' => $department_head_data, 'dtarequests' => $dtarequests, 'unit_head_data' => $unit_head_data]);
     }
+
+    public function showDTAForMD(Request $request, $dId, $bId)
+{
+    $DTAs = DTARequests::where('department_id', $dId)
+                       ->where('branch_id', $bId)
+                       ->limit(10)
+                       ->get();
+    
+    return response()->json($DTAs);
+}
 
     /**
      * Show the form for creating a new resource.
@@ -113,16 +137,16 @@ class DTARequestsController extends AppBaseController
             $department_id = $department->department_id;
 
             $unit_head_id = $this->dtaRequestsRepository->isUnitHeadInSameDepartment($user_id, $department_id);
-            if (!$unit_head_id) {
+            /* if (!$unit_head_id) {
                 Flash::error("You can not add new dta request because you don'\t have a unit head in your department. Contact administrator for assistance.");
                 return redirect(route('dtarequests.index'));
-            }
+            } */
 
-            $unit_head_department = $this->staffRepository->getByUserId($unit_head_id);
-            $unit_head_department_id = $unit_head_department->department_id;
+            //$unit_head_department = $this->staffRepository->getByUserId($unit_head_id);
+            //$unit_head_department_id = $unit_head_department->department_id;
 
 
-            if ($unit_head_department_id == $department_id) {
+           /*  if ($unit_head_department_id == $department_id) { */
                 # code...
                 $unit_head_data = UnitHead::with('user')->where('user_id', $user_id)->first();
                 $department_head_data = DepartmentHead::with('user')->where('user_id', $user_id)->first();
@@ -130,11 +154,11 @@ class DTARequestsController extends AppBaseController
                 $branches = $this->branchRepository->all()->pluck('branch_name', 'id');
                 $branches->prepend('Select branch', '');
                 return view('dtarequests::dtarequests.create')->with(['department_head_data' => $department_head_data, 'branches' => $branches, 'unit_head_data' => $unit_head_data]);
-            } else {
+            /* } else {
                 # code...
                 Flash::error('You can not create a DTA request because there is no unit head in your department.');
                 return redirect(route('dtarequests.index'));
-            }
+            } */
         }
     }
 
@@ -150,10 +174,10 @@ class DTARequestsController extends AppBaseController
         $uid = Auth::id();
         $staff = Staff::where('user_id', $uid)->first();
         $staff_id = $this->staffRepository->getByUserId($uid);
-        if (!$staff_id) {
+        /* if (!$staff_id) {
             Flash::error('Admin can not add new DTA Request. DTA request should be added by a staff only');
             return redirect(route('dtarequests.index'));
-        } else {
+        } else { */
             try {
             $department = $this->staffRepository->getByUserId($uid);
             $department_id = $department->department_id;
@@ -172,24 +196,33 @@ class DTARequestsController extends AppBaseController
             $input['department_id'] = $s_depId;
 
             if ($request->hasFile('uploaded_doc')) {
-                $file = $request->file('uploaded_doc');
+                /* $file = $request->file('uploaded_doc');
                 $fileName = $file->hashName();
                 $path = $file->store('public');
-                $input['uploaded_doc'] = $fileName;
+                $input['uploaded_doc'] = $fileName; */
+                $path = "storage";
+                $path_folder = public_path($path);
+                // Save file
+                $file = $request->file('uploaded_doc');
+               // $title = str_replace(' ', '', rand());
+                $file_name = rand() . '.' . $file->getClientOriginalExtension();
+                $file->move($path_folder, $file_name);
+                $document_url = $path . "/" . $file_name;
+                $input['uploaded_doc'] = $document_url;
             }
 
             $dtarequests = $this->dtaRequestsRepository->create($input);
 
-            $unitHeadUser = $this->dtaRequestsRepository->getUnitHeadInfo($uid, $department_id);
+           // $unitHeadUser = $this->dtaRequestsRepository->getUnitHeadInfo($uid, $department_id);
 
 
-            if ($unitHeadUser) {
-                $user = $unitHeadUser->user;
+            //if ($unitHeadUser) {
+           //     $user = $unitHeadUser->user;
 
                 // Assuming User model has a method to send email notifications
                 //$user->sendUnitHeadNotification();
               // $user->notify(new UnitHeadNotification($user));
-            }
+           // }
 
 
             Flash::success('DTA Requests saved successfully.');
@@ -213,7 +246,7 @@ class DTARequestsController extends AppBaseController
 
             return redirect(route('dtarequests.index'));
         }
-        }
+        /* } */
     }
 
     /**
@@ -282,11 +315,21 @@ class DTARequestsController extends AppBaseController
         $staff = Staff::where('user_id', $user_id)->first();
         $input['staff_id'] = $user_id;
 
+        
         if ($request->hasFile('uploaded_doc')) {
-            $file = $request->file('uploaded_doc');
+            /* $file = $request->file('uploaded_doc');
             $fileName = $file->hashName();
             $path = $file->store('public');
-            $input['uploaded_doc'] = $fileName;
+            $input['uploaded_doc'] = $fileName; */
+            $path = "storage";
+            $path_folder = public_path($path);
+            // Save file
+            $file = $request->file('uploaded_doc');
+           // $title = str_replace(' ', '', rand());
+            $file_name = rand() . '.' . $file->getClientOriginalExtension();
+            $file->move($path_folder, $file_name);
+            $document_url = $path . "/" . $file_name;
+            $input['uploaded_doc'] = $document_url;
         } else {
             // prevent images from updating db since there is no upload
             unset($input['uploaded_doc']);
@@ -310,6 +353,14 @@ class DTARequestsController extends AppBaseController
             $s_depId = intval(session('department_id'));
             $input_r['department_id'] = $staff->department_id;
         $this->dtaReviewRepository->create($input_r);
+
+        if(auth()->user()->level_id == 20){
+            $dta_requests = DTARequests::find($id);
+            if ($dta_requests) {
+                $dta_requests->edited = 1;
+                $dta_requests->save();
+            }
+        }
 
         Flash::success('DTA Requests updated successfully.');
 

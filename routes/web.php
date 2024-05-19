@@ -159,6 +159,8 @@ Route::get('/showDepartementalDocumentsAndBranch/{id}', 'App\Http\Controllers\Do
 
 Route::get('/showDepartementalDocumentsByUser/{id}', 'App\Http\Controllers\DocumentsController@showDepartementalDocumentsByUser');
 
+//show all dta request for md
+Route::get('/showDTAForMD/{did}/{bid}', 'Modules\DTARequests\Http\Controllers\DTARequestsController@showDTAForMD');
 
 // Start of asset manager
 

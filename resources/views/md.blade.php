@@ -43,6 +43,10 @@
                     <a class="nav-link" id="demand-tab" data-toggle="tab" href="#demand" role="tab"
                         aria-controls="demand" aria-selected="false">My Departmental Documents</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="dta_request-tab" data-toggle="tab" href="#dta_request" role="tab"
+                        aria-controls="dta_request" aria-selected="false">DTA Requests</a>
+                </li>
 
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -381,6 +385,7 @@
                                 });
 
                                 function fetchDocumentsData(departmentId) {
+                                    $('.loader-demo-box1').show();
                                     fetch(`/showDepartementalDocuments/${departmentId}`)
                                         .then(response => response.json())
                                         .then(data => {
@@ -394,6 +399,7 @@
                                     tableBody.innerHTML = '';
 
                                     if (documents.length === 0) {
+                                        $('.loader-demo-box1').hide();
                                         let noResultsRow = `
                                         <tr>
                                             <td colspan="7" class="text-center text-danger"><strong>No results found</strong></td>
@@ -401,6 +407,7 @@
                                     `;
                                         tableBody.insertAdjacentHTML('beforeend', noResultsRow);
                                     } else {
+                                        $('.loader-demo-box1').hide();
                                         documents.forEach((document, index) => {
                                             var fullUrl = "{{ asset('') }}" + document.document_url;
                                             let row = `
@@ -420,6 +427,53 @@
                                     }
                                 }
                             </script>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="dta_request" role="tabpanel" aria-labelledby="dta_request-tab">
+                    <div class="row grid-margin stretch-card">
+                            <div class="col-md-3">
+                                {!! Form::label('department_id', 'Cick To Select User Department:', ['style' => 'font-weight:bold;']) !!}
+                                {!! Form::select('department_id', $departments_data, null, ['class' => 'form-control', 'id' => 'deptDTA']) !!}
+
+                            </div>
+                            <div class="col-md-3">
+                                {!! Form::label('department_id', 'Cick To Select Location:', ['style' => 'font-weight:bold;']) !!}
+                                {!! Form::select('branch_id', $branch, null, ['class' => ' form-control', 'id' => 'branchDTA']) !!}
+                            </div>
+                            <div class="col-md-3" style="margin-top: 20px;"> 
+                                
+                                <button type="button" id="searchDTA" class="btn btn-primary">SEARCH</button>
+                            </div>
+                        <div class="card ">
+                            <div class="card-body p-5">
+                                <h4 class="card-title">
+                                    <i class="fas fa-envelope"></i>
+                                    Latest 10 DTA Requests
+                                </h4>
+                                <div class="table-responsive1" style="overflow-y: auto;">
+                                    <table class="table align-middle gs-0 gy-4" id="order-listing2">
+                                        <thead>
+                                            <tr>
+                                                <th>S/N</th>
+                                                <th>Full Name</th>
+                                                <th>Destination</th>
+                                                <th>Number Of Days</th>
+                                                <th>Travel Date</th>
+                                                <th>Arrival Date</th>
+                                                <th>Estimated Expenses</th>
+                                                <th>Date Applied</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dtaTableBody">
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
 
                         </div>
                     </div>
@@ -1158,9 +1212,62 @@
 
                     // Trigger initial statistics update
                     updateStatistics();
+
+                    $('#searchDTA').click(function() {
+                        updateDTA();
+                    });
+                    function fetchDTA(departmentId, branchId) {
+    $('.loader-demo-box1').show();
+    fetch(`/showDTAForMD/${departmentId}/${branchId}`)
+        .then(response => response.json())
+        .then(data => {
+            displayDTA(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            $('.loader-demo-box1').hide();
+        });
+}
+
+function displayDTA(dtas) {
+    $('.loader-demo-box1').hide();
+    let tableBody = document.getElementById('dtaTableBody');
+    tableBody.innerHTML = '';
+
+    if (dtas.length === 0) {
+        let noResultsRow = `
+            <tr>
+                <td colspan="8" class="text-center text-danger"><strong>No results found</strong></td>
+            </tr>
+        `;
+        tableBody.insertAdjacentHTML('beforeend', noResultsRow);
+    } else {
+        dtas.forEach((dta, index) => {
+            let row = `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${dta.id}</td>
+                    <td>${dta.destination}</td>
+                    <td>${dta.number_days}</td>
+                    <td>${dta.travel_date}</td>
+                    <td>${dta.arrival_date}</td>
+                    <td>₦${dta.estimated_expenses}</td>
+                    <td>${dta.created_at}</td>
+                </tr>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', row);
+        });
+    }
+}
+
+function updateDTA() {
+    var department = $('#deptDTA').val();
+    var branch = $('#branchDTA').val();
+    fetchDTA(department, branch);
+}
                 });
             </script>
-
+ {{-- <td><a target="_blank" class="document-link" href="${ fullUrl }">Approve</a></td>  --}}
             <script>
                 $(document).ready(function() {
                     // Listen for changes in the branch dropdown

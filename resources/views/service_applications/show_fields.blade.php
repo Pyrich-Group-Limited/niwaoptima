@@ -90,11 +90,13 @@ $app_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_stat
         @endpush
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve or decline application form fee')
             {!! Form::button('Approve', [
                 'type' => 'button',
                 'class' => 'btn btn-success btn-xs1',
                 'onclick' => "setSelectedStatus('approve')",
             ]) !!}
+            @endcan
             {{-- {!! Form::button('Decline', [
                 'type' => 'button',
                 'class' => 'btn btn-danger btn-xs1',
@@ -133,6 +135,7 @@ $pro_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_stat
         @endpush
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve or decline processing fee')
             {!! Form::button('Approve', [
                 'type' => 'button',
                 'class' => 'btn btn-success btn-xs1',
@@ -143,6 +146,7 @@ $pro_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_stat
                 'class' => 'btn btn-danger btn-xs1',
                 'onclick' => "setSelectedStatus('decline')",
             ]) !!}
+            @endcan
         </div>
         {!! Form::close() !!}
     </div>
@@ -175,11 +179,13 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
         @endpush
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve or decline inspection fee')
             {!! Form::button('SUBMIT', [
                 'type' => 'submit',
                 'class' => 'btn btn-success btn-xs1',
                 'onclick' => "setSelectedStatus('approve')",
             ]) !!}
+            @endcan
             {{-- {!! Form::button('Decline', [
                 'type' => 'button',
                 'class' => 'btn btn-danger btn-xs1',
@@ -209,6 +215,7 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
         </div>
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve or decline inspection fee')
             {!! Form::button('Approve', [
                 'type' => 'button',
                 'class' => 'btn btn-success btn-xs1',
@@ -219,6 +226,7 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
                 'class' => 'btn btn-danger btn-xs1',
                 'onclick' => "setSelectedStatus('decline')",
             ]) !!}
+            @endcan
         </div>
         {!! Form::close() !!}
     </div>
@@ -272,9 +280,11 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
     </div>
 
     <!-- Add Button -->
+    @can('generate equipment invoice')
     <div class="form-group col-sm-3 mt-5">
         <button type="button" class="btn btn-success" id="add-new-btn">Add New</button>
     </div>
+    @endcan
 
     <div class="form-group col-sm-3 mt-5">
         <span class="total-price"></span>
@@ -282,10 +292,11 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
     </div>
     
     <div id="equipments"></div>
-
+    @can('generate equipment invoice')
     <div class="card-footer">
         <button type="submit" class="btn btn-success">Generate Invoice</button>
     </div>
+    @endcan
     {!! Form::close() !!}
 </div>
 
@@ -331,6 +342,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
         @endpush
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve or decline equipment fee')
             {!! Form::button('Approve', [
                 'type' => 'button',
                 'class' => 'btn btn-success btn-xs1',
@@ -341,6 +353,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
                 'class' => 'btn btn-danger btn-xs1',
                 'onclick' => "setSelectedStatus('decline')",
             ]) !!}
+            @endcan
         </div>
         {!! Form::close() !!}
     </div>
@@ -366,6 +379,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
         @endpush
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve service application as hod marine')
             {!! Form::button('Approve', [
                 'type' => 'button',
                 'class' => 'btn btn-success btn-xs1',
@@ -376,6 +390,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
                 'class' => 'btn btn-danger btn-xs1',
                 'onclick' => "setSelectedStatus('decline')",
             ]) !!}
+            @endcan
         </div>
         {!! Form::close() !!}
     </div>
@@ -398,6 +413,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
         @endpush
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve service application as area officer')
             {!! Form::button('Approve', [
                 'type' => 'button',
                 'class' => 'btn btn-success btn-xs1',
@@ -408,6 +424,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
                 'class' => 'btn btn-danger btn-xs1',
                 'onclick' => "setSelectedStatus('decline')",
             ]) !!}
+            @endcan
         </div>
         {!! Form::close() !!}
     </div>

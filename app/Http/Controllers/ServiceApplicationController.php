@@ -485,12 +485,22 @@ if (count($prices) === count($quantities)) {
         //$total += $monitoring_fee->amount;
 
         // Add the total to the sum
-        $sum_total += $total;
+        //$sum_total += $total;
     }
 }
 
 
-       
+if(isset($equipment)){
+    // Assuming $service_application->equipment_fees_list is the JSON string
+    $equipment_fees_list = json_decode($equipment, true); // Convert JSON to PHP array
+
+    $sum = 0;
+    foreach ($equipment_fees_list as $item) {
+        $sum += $item['price'];
+    }
+}   
+$sum_total = $sum ? $sum : $total;
+
         if (empty($serviceApplication)) {
             Flash::error('Application not found');
 

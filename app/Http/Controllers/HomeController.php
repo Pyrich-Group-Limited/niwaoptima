@@ -24,6 +24,7 @@ use App\Repositories\RoleRepository;
 use App\Models\Service;
 //use App\Models\Level;
 use App\Models\ServiceApplication;
+use Modules\DTARequests\Models\DTARequests;
 
 
 class HomeController extends Controller
@@ -778,7 +779,9 @@ class HomeController extends Controller
             $query->where('user_type', 'e-promota');
         })->get();
 
-        return view('am', compact('branch', 'approvecount', 'pendingcount', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
+        $dta_requests = DTARequests::where('branch_id', auth()->user()->staff->branch_id)->paginate(10);
+
+        return view('am', compact('dta_requests', 'branch', 'approvecount', 'pendingcount', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
     }
 
     //secretary dashboard
@@ -1040,7 +1043,10 @@ class HomeController extends Controller
             $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
         }
 
-        return view('gm_dashboard', compact('branch', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications'));
+        $dta_requests = DTARequests::where('branch_id', auth()->user()->staff->branch_id)->where('department_id', auth()->user()->staff->department_id)->paginate(10);
+
+
+        return view('gm_dashboard', compact('dta_requests', 'branch', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications'));
     }
 
     //From level 6 to 14 dashboard
