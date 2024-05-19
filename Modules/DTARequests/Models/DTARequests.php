@@ -44,6 +44,7 @@ use App\Traits\Approval;
         'status',
         'uploaded_doc',
         'unit_head_id',
+        'edited',
     ];
 
     // protected $casts = [
@@ -65,6 +66,11 @@ use App\Traits\Approval;
     public function branch(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\Modules\Shared\Models\Branch::class, 'branch_id', 'id');
+    }
+
+    public function department(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\Modules\Shared\Models\Department::class, 'department_id', 'id');
     }
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

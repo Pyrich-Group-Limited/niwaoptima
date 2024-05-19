@@ -2,10 +2,14 @@
 
 @section('content')
     <style>
-      .nav-tabs .nav-link.active {
-        background-color: green !important;
-        color: white !important;
-    }
+        .nav-link {
+            font-weight: 600;
+            color: blue !important;
+        }
+
+        .nav-link:hover {
+            color: green !important;
+        }
     </style>
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
@@ -14,7 +18,16 @@
             <h1 class="text-center text-primary mb-5">LOCATION: <span class=" text-uppercase">
                     {{ auth()->user()->staff->branch ? auth()->user()->staff->branch->branch_name : '' }} </span> </h1>
             <div class="row">
+                <div class="d-flex  float-end">
 
+                    {!! Form::label('department_id', 'Click To Select User Department:', ['style' => 'font-weight:bold;']) !!}
+                    {!! Form::select('department_id', $departments_data1, null, [
+                        'class' => 'form-control form-select',
+                        'id' => 'deptSelect1',
+                    ]) !!}
+
+
+                </div>
                 <div class=" justify-content-between">
                     <ul class="nav nav-tabs bg-primary" id="myTab" role="tablist">
                         <li class="nav-item">
@@ -35,11 +48,63 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="vendor-tab" data-toggle="tab" href="#vendor" role="tab"
-                                aria-controls="vendor" aria-selected="true">e-Promota</a>
+                                aria-controls="vendor" aria-selected="true">E-promoter </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="dta_request-tab" data-toggle="tab" href="#dta_request" role="tab"
+                                aria-controls="dta_request" aria-selected="false">DTA Requests</a>
+                        </li>
+
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active my-4" id="letter" role="tabpanel" aria-labelledby="letter-tab">
+                        <div class="tab-pane fade" id="dta_request" role="tabpanel" aria-labelledby="dta_request-tab">
+                            <div class="row grid-margin stretch-card">
+                                    
+                                <div class="card ">
+                                    <div class="card-body p-5">
+                                        <h4 class="card-title">
+                                            <i class="fas fa-envelope"></i>
+                                            Latest 10 DTA Requests
+                                        </h4>
+                                        <div class="table-responsive1" style="overflow-y: auto;">
+                                            <table class="table align-middle gs-0 gy-4" id="order-listing2">
+                                                <thead>
+                                                    <tr>
+                                                        <th>S/N</th>
+                                                        <th>Full Name</th>
+                                                        <th>Destination</th>
+                                                        <th>Number Of Days</th>
+                                                        <th>Travel Date</th>
+                                                        <th>Arrival Date</th>
+                                                        <th>Estimated Expenses</th>
+                                                        <th>Date Applied</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($dta_requests as $index => $dtarequests)
+                                                            
+                                                            <tr>
+                                                                <td>{{ $index + 1 }}</td>
+                                                                <td>{{ $dtarequests->destination }}</td>
+                            <td>{{ $dtarequests->user->first_name }} {{ $dtarequests->user->last_name }}</td>
+                            <td>{{ $dtarequests->number_days }}</td>
+                            <td>{{ $dtarequests->travel_date}}</td>
+                            <td>{{ $dtarequests->arrival_date}}</td>
+                            <td>₦{{ $dtarequests->estimated_expenses}}</td>
+                            <td>{{ $dtarequests->created_at}}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+        
+        
+                                    </div>
+        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show active" id="letter" role="tabpanel" aria-labelledby="letter-tab">
                             <div class="row g-5 g-xl-8">
 
 
@@ -48,24 +113,11 @@
 
                                         <div class="card  ">
 
-                                            <div class="card-header">
-
-
-                                                    {!! Form::label('department_id', 'Click To Select User Department:', ['style' => 'font-weight:bold;','class'=>'py-4']) !!}
-                                                    {!! Form::select('department_id', $departments_data1, null, [
-                                                        'class' => 'form-control form-select',
-                                                        'id' => 'deptSelect1',
-                                                    ]) !!}
-
-
-
-                                            </div>
                                             <div class="card-body p-5">
                                                 <h4 class="card-title">
                                                     <i class="fas fa-envelope"></i>
                                                     Latest 10 Departmental Document
                                                 </h4>
-
                                                 <div class="table-responsive1" style="overflow-y: auto;">
                                                     <table class="table align-middle gs-0 gy-4" id="order-listing2">
                                                         <thead>
@@ -296,8 +348,8 @@
                                 <div class="col-5">
                                     <div class="row">
                                         <!-- <div class="col-3">
-                                                                                                    {!! Form::label('', 'Filter By', ['class' => 'form-label mt-2']) !!}
-                                                                                                </div> -->
+                                                                                                {!! Form::label('', 'Filter By', ['class' => 'form-label mt-2']) !!}
+                                                                                            </div> -->
                                         <div class="col-3">
                                             {!! Form::select('service_id', $services, null, ['class' => 'form-select', 'id' => 'serviceSelect']) !!}
                                         </div>
@@ -464,21 +516,17 @@
                         <div class="tab-pane fade" id="vendor" role="tabpanel" aria-labelledby="vendor-tab">
                             <div class=" justify-content-between">
 
-                                <ul class="nav nav-tabs " id="myTab" role="tablist">
+                                <ul class="nav nav-tabs bg-primary " id="myTab" role="tablist">
                                     <li class="nav-item  mx-2">
-                                        <a class="nav-link active" aria-current="page" data-toggle="tab"
-                                            href="#pendingvendor">Unverified<i
-                                                class=" text-danger">{{ $pendingcount }}</i></a>
+                                        <a class="nav-link active" aria-current="page" data-toggle="tab" href="#pendingvendor">Unverified<i class=" text-danger">{{ $pendingcount }}</i></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#approvedvendor">Verified <i
-                                                class=" text-success">{{ $approvecount }}</i></a>
+                                        <a class="nav-link" data-toggle="tab" href="#approvedvendor">Verified <i class=" text-success">{{ $approvecount }}</i></a>
                                     </li>
                                 </ul>
 
                                 <div class="tab-content" id="vendortabcontent">
-                                    <div class="tab-pane fade show active" id="pendingvendor" role="tabpanel"
-                                        aria-labelledby="pendingvendor-tab">
+                                    <div class="tab-pane fade show active" id="pendingvendor" role="tabpanel" aria-labelledby="pendingvendor-tab">
                                         <div class="row g-5 g-xl-8">
                                             <table class="table">
                                                 <thead>
@@ -509,8 +557,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="tab-pane fade" id="approvedvendor" role="tabpanel"
-                                        aria-labelledby="approvedvendor-tab">
+                                    <div class="tab-pane fade" id="approvedvendor" role="tabpanel" aria-labelledby="approvedvendor-tab">
                                         <div class="row g-5 g-xl-8">
                                             <table class="table">
                                                 <thead>
@@ -521,7 +568,7 @@
                                                     <th>Action</th>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ($approvedvendors as $pendingvendor)
+                                                    @foreach ( $approvedvendors as $pendingvendor)
                                                         <tr>
                                                             <td>{{ $pendingvendor->applicant_code ? $pendingvendor->applicant_code : '' }}
                                                             </td>

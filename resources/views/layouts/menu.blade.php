@@ -112,6 +112,8 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
             {{--  @endif --}}
         @endcan
 
+        @include('dtarequests::layouts.menu')
+
         @can('view approval module')
             <li class="nav-item" id="myTask">
                 <a class="nav-link" href="#">
@@ -120,25 +122,29 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
                     <i class="menu-arrow"></i>
                 </a>
                 <ul class="nav flex-column sub-menu">
-
+                    @can('read approval request')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('request.index') }}">Approval Request</a>
                     </li>
-
-                    {{--  @if (Auth()->user()->hasRole('super-admin')) --}}
+                    @endcan
+                    @can('read approval appraisal')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('appraisal.index') }}">Appraisal</a>
                     </li>
-                    {{-- @endif --}}
+                    @endcan
+                    @can('read approval types')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('type.index') }}">Types</a>
                     </li>
+                    @endcan
+                    @can('read payments approval')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('niwa.payments') }}">
                             Payments Approval
 
                         </a>
                     </li>
+                    @endcan
                     {{-- <li class="nav-item">
                     <a class="nav-link" href="{{ route('document.index') }}">
                         Documents Approval
@@ -320,24 +326,8 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
                             </a>
                         </li>
                     @endif
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dtarequests.create') }}">
-                            <i class="fas fa-code-pull-request menu-icon"></i>
-                            <span>New DTA Requests</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dtarequests.index') }}">
-                            <i class="fas fa-bars menu-icon"></i>
-                            <span>My DTA Applications</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dtareview.index') }}">
-                            <i class="fas fa-star menu-icon"></i>
-                            <span>View Reviewed DTA</span>
-                        </a>
-                    </li>
+                    
+                    
                     <li class="nav-item" id="myTaskLayouts">
                         {{-- <a class="nav-link" href="#">
                         <i class="fas fa-file-archive menu-icon"></i>

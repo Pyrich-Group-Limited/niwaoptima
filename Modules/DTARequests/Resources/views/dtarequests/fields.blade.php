@@ -39,10 +39,29 @@
 
 <!-- document fields -->
 <div class="col-sm-4 my-5">
-    <span class="text-danger">UPLOAD ALL NECESSARY SUPPORTING DOCUMENT INCLUDING RECIEPT AND INVOICE(SCAN ALL AS SINGLE DOC IN PDF FORMAT)</span>
+    <span class="text-danger">UPLOAD ALL NECESSARY SUPPORTING DOCUMENT INCLUDING RECIEPT AND INVOICE(SCAN ALL AS SINGLE DOC IN PDF FORMAT ONLY)</span>
     <div class="form-group">
-        {!! Form::file('uploaded_doc', ['class' =>'form-control','accept' => '.pdf',
-        'onchange' => 'validateFile(this)']) !!}
+        {!! Form::file('uploaded_doc', ['class' =>'form-control', 'id' => 'fileInput','accept' => '.pdf',
+         'required']) !!}
     </div>
-    {!! Form::label('uploaded_doc', ' PDF FILE') !!}
+    {!! Form::label('uploaded_doc', ' PDF FILE ONLY') !!}
 </div>
+
+
+<script>
+    document.getElementById('fileInput').addEventListener('change', function() {
+        const file = this.files[0];
+        const maxSize = 1048576; // 1MB in bytes
+        const allowedFormats = ['application/pdf'];
+        
+        if (file) {
+            if (!allowedFormats.includes(file.type)) {
+                alert('Please select a valid file format PDF.');
+                this.value = ''; // Clear the file input
+            } else if (file.size > maxSize) {
+                alert('File size exceeds the maximum limit of 1MB.');
+                this.value = ''; // Clear the file input
+            }
+        }
+    });
+</script>
