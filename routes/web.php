@@ -961,3 +961,7 @@ Route::get('downloadpay', [EmployerController::class, 'downloadpaymentsample'])-
 Route::get('viewapplicantrecord/{id}',[EmployerController::class,'viewapplicant'])->name('viewapplicant');
 
 Route::post('saveapplicantrecord/{id}',[EmployerController::class,'saveapplicate'])->name('apsav');
+
+
+
+Route::get('p2e',[HomeController::class,'p2e'])->name('p2e')->middleware(['auth']);
