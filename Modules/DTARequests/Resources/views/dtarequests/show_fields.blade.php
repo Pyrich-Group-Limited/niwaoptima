@@ -26,7 +26,7 @@
     {!! Form::label('images', 'PDF Document') !!}
     <div class="form-group">
         <p>
-            <a target="_blank" href="{{ url('storage') }}{!! '/'.$dtarequests->uploaded_doc !!}" alt="PDF file">View PDF in browser</a></p>
+            <a target="_blank" href="{{ url('/') }}{!! '/'.$dtarequests->uploaded_doc !!}" alt="PDF file">View PDF in browser</a></p>
     </div>
 </div>
 
