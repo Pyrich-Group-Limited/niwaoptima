@@ -822,61 +822,67 @@ class HomeController extends Controller
 
         // atp look at this document1, so that all letter of intent will display here
 
-        $documents1 = DB::table('incoming_documents_has_users')
-            ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
-            ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
-            ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
-            ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
-            ->select(
-                'incoming_documents_manager.category_id',
-                'incoming_documents_categories.id',
-                'incoming_documents_manager.title',
-                'incoming_documents_manager.full_name as sender_full_name',
-                'incoming_documents_manager.email as sender_email',
-                'incoming_documents_manager.phone as sender_phone',
-                'incoming_documents_has_users.created_at as createdAt',
-                'incoming_documents_categories.name as category_name',
-                'incoming_documents_has_users.start_date',
-                'incoming_documents_has_users.end_date',
-                'incoming_documents_has_users.allow_share',
-                'incoming_documents_has_users.is_download',
-                'incoming_documents_has_users.user_id',
-                'incoming_documents_has_users.assigned_by',
-                'incoming_documents_manager.document_url as document_url',
-                'incoming_documents_manager.id as d_id',
-                'incoming_documents_categories.id as d_m_c_id',
-                'incoming_documents_categories.name as cat_name',
-                'departments.name as dep_name',
+        // $documents1 = DB::table('incoming_documents_has_users')
+        //     ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
+        //     ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+        //     ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
+        //     ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+        //     ->select(
+        //         'incoming_documents_manager.category_id',
+        //         'incoming_documents_categories.id',
+        //         'incoming_documents_manager.title',
+        //         'incoming_documents_manager.full_name as sender_full_name',
+        //         'incoming_documents_manager.email as sender_email',
+        //         'incoming_documents_manager.phone as sender_phone',
+        //         'incoming_documents_has_users.created_at as createdAt',
+        //         'incoming_documents_categories.name as category_name',
+        //         'incoming_documents_has_users.start_date',
+        //         'incoming_documents_has_users.end_date',
+        //         'incoming_documents_has_users.allow_share',
+        //         'incoming_documents_has_users.is_download',
+        //         'incoming_documents_has_users.user_id',
+        //         'incoming_documents_has_users.assigned_by',
+        //         'incoming_documents_manager.document_url as document_url',
+        //         'incoming_documents_manager.id as d_id',
+        //         'incoming_documents_categories.id as d_m_c_id',
+        //         'incoming_documents_categories.name as cat_name',
+        //         'departments.name as dep_name',
 
-                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
-                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
-                DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
-            )
-            ->latest('incoming_documents_has_users.created_at')
-            ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
-            ->groupBy(
-                'incoming_documents_manager.category_id',
-                'incoming_documents_categories.id',
-                'incoming_documents_has_users.start_date',
-                'incoming_documents_has_users.end_date',
-                'incoming_documents_manager.id',
-                'incoming_documents_manager.title',
-                'incoming_documents_manager.document_url',
-                'incoming_documents_has_users.id',
-                'incoming_documents_has_users.created_at',
-                'incoming_documents_categories.name',
-                'incoming_documents_has_users.allow_share',
-                'incoming_documents_has_users.is_download',
-                'incoming_documents_has_users.user_id',
-                'incoming_documents_has_users.assigned_by',
-                'incoming_documents_manager.created_by',
-                'departments.name',
-                'incoming_documents_manager.status',
-                'incoming_documents_manager.phone',
-                'incoming_documents_manager.email',
-                'incoming_documents_manager.full_name',
-            )
-            ->get();
+        //         DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
+        //         DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
+        //         DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
+        //     )
+        //     ->latest('incoming_documents_has_users.created_at')
+        //     ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
+        //     ->groupBy(
+        //         'incoming_documents_manager.category_id',
+        //         'incoming_documents_categories.id',
+        //         'incoming_documents_has_users.start_date',
+        //         'incoming_documents_has_users.end_date',
+        //         'incoming_documents_manager.id',
+        //         'incoming_documents_manager.title',
+        //         'incoming_documents_manager.document_url',
+        //         'incoming_documents_has_users.id',
+        //         'incoming_documents_has_users.created_at',
+        //         'incoming_documents_categories.name',
+        //         'incoming_documents_has_users.allow_share',
+        //         'incoming_documents_has_users.is_download',
+        //         'incoming_documents_has_users.user_id',
+        //         'incoming_documents_has_users.assigned_by',
+        //         'incoming_documents_manager.created_by',
+        //         'departments.name',
+        //         'incoming_documents_manager.status',
+        //         'incoming_documents_manager.phone',
+        //         'incoming_documents_manager.email',
+        //         'incoming_documents_manager.full_name',
+        //     )
+        //     ->get();
+
+        $intents=DB::table('incoming_documents_manager')
+        // ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+
+        ->get();
+
 
         $dept = Department::get();
         $deptData = $dept->map(function ($dept1) {
@@ -954,7 +960,7 @@ class HomeController extends Controller
             $query->where('user_type', 'e-promota');
         })->get();
 
-        return view('p2e', compact('branch', 'approvecount', 'pendingcount', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
+        return view('p2e', compact('branch', 'approvecount', 'pendingcount', 'services', 'intents', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
     }
 
     //secretary dashboard
