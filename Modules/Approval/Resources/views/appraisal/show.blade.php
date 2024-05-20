@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Appraise Request</h1>
+                    <h1>Approval Request</h1>
                 </div>
                 <div class="col-sm-6">
                     {{-- <a class="btn btn-primary float-end" href="{{ route('type.create') }}">
@@ -41,7 +41,7 @@
 
         <div class="card mb-5">
             <div class="card-body p-5">
-                <h5>Request:: {{ $request->type->name }}</h5>
+                <h5>Request For Approval For:: {{ $request->type->name }}</h5>
                 <hr>
 
                 <table class="table table-bordered align-middle gs-0 gy-4">
@@ -227,7 +227,7 @@
                 <input type="hidden" name="order" id="order" value="{{ isset($next_step) ? $next_step->approval_order : '1' }}">
 
                 <div class="card-body p-5">
-                    <h4>Current Step::{{ $request->next_step }} - Your appraisal on this request</h4>
+                    <h4>Current Approval Step::{{ $request->next_step }} - Your appraisal on this request</h4>
                     <hr>
 
                     <div class="row">

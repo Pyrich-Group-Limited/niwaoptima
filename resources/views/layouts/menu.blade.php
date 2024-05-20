@@ -129,7 +129,7 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
                     @endcan
                     @can('read approval appraisal')
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('appraisal.index') }}">Appraisal</a>
+                        <a class="nav-link" href="{{ route('appraisal.index') }}">Approval Portal</a>
                     </li>
                     @endcan
                     @can('read approval types')
