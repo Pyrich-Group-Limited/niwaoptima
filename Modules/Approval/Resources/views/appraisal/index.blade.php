@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Approval Appraisal</h1>
+                    <h1>Approval Portal</h1>
                 </div>
                 <div class="col-sm-6">
                     {{-- <a class="btn btn-primary float-end" href="{{ route('type.create') }}">
@@ -24,7 +24,7 @@
 
         <div class="card mb-5">
             <div class="card-body p-5">
-                <h5>Pending Approval Appraisal List</h5>
+                <h5>Pending Approval List</h5>
                 <hr>
 
                 <table class="table table-bordered align-middle gs-0 gy-4">
