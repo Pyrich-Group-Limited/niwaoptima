@@ -397,23 +397,23 @@
                                                         <th>Sender Email</th>
                                                         <th>Sender Phone</th>
                                                         <th>Document URL</th>
-                                                        <th>User Share</th>
+                                                        {{-- <th>User Share</th> --}}
                                                         <th>Subject</th>
-                                                        <th>Created Date</th>
+                                                        {{-- <th>Created Date</th> --}}
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 
-                                                    @foreach ($documents1 as $document)
+                                                    @foreach ( $intents as $document)
                                                         @php
 
                                                         @endphp
                                                         <tr>
                                                             {{-- <td>{{ $n++ }}</td> --}}
-                                                            <td>{{ $document->title ?? 'NILL' }}</td>
-                                                            <td>{{ $document->sender_full_name ?? 'NILL' }}</td>
-                                                            <td>{{ $document->sender_email ?? 'NILL' }}</td>
-                                                            <td>{{ $document->sender_phone ?? 'NILL' }}</td>
+                                                            <td>{{ $document->title ?? 'Letter of Intent' }}</td>
+                                                            <td>{{ $document->full_name ?? 'NILL' }}</td>
+                                                            <td>{{ $document->email ?? 'NILL' }}</td>
+                                                            <td>{{ $document->phone ?? 'NILL' }}</td>
                                                             {{-- <td>{{ $document->description }}</td> --}}
 
                                                             <td>
@@ -421,12 +421,12 @@
                                                                     onClick="saveData('{{ $document->document_url }}')"
                                                                     href="{{ asset($document->document_url) }}">{{ substr($document->document_url, 10) }}</a>
                                                             </td>
-                                                            <td><a class="open-modal-shareuser btn btn-primary"
+                                                            {{-- <td><a class="open-modal-shareuser btn btn-primary"
                                                                     href="#" data-toggle="modal"
                                                                     data-target="#shareuserModal1"
-                                                                    data-shareuser={{ $document->d_id }}>User</a></td>
-                                                            <td>{{ $document->doc_description ?? 'NILL' }}</td>
-                                                            <td>{{ $document->document_created_at ?? 'NILL' }}</td>
+                                                                    data-shareuser={{ $document->d_id }}>User</a></td> --}}
+                                                            <td>{{ $document->description ?? 'NILL' }}</td>
+                                                            {{-- <td>{{ $document->document_created_at ?? 'NILL' }}</td> --}}
 
 
                                                         </tr>
