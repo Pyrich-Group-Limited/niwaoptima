@@ -53,7 +53,7 @@ use Modules\EmployerManager\Http\Controllers\EmployerController;
 */
 
 //LARAVEL DEFAULT Auth::routes();
-
+Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
 
 
