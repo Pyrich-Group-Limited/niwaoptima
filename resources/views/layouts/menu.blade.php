@@ -252,7 +252,7 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
 
         @endcan
 
-        @can('view mass upload module')
+        {{-- @can('view mass upload module') --}}
             {{-- i was asked to remove the super user lock here --}}
             <li class=" nav-item" id="myTask">
                 <a href="#" class="nav-link">
@@ -261,34 +261,34 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
                     <i class="menu-arrow"></i>
                 </a>
                 <ul class="nav flex-column sub-menu">
-                    @can('applicant massupload')
+                    {{-- @can('applicant massupload') --}}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('showemplist') }}">
                                 <i class="fas fa-balance-scale menu-icon"></i>
                                 <span>Applicant Record</span>
                             </a>
                         </li>
-                    @endcan
+                    {{-- @endcan --}}
 
-                    @can('service massupload')
+                    {{-- @can('service massupload') --}}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('serviceappdata') }}">
                                 <i class="fas fa-balance-scale menu-icon"></i>
                                 <span>Service Application Record</span>
                             </a>
                         </li>
-                    @endcan
-                    @can('payment massupload')
+                    {{-- @endcan --}}
+                    {{-- @can('payment massupload') --}}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('payhistory') }}">
                                 <i class="fas menu-icon fa-book"></i>
                                 <span>Payment Record</span>
                             </a>
                         </li>
-                    @endcan
+                    {{-- @endcan --}}
                 </ul>
             </li>
-        @endcan
+        {{-- @endcan --}}
 
 
         @can('view my task module')
@@ -326,8 +326,8 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
                             </a>
                         </li>
                     @endif
-                    
-                    
+
+
                     <li class="nav-item" id="myTaskLayouts">
                         {{-- <a class="nav-link" href="#">
                         <i class="fas fa-file-archive menu-icon"></i>

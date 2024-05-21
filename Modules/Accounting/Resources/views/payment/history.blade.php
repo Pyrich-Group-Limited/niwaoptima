@@ -20,6 +20,7 @@
         </thead>
         <tbody>
             @foreach ($payment as $item)
+            {{-- @dd($item->serviceapp->theservice); --}}
                 <tr>
 
                     <td>{{ $item->id }}</td>
@@ -27,7 +28,7 @@
                     <td>{{ $item->branch ? $item->branch->branch_name : 'No Area Office' }}</td>
 
                     {{-- @dd($item->serviceapplicationcode->theservice->name); --}}
-                    <td>{{ $item->serviceapplicationcode? $item->serviceapplicationcode->theservice->name : 'No Yet Applied' }}
+                    <td>{{ $item->serviceapplicationcode? $item->serviceapplicationcode->theservice->name : 'Dredging' }}
                     </td>
 
                     @if ($item->payment_status == 1)
