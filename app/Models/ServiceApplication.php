@@ -97,7 +97,7 @@ class ServiceApplication extends Model
         return $employer;
     } */
     public function applicant(){
-        return $this->belongsTo(Employer::class,'applicant_code','id');
+        return $this->belongsTo(Employer::class,'applicant_code','applicant_code');
     }
 
      public function employer(){

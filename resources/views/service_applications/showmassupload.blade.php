@@ -27,7 +27,7 @@
                     <table class="table align-middle gs-0 gy-4" id="mytable1">
                         <thead>
                             <tr>
-                                <th class="min-w-200px">ID</th>
+                                <th class="min-w-200px">Service Ref</th>
                                 <th class="min-w-200px">Applicant</th>
                                 <th class="min-w-200px">Service Name</th>
                                 <th class="min-w-200px">Service Type</th>
@@ -38,9 +38,10 @@
                         </thead>
                         <tbody>
                             @foreach ($serviceApplications as $serviceApplication)
-                                <tr>
-                                    <td>{{ $serviceApplication->id }}</td>
-                                    <td>{{ $serviceApplication->employer() ? $serviceApplication->employer()->company_name : 'Name Not Found' }}
+{{-- @dd($serviceApplication); --}}
+                            <tr>
+                                    <td>{{ $serviceApplication->serviceapplication_code }}</td>
+                                    <td>{{ $serviceApplication->applicant ? $serviceApplication->applicant->company_name : 'Name Not Found' }}
                                     </td>
                                     <td>{{ $serviceApplication->theservice ? $serviceApplication->theservice->name : '' }}
                                         <td>{{ $serviceApplication->service_type_id == 'mechanical' ? 'Mechanical' : 'Manual' }}

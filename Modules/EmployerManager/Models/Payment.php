@@ -32,7 +32,7 @@ class Payment extends Model
     //    return $data;
     // }
     public function serviceapp(){
-        return $this->belongsTo(ServiceApplication::class,'serviceapplication_code','id');
+        return $this->belongsTo(ServiceApplication::class,'serviceapplication_code','serviceapplication_code');
     }
     public function certificate()
     {
