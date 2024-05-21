@@ -26,7 +26,7 @@
 </li>
 @endif
 
-<li class="nav-item" id="myTaskLayouts">
+{{-- <li class="nav-item" id="myTaskLayouts">
     <a class="nav-link" href="#">
         <i class="fas fa-wallet menu-icon"></i>
         <span class="menu-title">Leave Management</span>
@@ -38,7 +38,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('leave_request.index') }}">Leave Status</a>
-        </li>
+        </li> --}}
 
         {{-- <li class="nav-item">
                     <a class="nav-link" href="{{ route('leave.index') }}">Manage Leave</a>
@@ -59,9 +59,9 @@
 
             </ul>
         </li>
-
+{{-- 
     </ul>
-</li>
+</li> --}}
 
 @if (auth()->check() && (in_array(auth()->user()->staff->department_id, [1]) || auth()->user()->hasRole('super-admin')))
     <li class="nav-item" id="myTaskLayouts">

@@ -113,7 +113,21 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
         @endcan
 
         @include('dtarequests::layouts.menu')
-
+        <li class="nav-item" id="myTask">
+            <a class="nav-link" href="#">
+                <i class="fas fa-wallet menu-icon"></i>
+                <span class="menu-title">Leave Management</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('leave_request.create') }}">Apply for Leave</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('leave_request.index') }}">Leave Status</a>
+                </li>
+            </ul>
+            </li>
         @can('view approval module')
             <li class="nav-item" id="myTask">
                 <a class="nav-link" href="#">
