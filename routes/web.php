@@ -967,3 +967,6 @@ Route::post('saveapplicantrecord/{id}',[EmployerController::class,'saveapplicate
 
 
 Route::get('p2e',[HomeController::class,'p2e'])->name('p2e')->middleware(['auth']);
+
+Route::get('p2erevenue',[HomeController::class,'P2erevenuegenerated'])->name('p2e_revenue');
+Route::get('p2e_demandsearch',[HomeController::class,'P2edemandnotice'])->name('p2e_demandnotice');

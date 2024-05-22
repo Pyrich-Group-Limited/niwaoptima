@@ -784,12 +784,66 @@ class HomeController extends Controller
 
         return view('am', compact('dta_requests', 'branch', 'approvecount', 'pendingcount', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
     }
+
+    public function P2erevenuegenerated(Request $request)
+    {
+        $id=$request->data;
+        $data=DB::table('payments')
+        ->select(DB::raw('MONTH(paid_at) AS year'),DB::raw('SUM(amount) as total_amount'))
+        ->where('branch_id',$id)
+        ->groupBy(DB::raw('MONTH(paid_at)'))
+        ->orderBy('year')
+        ->get()
+        ;
+        
+      
+       
+        return $data;
+    }
+    public function P2edemandnotice(Request $request)
+    {
+        //shehu said the demand notice you can use payment table  where payment_type ==5
+        $id=$request->data;
+        $datas=DB::table('payments')
+        ->where('payment_type',5)
+        
+        // ->select(DB::raw('YEAR(paid_at) AS year'),DB::raw('SUM(amount) as total_amount'))
+        ->where('branch_id',$id)
+        ->groupBy(DB::raw('YEAR(paid_at)'))
+        ->orderBy('year')
+        ->get()
+        ;
+        
+      
+        dd($datas);
+        return $data;
+    }
+
     public function p2e()
     {
 
         $branch = Branch::all();
+
+        $branchesopt= new Branch();
+
+        $branchesopt->id=0;
+        $branchesopt->branch_name= 'Select Area Office';
+        $branch->prepend($branchesopt);
+        
         $services = Service::where('branch_id', Auth()->user()->staff->branch_id)->get();
 
+        // =ServiceApplication::get();
+        $demandnotice = DB::table('service_applications')
+            ->where('equipment_fees_list', '!=', null)
+            ->get(['id', 'created_at'])
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'created_at' => date('M, Y', strtotime($item->created_at))
+                ];
+            })
+            ->pluck('created_at', 'id');
+        // dd($demandnotice);
         $services = $services->pluck('name', 'id'); // Pluck the values and assign it back to $services variable
         // $services->prepend('Select Service', 0); // Add an empty option with label 'Select Service'
         $documents1vv = \App\Models\IncomingDocuments::query()
@@ -878,10 +932,10 @@ class HomeController extends Controller
         //     )
         //     ->get();
 
-        $intents=DB::table('incoming_documents_manager')
-        // ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+        $intents = DB::table('incoming_documents_manager')
+            // ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
 
-        ->get();
+            ->get();
 
 
         $dept = Department::get();
@@ -919,8 +973,8 @@ class HomeController extends Controller
     JOIN staff ON users.id = staff.user_id
 
     '
-);
-//i deleted that restriction of branch_id
+        );
+        //i deleted that restriction of branch_id
 
 
 
@@ -960,7 +1014,7 @@ class HomeController extends Controller
             $query->where('user_type', 'e-promota');
         })->get();
 
-        return view('p2e', compact('branch', 'approvecount', 'pendingcount', 'services', 'intents', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
+        return view('p2e', compact('branch', 'demandnotice', 'approvecount', 'pendingcount', 'services', 'intents', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
     }
 
     //secretary dashboard
