@@ -2,17 +2,26 @@
 
 @section('content')
     <style>
-      .nav-tabs .nav-link.active {
-        background-color: green !important;
-        color: white !important;
-    }
+        .nav-tabs .nav-link.active {
+            background-color: green !important;
+            color: white !important;
+        }
     </style>
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
         <div id="kt_content_container" class="container-xxl">
-            <h5 class="text-center mb-2">WELCOME {{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</h5>
-            <h1 class="text-center text-primary mb-5">P2E  DASHBOARD<span class=" text-uppercase">
-                    </span> </h1>
+            <h5 class="text-center mb-2"> </h5>
+            <h1 class="text-center text-primary mb-5">P2E TECHNOLOGY DASHBOARD<span class=" text-uppercase">
+                </span> </h1>
+
+
+
+
+
+
+
+
+
             <div class="row">
 
                 <div class=" justify-content-between">
@@ -124,8 +133,8 @@
                                 <div class="col-5">
                                     <div class="row">
                                         <!-- <div class="col-3">
-                                                                                                    {!! Form::label('', 'Filter By', ['class' => 'form-label mt-2']) !!}
-                                                                                                </div> -->
+                                                                                                                                                                                                                                {!! Form::label('', 'Filter By', ['class' => 'form-label mt-2']) !!}
+                                                                                                                                                                                                                            </div> -->
                                         <div class="col-3">
                                             {!! Form::select('service_id', $services, null, ['class' => 'form-select', 'id' => 'serviceSelect']) !!}
                                         </div>
@@ -404,7 +413,7 @@
                                                 </thead>
                                                 <tbody>
 
-                                                    @foreach ( $intents as $document)
+                                                    @foreach ($intents as $document)
                                                         @php
 
                                                         @endphp
@@ -557,11 +566,86 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="">
+                        <div class="card">
 
+                            <div class="card-body">
+
+                                <div class="row">
+
+
+
+
+
+                                    <div class="form-group col-6">
+                                        <label for="selectBranch">Select Area Office:</label>
+                                        <select name="branch" id="selectBranchreve" class="form-select">
+                                            @foreach ($branch as $branchItem)
+                                                <option value="{{ $branchItem->id }}">{{ $branchItem->branch_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="chart-container" style="position: relative; height:40vh; width:60vw">
+
+                                    <canvas id="myChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group col-6">
+                                        <label for="selectBranch">Select Area Office:</label>
+                                        <select name="branch" id="selectBranch" class="form-select">
+                                            @foreach ($branch as $branchItem)
+                                                <option value="{{ $branchItem->id }}">{{ $branchItem->branch_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="selectYear">Select Year:</label>
+                                        <select name="year" id="selectYear" class="form-select">
+                                            @for ($year = date('Y'); $year >= date('Y') - 10; $year--)
+                                                <option value="{{ $year }}">{{ $year }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <div class="form-group mt-4 col-4">
+
+                                        <button class="btn btn-success " id="searchbtn" type="button">Search</button>
+                                    </div>
+
+                                </div>
+
+
+                                <h4 class=" text-center text-success"> Demand Notice:</h4>
+                                <div class="chart-container" style="position: relative; height:40vh; width:60vw;">
+                                    <canvas id="demandnotice"></canvas>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
 
                 <br>
                 <br>
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
                 <script>
                     $(document).on("click", ".open-modal-shareuser", function() {
                         let shareuser = $(this).data('shareuser');
@@ -571,6 +655,9 @@
 
                     $(document).ready(function() {
                         // Function to update statistics based on selected options
+
+
+
                         function updateStatistics() {
                             var serviceId = $('#serviceSelect').val();
                             var month = $('#monthSelect').val();
@@ -615,5 +702,112 @@
                         // Trigger initial statistics update
                         updateStatistics();
                     });
+                    const demandnotice = $('#demandnotice')
+                    const ctx = document.getElementById('myChart');
+                    var revenuebranch = $('#selectBranchreve')
+
+                    var demandnoticeyear = $('#selectYear')
+                    var demandnoticebranch = $('#selectBranch')
+                    var demandnoticebtn = $('#searchbtn')
+
+
+                    revenuebranch.change(function(e) {
+                        // alert()
+                        e.preventDefault(); // Prevent default form submission if revenuebranch is a form element
+
+                        var data = $(this).val();
+
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('p2e_revenue') }}",
+                            data: {
+                                data: data
+                            },
+                            dataType: "json", // Change this to the expected data type
+                            success: function(response) {
+                                // alert(response);
+                                var monthNames = ["January", "February", "March", "April", "May", "June",
+                                    "July", "August", "September", "October", "November", "December"
+                                ];
+                                // var month = response.map(function(item) {
+                                //     return item.year;
+                                // });
+                                var month = response.map(function(item) {
+                                    // Convert numeric month to month name
+                                    var monthIndex = parseInt(item.year) -
+                                    1; // Assuming month starts from 1
+                                    return monthNames[monthIndex];
+                                });
+                                var amount = response.map(function(item) {
+                                    return item.total_amount;
+                                });
+
+
+
+                                var dynamicColors = [];
+                                for (var i = 0; i < month.length; i++) {
+                                    dynamicColors.push('rgba(' + Math.floor(Math.random() * 255) + ',' + Math.floor(
+                                            Math.random() * 255) + ',' + Math.floor(Math.random() * 255) +
+                                        ', 0.6)');
+                                }
+                                new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: month,
+                                        datasets: [{
+                                            label: '# MONTHLY REVENUE GENERATED',
+                                            data: amount,
+                                            backgroundColor: dynamicColors,
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    }
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText); // Log any errors to the console
+                            }
+                        });
+                    })
+
+
+
+
+                    new Chart(demandnotice, {
+    type: 'pie',
+    data: {
+        labels: [
+            'Red',
+            'Blue',
+            'Yellow'
+        ],
+        datasets: [{
+            label: 'My First Dataset',
+            data: [300, 50, 100],
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+            ],
+            hoverOffset: 4,
+        }]
+    },
+    options: {
+        plugins: {
+            legend: {
+                display: true,
+                position: 'right'
+            }
+        },
+        maintainAspectRatio: false
+    }
+});
+
                 </script>
             @endsection
