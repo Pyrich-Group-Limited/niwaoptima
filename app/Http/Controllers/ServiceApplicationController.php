@@ -21,6 +21,9 @@ use App\Http\Requests\CreateServiceApplicationRequest;
 use App\Http\Requests\UpdateServiceApplicationRequest;
 use App\Models\Service;
 use Modules\EmployerManager\Models\Employer;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use App\Models\User;
 
 class ServiceApplicationController extends AppBaseController
 {
@@ -56,16 +59,69 @@ class ServiceApplicationController extends AppBaseController
     }
 
     // Filter by role axis_id
-    if (Auth()->user()->hasRole('super-admin') || Auth()->user()->hasRole('MANAGING DIRECTOR')) {
+    if (Auth()->user()->hasRole('super-admin') || Auth()->user()->level_id == 20) {
         $query->where('current_step', '>', 3);
-    } else {
+    } else if(Auth()->user()->level_id == 3) {
         $query->where('branch_id', Auth()->user()->staff->branch_id)
               ->where('current_step', '>', 3);
-    }
+    } else {
+        $query->where('assigned_user_id', Auth()->user()->id)
+              ->where('current_step', '>', 3);
+    } 
 
     $serviceApplications = $query->orderBy('id', 'desc')->paginate(10);
 
-    return view('service_applications.index')->with('serviceApplications', $serviceApplications);
+    $displayedIds = [164,140,145,146,147,148,142,143,146,181,147];
+        $permissions = DB::table('permissions')->whereIn('id', $displayedIds)->get();
+        //$permissions = $this->permissionRepository->all();
+
+        $permissions->each(function ($permission) {
+            $permission->assigned = false;
+        });
+        
+
+        $groupedPermissions = $permissions->groupBy(function ($permission) {
+            $words = explode(' ', strtolower($permission->name));
+            // dd($words );
+            $commonWords = array_intersect($words, ['user', 'role', 'client', 'project', 'milestone', 'bug', 'grant chart', 'project task', 'timesheet', 'areamanager', 'area office', 'hod', 'md', 'account', 'regional', 'medical']);
+
+            return count($commonWords) > 0 ? implode('_', $commonWords) : $permission->name;
+        });
+     $roles = Role::where('id','!=', 1)->get()->pluck('name', 'id');
+        $users = DB::table('users')
+    ->join('staff', 'users.id', '=', 'staff.user_id')
+    ->where('staff.branch_id', auth()->user()->staff->branch_id)
+    ->select('users.id', DB::raw('CONCAT(users.first_name, " ", users.last_name) AS name'))
+    ->pluck('name', 'id');
+
+    return view('service_applications.index', compact( 'serviceApplications', 'groupedPermissions', 'roles', 'users'));
+}
+
+public function assignPermissions(Request $request)
+{
+    // Find the role
+    $role = Role::find($request->role_id);
+
+    // Sync permissions
+    $role->syncPermissions($request->input('permissions', []));
+
+    // Find the service application and update assigned user
+    $serviceApplication = ServiceApplication::find($request->shareuser_id);
+    if ($serviceApplication) {
+        $serviceApplication->assigned_user_id = $request->user_id;
+        $serviceApplication->save();
+    }
+    
+    // Find the user and assign the role
+    $user = User::find($request->user_id);
+    if ($user) {
+        $user->assignRole($request->role_id);
+    }
+
+    // Assuming you're using Laravel's built-in flash messaging
+    session()->flash('success', 'Permissions assigned successfully.');
+
+    return redirect()->back();
 }
 
 
@@ -508,8 +564,9 @@ $sum_total = $sum ? $sum : $total;
         }
 
         $input = $request->all();
+        $demand_total = $request->total_price;
 
-        $essp_payment = (new ESSPPaymentController)->generateRemita($request, $sum_total, $serviceApplication);
+        $essp_payment = (new ESSPPaymentController)->generateRemita($request, $demand_total, $serviceApplication);
 
         if ($essp_payment == true) {
             if ($input['payment_type'] == "5") {
@@ -521,7 +578,7 @@ $sum_total = $sum ? $sum : $total;
                 $serviceApplication->expiry_date = $expiry_date;
                 $serviceApplication->status_summary = "Please review and approve this demand notice.";
                 $serviceApplication->equipment_fees_list = $equipment;
-                $serviceApplication->demand_total = $sum_total;
+                $serviceApplication->demand_total = $demand_total;
                 $serviceApplication->save();
             }
         }

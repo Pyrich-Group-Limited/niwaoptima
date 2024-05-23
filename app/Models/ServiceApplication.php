@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\EmployerManager\Models\Employer;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Shared\Models\Branch;
 
 class ServiceApplication extends Model
 {
@@ -40,6 +41,7 @@ class ServiceApplication extends Model
         'demand_total',
         'axis_id',
         'expiry_date',
+        'assigned_user_id',
     ];
 
     protected $casts = [
@@ -117,5 +119,10 @@ class ServiceApplication extends Model
     public function processingType()
     {
         return $this->belongsTo(ProcessingType::class, 'service_type_id');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
     }
 }

@@ -264,6 +264,8 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
     @endpush
     <input type="hidden" name="payment_type" id="payment_type" value="5">
     <input type="hidden" name="service_application_id" value="{{ $serviceApplication->id }}">
+    <input type="hidden" name="demand_total" id="demand_total" value="">
+
     <div class="form-group row col-sm-12" style="">
         <div class="row col-sm-12">
             <div class="form-group col-sm-3 dd1">
@@ -288,7 +290,7 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
 
     <div class="form-group col-sm-3 mt-5">
         <span class="total-price"></span>
-        <input type="hidden" class="total-price-input" name="total_price">
+        <input type="hidden" class="total-price-input" name="total_price" id="total_price">
     </div>
     
     <div id="equipments"></div>
@@ -399,7 +401,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
 @if ($serviceApplication->current_step == 142)
     <div class="col-sm-12">
         <!-- Documents Approval -->
-        <h3>Area Officer Approval</h3>
+        <h3>Area Manager Approval</h3>
         {!! Form::open([
             'route' => ['application.hodmarine.approval', $serviceApplication->id],
             'method' => 'post',

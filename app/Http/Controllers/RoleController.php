@@ -61,17 +61,8 @@ class RoleController extends AppBaseController
         $groupedPermissions = $permissions->groupBy(function ($permission) {
             $words = explode(' ', strtolower($permission->name));
             // dd($words );
-            $commonWords = array_intersect($words, [
-                'user', 'role', 'files', 'document', 'client','niwaexpresspaymentmodule',
-              'memo', 'dashboards', 'leaveapproval', 'account', ' area office manager', 'medical',
-                'legal', 'qgis and arcgis', 'marine', 'salary',
-                'gifmis', 'finance', 'asset', 'management', 'crm', 'calender', 'locations',
-                'engineering','requisition', 'corporate', 'vendors', 'requisition',
-                'invoices', 'service applications','sericeapproval','product stock', 'cash flow', 'expense', 'tax', 'approval',
-                 'ticket',  'task','documents',
-                'area office',    'correspondence',
-                'equipment', 'clients', 'survey','debtors',
-            ]);
+            $commonWords = array_intersect($words, ['user', 'role', 'client', 'project', 'milestone', 'bug', 'grant chart', 'project task', 'timesheet', 'areamanager', 'area office', 'hod', 'md', 'account', 'regional', 'medical']);
+
             return count($commonWords) > 0 ? implode('_', $commonWords) : $permission->name;
         });
 // dd($words);

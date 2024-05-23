@@ -315,8 +315,9 @@
     foreach ($equipment_fees_list as $item) {
         $sum += $item['price'];
     } ?>
-                                                                    {{ isset($service_application->equipment_fees_list) ? '₦' . number_format($sum, 2) : 'N/A' }}
+                                                                    {{-- {{ isset($service_application->equipment_fees_list) ? '₦' . number_format($sum, 2) : 'N/A' }} --}}
                                                                     <?php } ?>
+                                                                    {{ '₦' . number_format($service_application->demand_total, 2) }}
                                                                 </td>
                                                                 <td>{{ $service_application->created_at ?? 'NILL' }}</td>
                                                                 <td>
