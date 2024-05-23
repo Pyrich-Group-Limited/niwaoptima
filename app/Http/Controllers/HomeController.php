@@ -815,8 +815,8 @@ class HomeController extends Controller
         ;
         
       
-        dd($datas);
-        return $data;
+        // dd($datas);
+        return $datas;
     }
 
     public function p2e()

@@ -230,7 +230,8 @@
                                                             @php @endphp
                                                             <tr>
                                                                 <td>{{ $index + 1 }}</td>
-                                                                <td>{{ $service_application->employer() ? $service_application->employer()->company_name : 'NILL' }}
+                                                                <td>{{ $service_application->employer ? $service_application->employer->company_name : 'NILL' }}
+                                                                {{-- <td>{{ $service_application->employer() ? $service_application->employer()->company_name : 'NILL' }} --}}
                                                                 </td>
                                                                 <td>{{ $service_application->service ? $service_application->service->name : '' }}
                                                                 </td>
