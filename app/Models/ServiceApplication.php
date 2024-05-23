@@ -40,6 +40,7 @@ class ServiceApplication extends Model
         'demand_total',
         'axis_id',
         'expiry_date',
+        'assigned_user_id',
     ];
 
     protected $casts = [

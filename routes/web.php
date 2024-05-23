@@ -610,6 +610,8 @@ Route::post('equipment-fee-payment-approval/{id}', [App\Http\Controllers\Service
 Route::post('area-officer-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'areaOfficerApproval'])->name('application.areaofficer.approval');
 Route::post('hod-marine-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'hodMarineApproval'])->name('application.hodmarine.approval');
 Route::get('/map/{id}', 'App\Http\Controllers\ServiceApplicationController@showMap')->name('map.show');
+Route::post('assign-permissions', [App\Http\Controllers\ServiceApplicationController::class, 'assignPermissions'])->name('assign.permissions');
+
 
 //Area manager approve equipment and fees created for a client
 Route::get('/service-application/{id}/approve', 'App\Http\Controllers\ServiceApplicationController@approveDemandNotice')->name('approve_demand_notice');
