@@ -172,6 +172,13 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
             {!! Form::label('date_of_inspection', 'Date Of Inspection:') !!}
             {!! Form::date('date_of_inspection', null, ['class' => 'form-control', 'id' => 'date_of_inspection']) !!}
         </div>
+        <div class="form-group col-sm-6 mb-5">
+            {!! Form::label('comments_on_inspection', 'Comments:') !!}
+            {!! Form::textarea('comments_on_inspection', $serviceApplication->comments_on_inspection, [
+                'class' => 'form-control',
+                'id' => 'comments_on_inspection',
+            ]) !!}
+        </div>
         @push('page_scripts')
             <script type="text/javascript">
                 $('#date_of_inspection').datepicker()
@@ -198,38 +205,42 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
 @endif
 
 @if ($serviceApplication->current_step == 9)
-    <div class="col-sm-12">
-        <!-- Documents Approval -->
-        <h3>Inspection Status</h3>
-        {!! Form::open([
-            'route' => ['application.inspection.status', $serviceApplication->id],
-            'method' => 'post',
-            'id' => 'approvalForm',
-        ]) !!}
-        <div class="form-group col-sm-6 mb-5">
-            {!! Form::label('comments_on_inspection', 'Comments:') !!}
-            {!! Form::textarea('comments_on_inspection', $serviceApplication->comments_on_inspection, [
-                'class' => 'form-control',
-                'id' => 'comments_on_inspection',
-            ]) !!}
+<div class="col-sm-12">
+    <!-- Documents Approval -->
+    <h3>Inspection Status Report</h3>
+    {!! Form::open([
+        'route' => ['application.inspection.status', $serviceApplication->id],
+        'method' => 'post',
+        'id' => 'approvalForm',
+        'enctype' => 'multipart/form-data',
+    ]) !!}
+    <div class="form-group col-sm-6 mb-5">
+        {!! Form::label('inspection_report', 'Upload Report (.pdf only):') !!}
+        <div class="input-group">
+            <div class="custom-file">
+                {!! Form::file('inspection_report', ['class' => 'form-control', 'required', 'id' => 'fileInput23', 'accept' => '.pdf']) !!}
+            </div>
         </div>
-        <input type="hidden" name="selected_status" id="selected_status_input">
-        <div class='btn-group'>
-            @can('approve or decline inspection fee')
-            {!! Form::button('Approve', [
-                'type' => 'button',
+    </div>
+    <input type="hidden" name="selected_status" id="selected_status_input">
+    <div class="btn-group">
+        @can('approve or decline inspection fee')
+            {!! Form::button('SUBMIT', [
+                'type' => 'submit',
                 'class' => 'btn btn-success btn-xs1',
                 'onclick' => "setSelectedStatus('approve')",
             ]) !!}
-            {!! Form::button('Decline', [
+            {{-- Uncomment the following lines if you want to add a Decline button --}}
+            {{-- {!! Form::button('Decline', [
                 'type' => 'button',
                 'class' => 'btn btn-danger btn-xs1',
                 'onclick' => "setSelectedStatus('decline')",
-            ]) !!}
-            @endcan
-        </div>
-        {!! Form::close() !!}
+            ]) !!} --}}
+        @endcan
     </div>
+    {!! Form::close() !!}
+</div>
+
 @endif
 
 
@@ -546,5 +557,22 @@ function updatePrice() {
     $('.total-price-input').val(totalPrice);
 }
 
+    </script>
+    <script>
+        document.getElementById('fileInput23').addEventListener('change', function() {
+            const file = this.files[0];
+            const maxSize = 1048576; // 1MB in bytes
+            const allowedFormats = ['application/pdf'];
+            
+            if (file) {
+                if (!allowedFormats.includes(file.type)) {
+                    alert('Please select a valid file format PDF.');
+                    this.value = ''; // Clear the file input
+                } else if (file.size > maxSize) {
+                    alert('File size exceeds the maximum limit of 1MB.');
+                    this.value = ''; // Clear the file input
+                }
+            }
+        });
     </script>
 @endpush

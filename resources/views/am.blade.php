@@ -285,6 +285,7 @@
                                                             <th>S/N</th>
                                                             <th>Client</th>
                                                             <th>Service</th>
+                                                            <th>Inspection Report</th>
                                                             {{--  <th>Service Type</th> --}}
                                                             <th>Amount</th>
                                                             <th>Created Date</th>
@@ -301,6 +302,9 @@
                                                                 </td>
                                                                 <td>{{ $service_application->theservice ? $service_application->theservice->name : '' }}
                                                                 </td>
+                                                                <td><a class="document-link" target="_blank" href="{{ asset($service_application->inspection_report) }}" >View Report </a>
+                                                                </td>
+                                                                
                                                                 {{--                                                               <td>{{ $service_application->processingTypes ? $service_application->processingTypes->name : 'NILL' }}</td>
  --}} {{-- <td><?php //$type = \App\Models\ProcessingType::where('service_id', $service_application->id)->first();
  ?>

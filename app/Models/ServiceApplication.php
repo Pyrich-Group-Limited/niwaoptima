@@ -42,6 +42,7 @@ class ServiceApplication extends Model
         'axis_id',
         'expiry_date',
         'assigned_user_id',
+        'inspection_report',
     ];
 
     protected $casts = [

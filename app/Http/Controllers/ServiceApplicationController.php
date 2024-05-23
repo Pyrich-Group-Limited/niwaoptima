@@ -102,7 +102,10 @@ public function assignPermissions(Request $request)
     // Find the role
     $role = Role::find($request->role_id);
 
-    // Sync permissions
+    // Delete existing permissions assigned to the role
+    $role->revokePermissionTo($role->permissions);
+
+    // Sync new permissions
     $role->syncPermissions($request->input('permissions', []));
 
     // Find the service application and update assigned user
@@ -123,6 +126,7 @@ public function assignPermissions(Request $request)
 
     return redirect()->back();
 }
+
 
 
     /**
@@ -271,7 +275,8 @@ public function assignPermissions(Request $request)
     {
         $user = Auth::user();
 
-        $serviceApplication = $this->serviceApplicationRepository->find($id);
+        //$serviceApplication = $this->serviceApplicationRepository->find($id);
+        $serviceApplication = ServiceApplication::find($id);
 
         if (empty($serviceApplication)) {
             Flash::error('Service Application not found');
@@ -466,6 +471,7 @@ public function assignPermissions(Request $request)
             $serviceApplication->current_step = 9;
             $serviceApplication->status_summary = 'An inspection notice has been sent to your mail';
             $serviceApplication->date_of_inspection = $request->date_of_inspection;
+            $serviceApplication->comments_on_inspection = $request->comments_on_inspection;
 
             $pay = Payments::where('payment_status', 1)->where('payment_type', 3)->where("employer_id", $serviceApplication->user_id)->latest()->first();
             $pay->approval_status = 1;
@@ -504,7 +510,21 @@ public function assignPermissions(Request $request)
             Flash::success('Inspection status: Approved');
         }
 
-        $serviceApplication->comments_on_inspection = $request->comments_on_inspection;
+        //$serviceApplication->comments_on_inspection = $request->comments_on_inspection;
+        $file = $request->file('inspection_report');
+if ($file && $file->isValid()) {
+    $path = "documents"; // Define the path where you want to store the file
+    $path_folder = public_path($path);
+
+    // Save file
+    $file_name = rand() . '.' . $file->getClientOriginalExtension();
+    $file->move($path_folder, $file_name);
+
+    $document_url = $path . "/" . $file_name;
+    $inspection_report = $document_url;
+}
+
+        $serviceApplication->inspection_report = $inspection_report;
         $serviceApplication->save();
 
         return redirect()->back();
