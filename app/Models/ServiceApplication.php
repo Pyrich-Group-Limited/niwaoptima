@@ -88,7 +88,7 @@ class ServiceApplication extends Model
 
     public function axis()
     {
-        return $this->belongsTo(Axis::class,'axis_d', 'id');
+        return $this->belongsTo(Axis::class,'axis_id', 'id');
     }
 
     public function payment(){
