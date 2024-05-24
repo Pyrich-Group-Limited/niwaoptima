@@ -411,6 +411,7 @@ public function assignPermissions(Request $request)
         $serviceApplication->current_step = 41;
         $serviceApplication->status_summary = 'Application form fee approved';
         $serviceApplication->save();
+        // dd($serviceApplication->current_step);
         Flash::success('Payment has been approved');
 
 
