@@ -821,6 +821,8 @@ class HomeController extends Controller
 
     public function p2e()
     {
+        $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
+        //for the demand notices 
 
         $branch = Branch::all();
 
