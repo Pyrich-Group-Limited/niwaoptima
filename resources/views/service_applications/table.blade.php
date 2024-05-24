@@ -12,7 +12,7 @@
                     <thead>
                         <tr>
                             <th>S/N</th>
-                    <th class="min-w-100px">Client</th>
+                    <th class="min-w-100px">Client..</th>
                     <th class="">Service</th>
                     <th class="">Application Form Payment Status</th>
                     <th class="">Date Of Inspection</th>
