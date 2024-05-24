@@ -87,7 +87,7 @@ class ServiceApplicationController extends AppBaseController
 
             return count($commonWords) > 0 ? implode('_', $commonWords) : $permission->name;
         });
-     $roles = Role::where('id','!=', 1)->get()->pluck('name', 'id');
+     $roles = Role::where('id','!=', 1)->where('id','!=', 2)->where('id','!=', 15)->get()->pluck('name', 'id');
         $users = DB::table('users')
     ->join('staff', 'users.id', '=', 'staff.user_id')
     ->where('staff.branch_id', auth()->user()->staff->branch_id)
