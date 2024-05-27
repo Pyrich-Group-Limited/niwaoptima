@@ -81,7 +81,7 @@
         ]) !!}
         <div class="form-group col-sm-6 mb-5">
             {!! Form::label('mse_document_verification_comment', 'Comments:') !!}
-            {!! Form::textarea('mse_document_verification_comment', $serviceApplication->mse_document_verification_comment, [
+            {!! Form::textarea('mse_document_verification_comment', null, [
                 'class' => 'form-control',
                 'id' => 'mse_document_verification_comment',
             ]) !!}

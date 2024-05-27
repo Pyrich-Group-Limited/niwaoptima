@@ -24,6 +24,7 @@ use Modules\EmployerManager\Models\Employer;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
+use App\Models\DeclinedDocument;
 
 class ServiceApplicationController extends AppBaseController
 {
@@ -284,7 +285,7 @@ public function assignPermissions(Request $request)
         }
 
         $payments = Payment::where('service_application_id', $serviceApplication->id)->paginate(10);
-        $documents = $serviceApplication->documents()->paginate(10);
+        $documents = $serviceApplication->documents()->orderBy('id', 'desc')->paginate(10);
 
         $equipment_and_fees = EquipmentAndFee::where('service_id', $serviceApplication->service_id)->where('processing_type_id', $serviceApplication->service_type_id)->pluck('name', 'price');
 
@@ -349,6 +350,13 @@ public function assignPermissions(Request $request)
 
         if ($selected_button == 'decline') {
             $document->approval_status = 2;
+            $serviceApplication = ServiceApplication::find($document->service_application_id);
+$documents = [
+   "service_id" => $document->service_application_id,
+   "name" => $document->name,
+   "user_id" => $serviceApplication->user_id,
+];
+DeclinedDocument::create($documents);
             Flash::error('Document has been declined');
         } else if ($selected_button == 'approve') {
             $document->approval_status = 1;
@@ -377,19 +385,21 @@ public function assignPermissions(Request $request)
 
         if ($selected_status == 'decline') {
             $serviceApplication->mse_are_documents_verified = 0;
-            $serviceApplication->current_step = 3;
+            $serviceApplication->current_step = 42;
+            $serviceApplication->mse_document_verification_comment = $request->mse_document_verification_comment;
             Flash::success('Documents have been declined. Wait for client to update documents before approval will show');
         } else if ($selected_status == 'approve') {
             $serviceApplication->mse_are_documents_verified = 1;
             $unapproved_documents_count = ServiceApplicationDocument::where('service_application_id', $serviceApplication->id)->where('approval_status', '!=', 1)->count();
 
-            if ($unapproved_documents_count > 0) {
+           /*  if ($unapproved_documents_count > 0) {
                 Flash::error('Please approve each document first');
 
                 return redirect()->back();
-            }
+            } */
             $serviceApplication->current_step = 6;
             $serviceApplication->status_summary = 'Your documents have been approved';
+            $serviceApplication->mse_document_verification_comment = $request->mse_document_verification_comment;
             Flash::success('Documents have been approved');
         }
 

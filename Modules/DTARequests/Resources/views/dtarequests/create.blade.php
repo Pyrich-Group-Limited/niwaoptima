@@ -13,7 +13,7 @@
         </div>
     </section>
 
-    <div class="content px-3">
+    <div class="content px-3" style="margin-bottom: 100px;">
 
         @include('adminlte-templates::common.errors')
 
@@ -29,7 +29,7 @@
 
             </div>
 
-            <div class="card-footer">
+            <div class="card-footer" >
                 {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
                 <a href="{{ route('dtarequests.index') }}" class="btn btn-default"> Cancel </a>
             </div>
