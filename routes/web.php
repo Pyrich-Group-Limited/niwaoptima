@@ -601,10 +601,14 @@ Route::resource('equipmentAndFees', App\Http\Controllers\EquipmentAndFeeControll
 Route::resource('serviceApplications', App\Http\Controllers\ServiceApplicationController::class);
 Route::post('approve-document/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'approveOrDeclineDocument'])->name('application.approve.document');
 Route::post('final-documents-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'approveDocuments'])->name('application.final.documents.approval');
+
 Route::post('application-fee-payment-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'approveApplicationFee'])->name('application.fee.approval');
+
+
 Route::post('processing-fee-payment-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'approveProcessingFee'])->name('application.processingfee.approval');
 Route::post('inspection-fee-payment-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'approveInspectionFee'])->name('application.inspectionfee.approval');
 Route::post('set-inspection-status/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'setInspectionStatus'])->name('application.inspection.status');
+
 Route::post('application-equipment-invoice/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'generateEquipmentInvoice'])->name('application.equipmemt.invoice');
 Route::post('equipment-fee-payment-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'approveEquipmentFee'])->name('application.equipmentfee.approval');
 Route::post('area-officer-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'areaOfficerApproval'])->name('application.areaofficer.approval');
@@ -969,3 +973,6 @@ Route::post('saveapplicantrecord/{id}',[EmployerController::class,'saveapplicate
 
 
 Route::get('p2e',[HomeController::class,'p2e'])->name('p2e')->middleware(['auth']);
+
+Route::get('p2erevenue',[HomeController::class,'P2erevenuegenerated'])->name('p2e_revenue');
+Route::get('p2e_demandsearch',[HomeController::class,'P2edemandnotice'])->name('p2e_demandnotice');
