@@ -40,9 +40,9 @@
 <!-- document fields -->
 <div class="col-sm-4 my-5">
     <div class="form-group">
+        {!! Form::label('uploaded_doc', 'Upload any file') !!}
         {!! Form::file('uploaded_doc', ['class' =>'form-control', 'id' => 'fileInput']) !!}
     </div>
-    {!! Form::label('uploaded_doc', ' Any File') !!}
 </div>
 
 
