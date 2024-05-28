@@ -102,7 +102,7 @@
                     </div>
 
                     <div class="row g-5 g-xl-8">
-                        <div class="col-xl-3">
+                        {{-- <div class="col-xl-3">
                             <!--begin::Statistics Widget 5-->
                             <a href="#" class="card bg-body hoverable card-xl-stretch mb-xl-8">
                                 <!--begin::Body-->
@@ -129,8 +129,8 @@
                                 <!--end::Body-->
                             </a>
                             <!--end::Statistics Widget 5-->
-                        </div>
-                        <div class="col-xl-3">
+                        </div> --}}
+                        {{-- <div class="col-xl-3">
                             <!--begin::Statistics Widget 5-->
                             <a href="#" class="card bg-dark hoverable card-xl-stretch mb-xl-8">
                                 <!--begin::Body-->
@@ -159,8 +159,8 @@
 
 
                             <!--end::Statistics Widget 5-->
-                        </div>
-                        <div class="col-xl-3">
+                        </div> --}}
+                        <div class="col-xl-6">
                             <!--begin::Statistics Widget 5-->
                             <a href="#" class="card bg-info hoverable card-xl-stretch mb-xl-8">
                                 <!--begin::Body-->
@@ -189,7 +189,7 @@
                             </a>
                             <!--end::Statistics Widget 5-->
                         </div>
-                        <div class="col-xl-3">
+                        <div class="col-xl-6">
                             <!--begin::Statistics Widget 5-->
                             <a href="#" class="card bg-success hoverable card-xl-stretch mb-xl-8">
                                 <!--begin::Body-->
