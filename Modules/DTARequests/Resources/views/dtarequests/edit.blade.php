@@ -13,7 +13,7 @@
         </div>
     </section>
 
-    <div class="content px-3">
+    <div class="content px-3" style="margin-bottom: 100px;">
 
         @include('adminlte-templates::common.errors')
 
