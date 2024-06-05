@@ -21,6 +21,10 @@ use App\Http\Requests\CreateServiceApplicationRequest;
 use App\Http\Requests\UpdateServiceApplicationRequest;
 use App\Models\Service;
 use Modules\EmployerManager\Models\Employer;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use App\Models\User;
+use App\Models\DeclinedDocument;
 
 class ServiceApplicationController extends AppBaseController
 {
@@ -56,17 +60,74 @@ class ServiceApplicationController extends AppBaseController
     }
 
     // Filter by role axis_id
-    if (Auth()->user()->hasRole('super-admin') || Auth()->user()->hasRole('MANAGING DIRECTOR')) {
+    if (Auth()->user()->hasRole('super-admin') || Auth()->user()->level_id == 20) {
         $query->where('current_step', '>', 3);
-    } else {
+    } else if(Auth()->user()->level_id == 3) {
         $query->where('branch_id', Auth()->user()->staff->branch_id)
               ->where('current_step', '>', 3);
-    }
+    } else {
+        $query->where('assigned_user_id', Auth()->user()->id)
+              ->where('current_step', '>', 3);
+    } 
 
     $serviceApplications = $query->orderBy('id', 'desc')->paginate(10);
 
-    return view('service_applications.index')->with('serviceApplications', $serviceApplications);
+    $displayedIds = [164,140,145,146,147,148,142,143,146,181,147];
+        $permissions = DB::table('permissions')->whereIn('id', $displayedIds)->get();
+        //$permissions = $this->permissionRepository->all();
+
+        $permissions->each(function ($permission) {
+            $permission->assigned = false;
+        });
+        
+
+        $groupedPermissions = $permissions->groupBy(function ($permission) {
+            $words = explode(' ', strtolower($permission->name));
+            // dd($words );
+            $commonWords = array_intersect($words, ['user', 'role', 'client', 'project', 'milestone', 'bug', 'grant chart', 'project task', 'timesheet', 'areamanager', 'area office', 'hod', 'md', 'account', 'regional', 'medical']);
+
+            return count($commonWords) > 0 ? implode('_', $commonWords) : $permission->name;
+        });
+     $roles = Role::where('id','!=', 1)->where('id','!=', 2)->where('id','!=', 15)->get()->pluck('name', 'id');
+        $users = DB::table('users')
+    ->join('staff', 'users.id', '=', 'staff.user_id')
+    ->where('staff.branch_id', auth()->user()->staff->branch_id)
+    ->select('users.id', DB::raw('CONCAT(users.first_name, " ", users.last_name) AS name'))
+    ->pluck('name', 'id');
+
+    return view('service_applications.index', compact( 'serviceApplications', 'groupedPermissions', 'roles', 'users'));
 }
+
+public function assignPermissions(Request $request)
+{
+    // Find the role
+    $role = Role::find($request->role_id);
+
+    // Delete existing permissions assigned to the role
+    $role->revokePermissionTo($role->permissions);
+
+    // Sync new permissions
+    $role->syncPermissions($request->input('permissions', []));
+
+    // Find the service application and update assigned user
+    $serviceApplication = ServiceApplication::find($request->shareuser_id);
+    if ($serviceApplication) {
+        $serviceApplication->assigned_user_id = $request->user_id;
+        $serviceApplication->save();
+    }
+    
+    // Find the user and assign the role
+    $user = User::find($request->user_id);
+    if ($user) {
+        $user->assignRole($request->role_id);
+    }
+
+    // Assuming you're using Laravel's built-in flash messaging
+    session()->flash('success', 'Permissions assigned successfully.');
+
+    return redirect()->back();
+}
+
 
 
     /**
@@ -215,7 +276,8 @@ class ServiceApplicationController extends AppBaseController
     {
         $user = Auth::user();
 
-        $serviceApplication = $this->serviceApplicationRepository->find($id);
+        //$serviceApplication = $this->serviceApplicationRepository->find($id);
+        $serviceApplication = ServiceApplication::find($id);
 
         if (empty($serviceApplication)) {
             Flash::error('Service Application not found');
@@ -223,7 +285,7 @@ class ServiceApplicationController extends AppBaseController
         }
 
         $payments = Payment::where('service_application_id', $serviceApplication->id)->paginate(10);
-        $documents = $serviceApplication->documents()->paginate(10);
+        $documents = $serviceApplication->documents()->orderBy('id', 'desc')->paginate(10);
 
         $equipment_and_fees = EquipmentAndFee::where('service_id', $serviceApplication->service_id)->where('processing_type_id', $serviceApplication->service_type_id)->pluck('name', 'price');
 
@@ -288,6 +350,13 @@ class ServiceApplicationController extends AppBaseController
 
         if ($selected_button == 'decline') {
             $document->approval_status = 2;
+            $serviceApplication = ServiceApplication::find($document->service_application_id);
+$documents = [
+   "service_id" => $document->service_application_id,
+   "name" => $document->name,
+   "user_id" => $serviceApplication->user_id,
+];
+DeclinedDocument::create($documents);
             Flash::error('Document has been declined');
         } else if ($selected_button == 'approve') {
             $document->approval_status = 1;
@@ -316,19 +385,21 @@ class ServiceApplicationController extends AppBaseController
 
         if ($selected_status == 'decline') {
             $serviceApplication->mse_are_documents_verified = 0;
-            $serviceApplication->current_step = 3;
+            $serviceApplication->current_step = 42;
+            $serviceApplication->mse_document_verification_comment = $request->mse_document_verification_comment;
             Flash::success('Documents have been declined. Wait for client to update documents before approval will show');
         } else if ($selected_status == 'approve') {
             $serviceApplication->mse_are_documents_verified = 1;
             $unapproved_documents_count = ServiceApplicationDocument::where('service_application_id', $serviceApplication->id)->where('approval_status', '!=', 1)->count();
 
-            if ($unapproved_documents_count > 0) {
+           /*  if ($unapproved_documents_count > 0) {
                 Flash::error('Please approve each document first');
 
                 return redirect()->back();
-            }
+            } */
             $serviceApplication->current_step = 6;
             $serviceApplication->status_summary = 'Your documents have been approved';
+            $serviceApplication->mse_document_verification_comment = $request->mse_document_verification_comment;
             Flash::success('Documents have been approved');
         }
 
@@ -350,6 +421,7 @@ class ServiceApplicationController extends AppBaseController
         $serviceApplication->current_step = 41;
         $serviceApplication->status_summary = 'Application form fee approved';
         $serviceApplication->save();
+        // dd($serviceApplication->current_step);
         Flash::success('Payment has been approved');
 
 
@@ -410,6 +482,7 @@ class ServiceApplicationController extends AppBaseController
             $serviceApplication->current_step = 9;
             $serviceApplication->status_summary = 'An inspection notice has been sent to your mail';
             $serviceApplication->date_of_inspection = $request->date_of_inspection;
+            $serviceApplication->comments_on_inspection = $request->comments_on_inspection;
 
             $pay = Payments::where('payment_status', 1)->where('payment_type', 3)->where("employer_id", $serviceApplication->user_id)->latest()->first();
             $pay->approval_status = 1;
@@ -448,7 +521,21 @@ class ServiceApplicationController extends AppBaseController
             Flash::success('Inspection status: Approved');
         }
 
-        $serviceApplication->comments_on_inspection = $request->comments_on_inspection;
+        //$serviceApplication->comments_on_inspection = $request->comments_on_inspection;
+        $file = $request->file('inspection_report');
+if ($file && $file->isValid()) {
+    $path = "documents"; // Define the path where you want to store the file
+    $path_folder = public_path($path);
+
+    // Save file
+    $file_name = rand() . '.' . $file->getClientOriginalExtension();
+    $file->move($path_folder, $file_name);
+
+    $document_url = $path . "/" . $file_name;
+    $inspection_report = $document_url;
+}
+
+        $serviceApplication->inspection_report = $inspection_report;
         $serviceApplication->save();
 
         return redirect()->back();
@@ -485,12 +572,22 @@ if (count($prices) === count($quantities)) {
         //$total += $monitoring_fee->amount;
 
         // Add the total to the sum
-        $sum_total += $total;
+        //$sum_total += $total;
     }
 }
 
 
-       
+if(isset($equipment)){
+    // Assuming $service_application->equipment_fees_list is the JSON string
+    $equipment_fees_list = json_decode($equipment, true); // Convert JSON to PHP array
+
+    $sum = 0;
+    foreach ($equipment_fees_list as $item) {
+        $sum += $item['price'];
+    }
+}   
+$sum_total = $sum ? $sum : $total;
+
         if (empty($serviceApplication)) {
             Flash::error('Application not found');
 
@@ -498,8 +595,9 @@ if (count($prices) === count($quantities)) {
         }
 
         $input = $request->all();
+        $demand_total = $request->total_price;
 
-        $essp_payment = (new ESSPPaymentController)->generateRemita($request, $sum_total, $serviceApplication);
+        $essp_payment = (new ESSPPaymentController)->generateRemita($request, $demand_total, $serviceApplication);
 
         if ($essp_payment == true) {
             if ($input['payment_type'] == "5") {
@@ -511,7 +609,7 @@ if (count($prices) === count($quantities)) {
                 $serviceApplication->expiry_date = $expiry_date;
                 $serviceApplication->status_summary = "Please review and approve this demand notice.";
                 $serviceApplication->equipment_fees_list = $equipment;
-                $serviceApplication->demand_total = $sum_total;
+                $serviceApplication->demand_total = $demand_total;
                 $serviceApplication->save();
             }
         }

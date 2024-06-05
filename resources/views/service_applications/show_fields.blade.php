@@ -90,11 +90,13 @@ $app_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_stat
         @endpush
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve or decline application form fee')
             {!! Form::button('Approve', [
                 'type' => 'button',
                 'class' => 'btn btn-success btn-xs1',
                 'onclick' => "setSelectedStatus('approve')",
             ]) !!}
+            @endcan
             {{-- {!! Form::button('Decline', [
                 'type' => 'button',
                 'class' => 'btn btn-danger btn-xs1',
@@ -133,6 +135,7 @@ $pro_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_stat
         @endpush
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve or decline processing fee')
             {!! Form::button('Approve', [
                 'type' => 'button',
                 'class' => 'btn btn-success btn-xs1',
@@ -143,6 +146,7 @@ $pro_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_stat
                 'class' => 'btn btn-danger btn-xs1',
                 'onclick' => "setSelectedStatus('decline')",
             ]) !!}
+            @endcan
         </div>
         {!! Form::close() !!}
     </div>
@@ -168,6 +172,13 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
             {!! Form::label('date_of_inspection', 'Date Of Inspection:') !!}
             {!! Form::date('date_of_inspection', null, ['class' => 'form-control', 'id' => 'date_of_inspection']) !!}
         </div>
+        <div class="form-group col-sm-6 mb-5">
+            {!! Form::label('comments_on_inspection', 'Comments:') !!}
+            {!! Form::textarea('comments_on_inspection', $serviceApplication->comments_on_inspection, [
+                'class' => 'form-control',
+                'id' => 'comments_on_inspection',
+            ]) !!}
+        </div>
         @push('page_scripts')
             <script type="text/javascript">
                 $('#date_of_inspection').datepicker()
@@ -175,11 +186,13 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
         @endpush
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve or decline inspection fee')
             {!! Form::button('SUBMIT', [
                 'type' => 'submit',
                 'class' => 'btn btn-success btn-xs1',
                 'onclick' => "setSelectedStatus('approve')",
             ]) !!}
+            @endcan
             {{-- {!! Form::button('Decline', [
                 'type' => 'button',
                 'class' => 'btn btn-danger btn-xs1',
@@ -192,36 +205,42 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
 @endif
 
 @if ($serviceApplication->current_step == 9)
-    <div class="col-sm-12">
-        <!-- Documents Approval -->
-        <h3>Inspection Status</h3>
-        {!! Form::open([
-            'route' => ['application.inspection.status', $serviceApplication->id],
-            'method' => 'post',
-            'id' => 'approvalForm',
-        ]) !!}
-        <div class="form-group col-sm-6 mb-5">
-            {!! Form::label('comments_on_inspection', 'Comments:') !!}
-            {!! Form::textarea('comments_on_inspection', $serviceApplication->comments_on_inspection, [
-                'class' => 'form-control',
-                'id' => 'comments_on_inspection',
-            ]) !!}
+<div class="col-sm-12">
+    <!-- Documents Approval -->
+    <h3>Inspection Status Report</h3>
+    {!! Form::open([
+        'route' => ['application.inspection.status', $serviceApplication->id],
+        'method' => 'post',
+        'id' => 'approvalForm',
+        'enctype' => 'multipart/form-data',
+    ]) !!}
+    <div class="form-group col-sm-6 mb-5">
+        {!! Form::label('inspection_report', 'Upload Report (.pdf only):') !!}
+        <div class="input-group">
+            <div class="custom-file">
+                {!! Form::file('inspection_report', ['class' => 'form-control', 'required', 'id' => 'fileInput23', 'accept' => '.pdf']) !!}
+            </div>
         </div>
-        <input type="hidden" name="selected_status" id="selected_status_input">
-        <div class='btn-group'>
-            {!! Form::button('Approve', [
-                'type' => 'button',
+    </div>
+    <input type="hidden" name="selected_status" id="selected_status_input">
+    <div class="btn-group">
+        @can('approve or decline inspection fee')
+            {!! Form::button('SUBMIT', [
+                'type' => 'submit',
                 'class' => 'btn btn-success btn-xs1',
                 'onclick' => "setSelectedStatus('approve')",
             ]) !!}
-            {!! Form::button('Decline', [
+            {{-- Uncomment the following lines if you want to add a Decline button --}}
+            {{-- {!! Form::button('Decline', [
                 'type' => 'button',
                 'class' => 'btn btn-danger btn-xs1',
                 'onclick' => "setSelectedStatus('decline')",
-            ]) !!}
-        </div>
-        {!! Form::close() !!}
+            ]) !!} --}}
+        @endcan
     </div>
+    {!! Form::close() !!}
+</div>
+
 @endif
 
 
@@ -256,6 +275,8 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
     @endpush
     <input type="hidden" name="payment_type" id="payment_type" value="5">
     <input type="hidden" name="service_application_id" value="{{ $serviceApplication->id }}">
+    <input type="hidden" name="demand_total" id="demand_total" value="">
+
     <div class="form-group row col-sm-12" style="">
         <div class="row col-sm-12">
             <div class="form-group col-sm-3 dd1">
@@ -272,20 +293,23 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
     </div>
 
     <!-- Add Button -->
+    @can('generate equipment invoice')
     <div class="form-group col-sm-3 mt-5">
         <button type="button" class="btn btn-success" id="add-new-btn">Add New</button>
     </div>
+    @endcan
 
     <div class="form-group col-sm-3 mt-5">
         <span class="total-price"></span>
-        <input type="hidden" class="total-price-input" name="total_price">
+        <input type="hidden" class="total-price-input" name="total_price" id="total_price">
     </div>
     
     <div id="equipments"></div>
-
+    @can('generate equipment invoice')
     <div class="card-footer">
         <button type="submit" class="btn btn-success">Generate Invoice</button>
     </div>
+    @endcan
     {!! Form::close() !!}
 </div>
 
@@ -331,6 +355,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
         @endpush
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve or decline equipment fee')
             {!! Form::button('Approve', [
                 'type' => 'button',
                 'class' => 'btn btn-success btn-xs1',
@@ -341,6 +366,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
                 'class' => 'btn btn-danger btn-xs1',
                 'onclick' => "setSelectedStatus('decline')",
             ]) !!}
+            @endcan
         </div>
         {!! Form::close() !!}
     </div>
@@ -352,7 +378,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
 @if ($serviceApplication->current_step == 141)
     <div class="col-sm-12">
         <!-- Documents Approval -->
-        <h3>Area Officer Approval</h3>
+        <h3>HOD Marine Approval</h3>
         {!! Form::open([
             'route' => ['application.areaofficer.approval', $serviceApplication->id],
             'method' => 'post',
@@ -366,6 +392,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
         @endpush
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve service application as hod marine')
             {!! Form::button('Approve', [
                 'type' => 'button',
                 'class' => 'btn btn-success btn-xs1',
@@ -376,6 +403,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
                 'class' => 'btn btn-danger btn-xs1',
                 'onclick' => "setSelectedStatus('decline')",
             ]) !!}
+            @endcan
         </div>
         {!! Form::close() !!}
     </div>
@@ -384,7 +412,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
 @if ($serviceApplication->current_step == 142)
     <div class="col-sm-12">
         <!-- Documents Approval -->
-        <h3>HOD Marine Approval</h3>
+        <h3>Area Manager Approval</h3>
         {!! Form::open([
             'route' => ['application.hodmarine.approval', $serviceApplication->id],
             'method' => 'post',
@@ -398,6 +426,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
         @endpush
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve service application as area officer')
             {!! Form::button('Approve', [
                 'type' => 'button',
                 'class' => 'btn btn-success btn-xs1',
@@ -408,6 +437,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
                 'class' => 'btn btn-danger btn-xs1',
                 'onclick' => "setSelectedStatus('decline')",
             ]) !!}
+            @endcan
         </div>
         {!! Form::close() !!}
     </div>
@@ -527,5 +557,22 @@ function updatePrice() {
     $('.total-price-input').val(totalPrice);
 }
 
+    </script>
+    <script>
+        document.getElementById('fileInput23').addEventListener('change', function() {
+            const file = this.files[0];
+            const maxSize = 1048576; // 1MB in bytes
+            const allowedFormats = ['application/pdf'];
+            
+            if (file) {
+                if (!allowedFormats.includes(file.type)) {
+                    alert('Please select a valid file format PDF.');
+                    this.value = ''; // Clear the file input
+                } else if (file.size > maxSize) {
+                    alert('File size exceeds the maximum limit of 1MB.');
+                    this.value = ''; // Clear the file input
+                }
+            }
+        });
     </script>
 @endpush

@@ -49,7 +49,7 @@ class RoleController extends AppBaseController
      */
     public function create()
     {
-        $displayedIds = [1,2,3,4,163,5,6,7,8,173,174,175,164,166,170,171,177,178,179,180];
+        $displayedIds = [1,2,3,4,163,5,6,7,8,173,174,175,164,166,170,171,177,178,179,180,134,135,136,137,138,165,140,145,146,147,148,142,143,146,181];
         $permissions = DB::table('permissions')->whereIn('id', $displayedIds)->get();
         //$permissions = $this->permissionRepository->all();
 
@@ -61,17 +61,8 @@ class RoleController extends AppBaseController
         $groupedPermissions = $permissions->groupBy(function ($permission) {
             $words = explode(' ', strtolower($permission->name));
             // dd($words );
-            $commonWords = array_intersect($words, [
-                'user', 'role', 'files', 'document', 'client','niwaexpresspaymentmodule',
-              'memo', 'dashboards', 'leaveapproval', 'account', ' area office manager', 'medical',
-                'legal', 'qgis and arcgis', 'marine', 'salary',
-                'gifmis', 'finance', 'asset', 'management', 'crm', 'calender', 'locations',
-                'engineering','requisition', 'corporate', 'vendors', 'requisition',
-                'invoices', 'service applications','sericeapproval','product stock', 'cash flow', 'expense', 'tax', 'approval',
-                 'ticket',  'task','documents',
-                'area office',    'correspondence',
-                'equipment', 'clients', 'survey','debtors',
-            ]);
+            $commonWords = array_intersect($words, ['user', 'role', 'client', 'project', 'milestone', 'bug', 'grant chart', 'project task', 'timesheet', 'areamanager', 'area office', 'hod', 'md', 'account', 'regional', 'medical']);
+
             return count($commonWords) > 0 ? implode('_', $commonWords) : $permission->name;
         });
 // dd($words);
@@ -148,7 +139,7 @@ class RoleController extends AppBaseController
         }
 
         //$permissions = $this->permissionRepository->all();
-        $displayedIds = [1,2,3,4,163,5,6,7,8,173,174,175,164,166,170,171,177,178,179,180];
+        $displayedIds = [1,2,3,4,163,5,6,7,8,173,174,175,164,166,170,171,177,178,179,180,134,135,136,137,138,165,140,145,146,147,148,142,143,146,181];
         $permissions = DB::table('permissions')->whereIn('id', $displayedIds)->get();
 
         $permissions->each(function ($permission) use ($role) {

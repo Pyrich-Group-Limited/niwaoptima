@@ -29,16 +29,16 @@
 </div> --}}
 
 <!-- signature_path Field -->
-<div class="col-sm-4">
+{{-- <div class="col-sm-4">
     {!! Form::label('signature_path', 'PDF SIGNATURE Document') !!}
     <div class="form-group">
         <p>
             <img style="width: 50px;height: 50px" src="{{ url('storage/') }}{!! '/'.$leaverequest->signature_path !!}" alt="SIGNATURE"></p>
     </div>
-</div>
+</div> --}}
 
 <!-- SUPERVISOR  STATUS Field -->
-<div class="col-sm-12">
+{{-- <div class="col-sm-12">
     {!! Form::label('supervisor_office', 'SUPERVISOR  STATUS:') !!}
     <div class="">
         <p> @if (isset($leaverequest->supervisor_office) && $leaverequest->supervisor_office == 1)
@@ -48,10 +48,10 @@
         @endif
             </p>
     </div>
-</div>
+</div> --}}
 
 <!-- MD HR Field -->
-<div class="col-sm-12">
+{{-- <div class="col-sm-12">
     {!! Form::label('md_hr', 'MD HR:') !!}
     <div class="">
         <p> @if (isset($leaverequest->md_hr) && $leaverequest->md_hr == 1)
@@ -61,10 +61,10 @@
         @endif
             </p>
     </div>
-</div>
+</div> --}}
 
 <!-- LEAVE_OFFICE Field -->
-<div class="col-sm-12">
+{{-- <div class="col-sm-12">
     {!! Form::label('leaver_officer', 'LEAVE_OFFICE:') !!}
     <div class="">
         <p> @if (isset($leaverequest->leaver_officer) && $leaverequest->leaver_officer == 1)
@@ -74,7 +74,7 @@
         @endif
             </p>
     </div>
-</div>
+</div> --}}
 
 <!-- Created At Field -->
 <div class="col-sm-12">

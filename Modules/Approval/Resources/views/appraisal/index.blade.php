@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Approval Appraisal</h1>
+                    <h1>Approval Portal</h1>
                 </div>
                 <div class="col-sm-6">
                     {{-- <a class="btn btn-primary float-end" href="{{ route('type.create') }}">
@@ -24,7 +24,7 @@
 
         <div class="card mb-5">
             <div class="card-body p-5">
-                <h5>Pending Approval Appraisal List</h5>
+                <h5>Pending Approval List</h5>
                 <hr>
 
                 <table class="table table-bordered align-middle gs-0 gy-4">
@@ -78,15 +78,16 @@
                                             <a class="btn btn-info" href="{{ route('disease.claims.show', $request->requestable_id) }}"><i
                                                 class="fa fa-eye"></i></a>
                                                 @endif --}}
-                                                @if($request->requestable::class == 'Modules\DTARequests\Models\DTARequests')
-                                                <a href="/dtarequests/dtarequests/{{$request->requestable->id}}" target="_blank" class="btn">
-                                                    <i class="fa fa-eye"></i>
-                                                </a>
-                                            @elseif($request->requestable::class == 'Modules\HumanResource\Models\LeaveRequest')
-                                                <a href="/leave_request/leave_request/{{$request->requestable->id}}" target="_blank" class="btn">
-                                                    <i class="fa fa-eye"></i>
-                                                </a>
-                                            @endif
+                                                @if($request->requestable && $request->requestable instanceof Modules\DTARequests\Models\DTARequests)
+    <a href="/dtarequests/dtarequests/{{$request->requestable->id}}" target="_blank" class="btn">
+        <i class="fa fa-eye"></i>
+    </a>
+@elseif($request->requestable && $request->requestable instanceof Modules\HumanResource\Models\LeaveRequest)
+    <a href="/leave_request/leave_request/{{$request->requestable->id}}" target="_blank" class="btn">
+        <i class="fa fa-eye"></i>
+    </a>
+@endif
+
                                             {{-- @if($request->requestable::class == 'Modules\FormBuilder\Models\FormResponse')
                                                 </a>
                                             <a class="btn btn-info" href="#" data-url="{{ route('response.detail',$request->requestable_id) }}" data-ajax-popup="true" data-size="md" data-bs-toggle="tooltip" title="{{__('View')}}" data-title="{{__('Response Detail')}}"><i

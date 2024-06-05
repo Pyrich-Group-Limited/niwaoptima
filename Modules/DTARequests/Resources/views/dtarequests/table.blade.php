@@ -8,10 +8,12 @@
                         <tr>
                             {{-- <th> TRAVEL PURPOSE</th> --}}
                             <th>DESTINATION</th>
+                            <th>FULL NAME</th>
                             <th>NUMBER OF DAYS</th>
                             <th>TRAVEL DATE</th>
                             <th>ARRIVAL DATE</th>
                             <th>ESTIMATED EXPENSES</th>
+                            <th>DATE APPLIED</th>
                             {{-- <th>ACCOUNT OFFICER STATUS</th>
                             <th>HOD STATUS</th>
                             <th>MD STATUS</th>
@@ -26,10 +28,12 @@
                         @foreach ($dtarequests as $dtarequests)
                         <tr>
                             <td>{{ $dtarequests->destination }}</td>
+                            <td>{{ $dtarequests->user->first_name }} {{ $dtarequests->user->last_name }}</td>
                             <td>{{ $dtarequests->number_days }}</td>
                             <td>{{ $dtarequests->travel_date}}</td>
                             <td>{{ $dtarequests->arrival_date}}</td>
                             <td>₦{{ $dtarequests->estimated_expenses}}</td>
+                            <td>{{ $dtarequests->created_at}}</td>
                            {{--  <td><p> @if (isset($dtarequests->supervisor_status) && $dtarequests->supervisor_status == 1)
                                 <span class="btn btn-sm btn-success">Approved</span>
                             @else
@@ -76,10 +80,10 @@
                                        class='btn btn-default btn-xs'>
                                         <i class="far fa-eye"></i>
                                     </a>
-                                    <a title="Approve this DTA request" href="{{ route('dtarequests.edit', [$dtarequests->id]) }}"
+                                    {{-- <a title="Approve this DTA request" href="{{ route('dtarequests.edit', [$dtarequests->id]) }}"
                                        class='btn btn-default btn-xs'>
                                         <i class="far fa-edit"></i>
-                                    </a>
+                                    </a> --}}
                                     {{-- {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!} --}}
                                 </div>
                                 {!! Form::close() !!}

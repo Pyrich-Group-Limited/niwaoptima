@@ -492,14 +492,14 @@ class EmployerController extends AppBaseController
             Mail::to($data['company_email'])->send(new ApprovevendorMail($data));
         } catch (\Throwable $th) {
             // dd($th->getMessage());
-            return redirect()->back()->with('error',$th->getMessage());
+            return redirect()->route('p2e')->with('error',$th->getMessage());
         }
 
         if ($data->status==2) {
             # code...
-            return redirect()->route('areamanager')->with('success', 'Successfully Approved Applicant');
+            return redirect()->route('p2e')->with('success', 'Successfully Approved Applicant');
         } elseif ($data->status==0) {
-            return redirect()->route('areamanager')->with('success', 'Successfully Rejected Application');
+            return redirect()->route('p2e')->with('success', 'Successfully Rejected Application');
             # code...
         }
     }

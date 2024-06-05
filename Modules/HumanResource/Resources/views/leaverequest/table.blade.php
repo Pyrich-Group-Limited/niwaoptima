@@ -6,7 +6,7 @@
                 <table class="table" id="order-listing">
                     <thead>
                         <tr>
-                            <th> STATFF ID</th>
+                            {{-- <th> STATFF ID</th> --}}
                             <th>TYPE OF LEAVE</th>
                             <th> LEAVE DATE</th>
                             <th>NUMBER OF DAYS</th>
@@ -21,14 +21,14 @@
                         @foreach ($leaverequest as $leaves)
                             <tr>
 
-                                <td>{{ $leaves->id }}</td>
+                                {{-- <td>{{ $leaves->id }}</td> --}}
                                 <td>{{ $leaves->leavetype ? $leaves->leavetype->name : '' }}</td>
 
-                                <td>{{ $leaves->date_start_new }}</td>
+                                <td>{{ date('d,M,Y', strtotime($leaves->date_start_new)) }}</td>
                                 <td>{{ $leaves->daystaken }}</td>
 
 
-                                <td>{{ $leaves->end_date }}</td>
+                                <td>{{ date('d,M,Y',strtotime( $leaves->end_date )  ) }}</td>
                                 <td>
                                     @if ($leaves->status==1)
                                     <span>Awaiting GM Approval</span>

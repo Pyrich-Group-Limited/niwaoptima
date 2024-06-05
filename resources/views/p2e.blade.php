@@ -2,271 +2,56 @@
 
 @section('content')
     <style>
-        .nav-link {
-            font-weight: 600;
-            color: blue !important;
-        }
-
-        .nav-link:hover {
-            color: green !important;
+        .nav-tabs .nav-link.active {
+            background-color: green !important;
+            color: white !important;
         }
     </style>
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
         <div id="kt_content_container" class="container-xxl">
-            <h5 class="text-center mb-2">WELCOME {{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</h5>
-            <h1 class="text-center text-primary mb-5">LOCATION: <span class=" text-uppercase">
-                    {{ auth()->user()->staff->branch ? auth()->user()->staff->branch->branch_name : '' }} </span> </h1>
+            <h5 class="text-center mb-2"> </h5>
+            <h1 class="text-center text-primary mb-5">P2E TECHNOLOGY DASHBOARD<span class=" text-uppercase">
+                </span> </h1>
+
+
+
+
+
+
+
+
+
             <div class="row">
-                <div class="d-flex  float-end">
 
-                    {!! Form::label('department_id', 'Click To Select User Department:', ['style' => 'font-weight:bold;']) !!}
-                    {!! Form::select('department_id', $departments_data1, null, [
-                        'class' => 'form-control form-select',
-                        'id' => 'deptSelect1',
-                    ]) !!}
-
-
-                </div>
                 <div class=" justify-content-between">
                     <ul class="nav nav-tabs bg-primary" id="myTab" role="tablist">
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link active" id="letter-tab" data-toggle="tab" href="#letter" role="tab"
                                 aria-controls="letter" aria-selected="true">Internal Correspondences</a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
-                            <a class="nav-link" id="demand-tab" data-toggle="tab" href="#demand" role="tab"
+                            <a class="nav-link " id="demand-tab" data-toggle="tab" href="#demand" role="tab"
                                 aria-controls="demand" aria-selected="false">Demand Notice</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" id="revenue-tab" data-toggle="tab" href="#revenue" role="tab"
                                 aria-controls="revenue" aria-selected="false">Revenue Update</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" id="letter1-tab" data-toggle="tab" href="#letter1" role="tab"
                                 aria-controls="letter1" aria-selected="true">Letters Of Intent</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" id="vendor-tab" data-toggle="tab" href="#vendor" role="tab"
-                                aria-controls="vendor" aria-selected="true">E-promoter </a>
+                                aria-controls="vendor" aria-selected="true">e-Promota</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="dta_request-tab" data-toggle="tab" href="#dta_request" role="tab"
-                                aria-controls="dta_request" aria-selected="false">DTA Requests</a>
-                        </li>
-
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade" id="dta_request" role="tabpanel" aria-labelledby="dta_request-tab">
-                            <div class="row grid-margin stretch-card">
-                                    
-                                <div class="card ">
-                                    <div class="card-body p-5">
-                                        <h4 class="card-title">
-                                            <i class="fas fa-envelope"></i>
-                                            Latest 10 DTA Requests
-                                        </h4>
-                                        <div class="table-responsive1" style="overflow-y: auto;">
-                                            <table class="table align-middle gs-0 gy-4" id="order-listing2">
-                                                <thead>
-                                                    <tr>
-                                                        <th>S/N</th>
-                                                        <th>Full Name</th>
-                                                        <th>Destination</th>
-                                                        <th>Number Of Days</th>
-                                                        <th>Travel Date</th>
-                                                        <th>Arrival Date</th>
-                                                        <th>Estimated Expenses</th>
-                                                        <th>Date Applied</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($dta_requests as $index => $dtarequests)
-                                                            
-                                                            <tr>
-                                                                <td>{{ $index + 1 }}</td>
-                                                                <td>{{ $dtarequests->destination }}</td>
-                            <td>{{ $dtarequests->user->first_name }} {{ $dtarequests->user->last_name }}</td>
-                            <td>{{ $dtarequests->number_days }}</td>
-                            <td>{{ $dtarequests->travel_date}}</td>
-                            <td>{{ $dtarequests->arrival_date}}</td>
-                            <td>₦{{ $dtarequests->estimated_expenses}}</td>
-                            <td>{{ $dtarequests->created_at}}</td>
-                                                            </tr>
-                                                        @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-        
-        
-                                    </div>
-        
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade show active" id="letter" role="tabpanel" aria-labelledby="letter-tab">
-                            <div class="row g-5 g-xl-8">
-
-
-                                <div class="row">
-                                    <div class="col-md-12 depDoc1" id="depDoc1">
-
-                                        <div class="card  ">
-
-                                            <div class="card-body p-5">
-                                                <h4 class="card-title">
-                                                    <i class="fas fa-envelope"></i>
-                                                    Latest 10 Departmental Document
-                                                </h4>
-                                                <div class="table-responsive1" style="overflow-y: auto;">
-                                                    <table class="table align-middle gs-0 gy-4" id="order-listing2">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>S/N</th>
-                                                                <th>Document Title</th>
-                                                                <th>Created By</th>
-                                                                <th>Assigned By</th>
-                                                                <th>Assigned To</th>
-                                                                <th>Document URL</th>
-                                                                <th>Share User</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="documentsTableBody">
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-
-
-                                            </div>
-
-                                            {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>    --}}
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", function() {
-                                                    // Fetch Departmental Documents based on selected department
-                                                    document.getElementById('deptSelect1').addEventListener('change', function() {
-                                                        let departmentId = this.value;
-                                                        //alert(departmentId);
-                                                        fetchDocumentsData(departmentId);
-                                                    });
-
-                                                    // Initial Fetch on Page Load
-                                                    let departmentId = document.getElementById('deptSelect1').value;
-                                                    fetchDocumentsData(departmentId);
-                                                });
-
-                                                function fetchDocumentsData(departmentId) {
-                                                    fetch(`/showDepartementalDocuments/${departmentId}`)
-                                                        .then(response => response.json())
-                                                        .then(data => {
-                                                            displayDocumentsData(data);
-                                                        })
-                                                        .catch(error => console.error('Error:', error));
-                                                }
-
-                                                function displayDocumentsData(documents) {
-                                                    let tableBody = document.getElementById('documentsTableBody');
-                                                    tableBody.innerHTML = '';
-                                                    //alert(JSON.stringify(documents));
-
-                                                    if (documents.length === 0) {
-                                                        let noResultsRow = `
-                                    <tr>
-                                        <td colspan="7" class="text-center text-danger"><strong>No results found</strong></td>
-                                    </tr>
-                                `;
-                                                        tableBody.insertAdjacentHTML('beforeend', noResultsRow);
-                                                    } else {
-                                                        //alert(JSON.stringify(documents));
-                                                        documents.forEach((document, index) => {
-                                                            var fullUrl = "{{ asset('') }}" + document.document_url;
-                                                            let row = `
-                                        <tr>
-                                            <td>${index + 1}</td>
-                                            <td>${document.title}</td>
-                                            <td>${document.created_by_name}</td>
-                                            <td>${document.assigned_by_name}</td>
-                                            <td>${document.assigned_to_name}</td>
-                                            <td><a class="document-link" target="_blank" onClick="saveData('${ document.document_url }')" href="${ fullUrl }">${ document.document_url.substr(10) }</a></td>
-                                            <td><a class="open-modal-shareuser btn btn-primary" href="#" data-toggle="modal" data-target="#shareuserModal"
-                                                                data-shareuser=${document.d_m_id}>User</a></td>
-                                        </tr>
-                                    `;
-                                                            tableBody.insertAdjacentHTML('beforeend', row);
-                                                        });
-                                                    }
-                                                }
-                                            </script>
-
-                                        </div>
-                                    </div>
-                                    <div class="modal fade" id="shareuserModal" tabindex="-1" role="dialog"
-                                        aria-labelledby="shareuserModalLabel" aria-hidden="true" data-backdrop="false">
-                                        <div class="modal-dialog " role="document">
-                                            <div class="modal-content">
-                                                {!! Form::open(['route' => 'documents_manager.shareuser', 'enctype' => 'multipart/form-data']) !!}
-                                                @csrf
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">User Permission</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-
-                                                    <div class="form-group">
-                                                        {!! Form::label('users', 'Select User(s):') !!}
-                                                        {!! Form::select('users[]', $users123, null, [
-                                                            'class' => 'form-control',
-                                                            'id' => 'userSelect',
-                                                            'multiple' => 'multiple',
-                                                        ]) !!}
-
-                                                        {!! Form::hidden('shareuser_id', null, ['id' => 'shareuser_id']) !!}
-                                                        {!! Form::hidden('notify_id', null, ['id' => 'notify_id']) !!}
-                                                    </div>
-                                                    <div class="form-group">
-                                                        {!! Form::checkbox('specify_su', 0, null, ['id' => 'specify_su']) !!}
-                                                        {!! Form::label('specify_su', 'Specify the period') !!}
-                                                    </div>
-                                                    <div class="form-group" id="enable_date" style="display: none">
-                                                        {!! Form::label('start_date', 'Start Date') !!}
-                                                        {!! Form::date('start_date', null, ['class' => 'form-control', 'id' => 'start_date1']) !!}<br />
-                                                        {!! Form::label('end_date', 'End Date') !!}
-                                                        {!! Form::date('end_date', null, ['class' => 'form-control', 'id' => 'end_date1']) !!}
-                                                    </div>
-                                                    <div class="form-group">
-                                                        {!! Form::checkbox('is_download', 1, ['id' => 'is_download']) !!}
-                                                        {!! Form::label('is_download', 'Allow Download') !!}
-                                                    </div>
-                                                    <div class="form-group">
-                                                        {!! Form::checkbox('allow_share', 1, ['id' => 'allow_share']) !!}
-                                                        {!! Form::label('allow_share', 'Allow Share') !!}
-                                                    </div>
-                                                    {!! Form::label('comment', 'Type your comment:') !!}
-                                                    <div class="form-group">
-                                                        <div class="custom-comment">
-                                                            {!! Form::textarea('comment', null, ['class' => 'form-control']) !!}
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary">SUBMIT</button>
-                                                </div>
-                                                {!! Form::close() !!}
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-
-                                </div>
-                            </div>
-                        </div>
+                        {{--  --}}
 
                         <div class="tab-pane fade" id="demand" role="tabpanel" aria-labelledby="demand-tab">
                             <div class="row">
@@ -285,7 +70,6 @@
                                                             <th>S/N</th>
                                                             <th>Client</th>
                                                             <th>Service</th>
-                                                            <th>Inspection Report</th>
                                                             {{--  <th>Service Type</th> --}}
                                                             <th>Amount</th>
                                                             <th>Created Date</th>
@@ -302,9 +86,6 @@
                                                                 </td>
                                                                 <td>{{ $service_application->theservice ? $service_application->theservice->name : '' }}
                                                                 </td>
-                                                                <td><a class="document-link" target="_blank" href="{{ asset($service_application->inspection_report) }}" >View Report </a>
-                                                                </td>
-                                                                
                                                                 {{--                                                               <td>{{ $service_application->processingTypes ? $service_application->processingTypes->name : 'NILL' }}</td>
  --}} {{-- <td><?php //$type = \App\Models\ProcessingType::where('service_id', $service_application->id)->first();
  ?>
@@ -319,9 +100,8 @@
     foreach ($equipment_fees_list as $item) {
         $sum += $item['price'];
     } ?>
-                                                                    {{-- {{ isset($service_application->equipment_fees_list) ? '₦' . number_format($sum, 2) : 'N/A' }} --}}
+                                                                    {{ isset($service_application->equipment_fees_list) ? '₦' . number_format($sum, 2) : 'N/A' }}
                                                                     <?php } ?>
-                                                                    {{ '₦' . number_format($service_application->demand_total, 2) }}
                                                                 </td>
                                                                 <td>{{ $service_application->created_at ?? 'NILL' }}</td>
                                                                 <td>
@@ -353,8 +133,8 @@
                                 <div class="col-5">
                                     <div class="row">
                                         <!-- <div class="col-3">
-                                                                                                {!! Form::label('', 'Filter By', ['class' => 'form-label mt-2']) !!}
-                                                                                            </div> -->
+                                                                                                                                                                                                                                {!! Form::label('', 'Filter By', ['class' => 'form-label mt-2']) !!}
+                                                                                                                                                                                                                            </div> -->
                                         <div class="col-3">
                                             {!! Form::select('service_id', $services, null, ['class' => 'form-select', 'id' => 'serviceSelect']) !!}
                                         </div>
@@ -521,17 +301,21 @@
                         <div class="tab-pane fade" id="vendor" role="tabpanel" aria-labelledby="vendor-tab">
                             <div class=" justify-content-between">
 
-                                <ul class="nav nav-tabs bg-primary " id="myTab" role="tablist">
+                                <ul class="nav nav-tabs " id="myTab" role="tablist">
                                     <li class="nav-item  mx-2">
-                                        <a class="nav-link active" aria-current="page" data-toggle="tab" href="#pendingvendor">Unverified<i class=" text-danger">{{ $pendingcount }}</i></a>
+                                        <a class="nav-link active" aria-current="page" data-toggle="tab"
+                                            href="#pendingvendor">Unverified<i
+                                                class=" text-danger">{{ $pendingcount }}</i></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#approvedvendor">Verified <i class=" text-success">{{ $approvecount }}</i></a>
+                                        <a class="nav-link" data-toggle="tab" href="#approvedvendor">Verified <i
+                                                class=" text-success">{{ $approvecount }}</i></a>
                                     </li>
                                 </ul>
 
                                 <div class="tab-content" id="vendortabcontent">
-                                    <div class="tab-pane fade show active" id="pendingvendor" role="tabpanel" aria-labelledby="pendingvendor-tab">
+                                    <div class="tab-pane fade show active" id="pendingvendor" role="tabpanel"
+                                        aria-labelledby="pendingvendor-tab">
                                         <div class="row g-5 g-xl-8">
                                             <table class="table">
                                                 <thead>
@@ -562,7 +346,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="tab-pane fade" id="approvedvendor" role="tabpanel" aria-labelledby="approvedvendor-tab">
+                                    <div class="tab-pane fade" id="approvedvendor" role="tabpanel"
+                                        aria-labelledby="approvedvendor-tab">
                                         <div class="row g-5 g-xl-8">
                                             <table class="table">
                                                 <thead>
@@ -573,7 +358,7 @@
                                                     <th>Action</th>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ( $approvedvendors as $pendingvendor)
+                                                    @foreach ($approvedvendors as $pendingvendor)
                                                         <tr>
                                                             <td>{{ $pendingvendor->applicant_code ? $pendingvendor->applicant_code : '' }}
                                                             </td>
@@ -621,21 +406,23 @@
                                                         <th>Sender Email</th>
                                                         <th>Sender Phone</th>
                                                         <th>Document URL</th>
-                                                        <th>User Share</th>
+                                                        {{-- <th>User Share</th> --}}
                                                         <th>Subject</th>
-                                                        <th>Created Date</th>
+                                                        {{-- <th>Created Date</th> --}}
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 
-                                                    @foreach ($documents1 as $document)
-                                                        @php @endphp
+                                                    @foreach ($intents as $document)
+                                                        @php
+
+                                                        @endphp
                                                         <tr>
                                                             {{-- <td>{{ $n++ }}</td> --}}
-                                                            <td>{{ $document->title ?? 'NILL' }}</td>
-                                                            <td>{{ $document->sender_full_name ?? 'NILL' }}</td>
-                                                            <td>{{ $document->sender_email ?? 'NILL' }}</td>
-                                                            <td>{{ $document->sender_phone ?? 'NILL' }}</td>
+                                                            <td>{{ $document->title ?? 'Letter of Intent' }}</td>
+                                                            <td>{{ $document->full_name ?? 'NILL' }}</td>
+                                                            <td>{{ $document->email ?? 'NILL' }}</td>
+                                                            <td>{{ $document->phone ?? 'NILL' }}</td>
                                                             {{-- <td>{{ $document->description }}</td> --}}
 
                                                             <td>
@@ -643,12 +430,12 @@
                                                                     onClick="saveData('{{ $document->document_url }}')"
                                                                     href="{{ asset($document->document_url) }}">{{ substr($document->document_url, 10) }}</a>
                                                             </td>
-                                                            <td><a class="open-modal-shareuser btn btn-primary"
+                                                            {{-- <td><a class="open-modal-shareuser btn btn-primary"
                                                                     href="#" data-toggle="modal"
                                                                     data-target="#shareuserModal1"
-                                                                    data-shareuser={{ $document->d_id }}>User</a></td>
-                                                            <td>{{ $document->doc_description ?? 'NILL' }}</td>
-                                                            <td>{{ $document->document_created_at ?? 'NILL' }}</td>
+                                                                    data-shareuser={{ $document->d_id }}>User</a></td> --}}
+                                                            <td>{{ $document->description ?? 'NILL' }}</td>
+                                                            {{-- <td>{{ $document->document_created_at ?? 'NILL' }}</td> --}}
 
 
                                                         </tr>
@@ -779,11 +566,86 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="">
+                        <div class="card">
 
+                            <div class="card-body">
+
+                                <div class="row">
+
+
+
+
+
+                                    <div class="form-group col-6">
+                                        <label for="selectBranch">Select Area Office:</label>
+                                        <select name="branch" id="selectBranchreve" class="form-select">
+                                            @foreach ($branch as $branchItem)
+                                                <option value="{{ $branchItem->id }}">{{ $branchItem->branch_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="chart-container" style="position: relative; height:40vh; width:60vw">
+
+                                    <canvas id="myChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group col-6">
+                                        <label for="selectBranch">Select Area Office:</label>
+                                        <select name="branch" id="selectBranch" class="form-select">
+                                            @foreach ($branch as $branchItem)
+                                                <option value="{{ $branchItem->id }}">{{ $branchItem->branch_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="selectYear">Select Year:</label>
+                                        <select name="year" id="selectYear" class="form-select">
+                                            @for ($year = date('Y'); $year >= date('Y') - 10; $year--)
+                                                <option value="{{ $year }}">{{ $year }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <div class="form-group mt-4 col-4">
+
+                                        <button class="btn btn-success " id="searchbtn" type="button">Search</button>
+                                    </div>
+
+                                </div>
+
+
+                                <h4 class=" text-center text-success"> Demand Notice:</h4>
+                                <div class="chart-container" style="position: relative; height:40vh; width:60vw;">
+                                    <canvas id="demandnotice"></canvas>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
 
                 <br>
                 <br>
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
                 <script>
                     $(document).on("click", ".open-modal-shareuser", function() {
                         let shareuser = $(this).data('shareuser');
@@ -793,6 +655,9 @@
 
                     $(document).ready(function() {
                         // Function to update statistics based on selected options
+
+
+
                         function updateStatistics() {
                             var serviceId = $('#serviceSelect').val();
                             var month = $('#monthSelect').val();
@@ -837,5 +702,112 @@
                         // Trigger initial statistics update
                         updateStatistics();
                     });
+                    const demandnotice = $('#demandnotice')
+                    const ctx = document.getElementById('myChart');
+                    var revenuebranch = $('#selectBranchreve')
+
+                    var demandnoticeyear = $('#selectYear')
+                    var demandnoticebranch = $('#selectBranch')
+                    var demandnoticebtn = $('#searchbtn')
+
+
+                    revenuebranch.change(function(e) {
+                        // alert()
+                        e.preventDefault(); // Prevent default form submission if revenuebranch is a form element
+
+                        var data = $(this).val();
+
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('p2e_revenue') }}",
+                            data: {
+                                data: data
+                            },
+                            dataType: "json", // Change this to the expected data type
+                            success: function(response) {
+                                // alert(response);
+                                var monthNames = ["January", "February", "March", "April", "May", "June",
+                                    "July", "August", "September", "October", "November", "December"
+                                ];
+                                // var month = response.map(function(item) {
+                                //     return item.year;
+                                // });
+                                var month = response.map(function(item) {
+                                    // Convert numeric month to month name
+                                    var monthIndex = parseInt(item.year) -
+                                    1; // Assuming month starts from 1
+                                    return monthNames[monthIndex];
+                                });
+                                var amount = response.map(function(item) {
+                                    return item.total_amount;
+                                });
+
+
+
+                                var dynamicColors = [];
+                                for (var i = 0; i < month.length; i++) {
+                                    dynamicColors.push('rgba(' + Math.floor(Math.random() * 255) + ',' + Math.floor(
+                                            Math.random() * 255) + ',' + Math.floor(Math.random() * 255) +
+                                        ', 0.6)');
+                                }
+                                new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: month,
+                                        datasets: [{
+                                            label: '# MONTHLY REVENUE GENERATED',
+                                            data: amount,
+                                            backgroundColor: dynamicColors,
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    }
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText); // Log any errors to the console
+                            }
+                        });
+                    })
+
+
+
+
+                    new Chart(demandnotice, {
+    type: 'pie',
+    data: {
+        labels: [
+            'Red',
+            'Blue',
+            'Yellow'
+        ],
+        datasets: [{
+            label: 'My First Dataset',
+            data: [300, 50, 100],
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+            ],
+            hoverOffset: 4,
+        }]
+    },
+    options: {
+        plugins: {
+            legend: {
+                display: true,
+                position: 'right'
+            }
+        },
+        maintainAspectRatio: false
+    }
+});
+
                 </script>
             @endsection

@@ -53,7 +53,7 @@ use Modules\EmployerManager\Http\Controllers\EmployerController;
 */
 
 //LARAVEL DEFAULT Auth::routes();
-
+Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
 
 
@@ -159,6 +159,8 @@ Route::get('/showDepartementalDocumentsAndBranch/{id}', 'App\Http\Controllers\Do
 
 Route::get('/showDepartementalDocumentsByUser/{id}', 'App\Http\Controllers\DocumentsController@showDepartementalDocumentsByUser');
 
+//show all dta request for md
+Route::get('/showDTAForMD/{did}/{bid}', 'Modules\DTARequests\Http\Controllers\DTARequestsController@showDTAForMD');
 
 // Start of asset manager
 
@@ -599,15 +601,21 @@ Route::resource('equipmentAndFees', App\Http\Controllers\EquipmentAndFeeControll
 Route::resource('serviceApplications', App\Http\Controllers\ServiceApplicationController::class);
 Route::post('approve-document/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'approveOrDeclineDocument'])->name('application.approve.document');
 Route::post('final-documents-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'approveDocuments'])->name('application.final.documents.approval');
+
 Route::post('application-fee-payment-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'approveApplicationFee'])->name('application.fee.approval');
+
+
 Route::post('processing-fee-payment-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'approveProcessingFee'])->name('application.processingfee.approval');
 Route::post('inspection-fee-payment-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'approveInspectionFee'])->name('application.inspectionfee.approval');
 Route::post('set-inspection-status/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'setInspectionStatus'])->name('application.inspection.status');
+
 Route::post('application-equipment-invoice/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'generateEquipmentInvoice'])->name('application.equipmemt.invoice');
 Route::post('equipment-fee-payment-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'approveEquipmentFee'])->name('application.equipmentfee.approval');
 Route::post('area-officer-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'areaOfficerApproval'])->name('application.areaofficer.approval');
 Route::post('hod-marine-approval/{id}', [App\Http\Controllers\ServiceApplicationController::class, 'hodMarineApproval'])->name('application.hodmarine.approval');
 Route::get('/map/{id}', 'App\Http\Controllers\ServiceApplicationController@showMap')->name('map.show');
+Route::post('assign-permissions', [App\Http\Controllers\ServiceApplicationController::class, 'assignPermissions'])->name('assign.permissions');
+
 
 //Area manager approve equipment and fees created for a client
 Route::get('/service-application/{id}/approve', 'App\Http\Controllers\ServiceApplicationController@approveDemandNotice')->name('approve_demand_notice');
@@ -961,3 +969,10 @@ Route::get('downloadpay', [EmployerController::class, 'downloadpaymentsample'])-
 Route::get('viewapplicantrecord/{id}',[EmployerController::class,'viewapplicant'])->name('viewapplicant');
 
 Route::post('saveapplicantrecord/{id}',[EmployerController::class,'saveapplicate'])->name('apsav');
+
+
+
+Route::get('p2e',[HomeController::class,'p2e'])->name('p2e')->middleware(['auth']);
+
+Route::get('p2erevenue',[HomeController::class,'P2erevenuegenerated'])->name('p2e_revenue');
+Route::get('p2e_demandsearch',[HomeController::class,'P2edemandnotice'])->name('p2e_demandnotice');

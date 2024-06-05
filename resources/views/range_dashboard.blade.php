@@ -2,16 +2,11 @@
 
 @section('content')
 <style>
-    .nav-link {
-            font-weight: 600;
-            color: blue !important;
-        }
-
-        .nav-link:hover {
-            color: green !important;
-        }
-
-</style>
+    .nav-tabs .nav-link.active {
+      background-color: green !important;
+      color: white !important;
+  }
+  </style>
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
         <div id="kt_content_container" class="container-xxl">
@@ -232,7 +227,7 @@
                                                           @php @endphp
                                                           <tr>
                                                               <td>{{ $index + 1 }}</td>
-                                                              <td>{{ $service_application->employer() ? $service_application->employer()->company_name : 'NILL' }}</td>
+                                                              <td>{{ $service_application->employer ? $service_application->employer->company_name : 'NILL' }}</td>
                                                               <td>{{ $service_application->service ? $service_application->service->name : '' }}</td>
 {{--                                                               <td>{{ $service_application->processingTypes ? $service_application->processingTypes->name : 'NILL' }}</td>
  --}}                                 {{-- <td><?php //$type = \App\Models\ProcessingType::where('service_id', $service_application->id)->first(); ?>

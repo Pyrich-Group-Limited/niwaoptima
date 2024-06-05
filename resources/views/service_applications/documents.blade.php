@@ -37,7 +37,7 @@
                                 <input type="hidden" name="selected_button" value="approve" id="selected_button_input">
                                 <input type="hidden" name="document_id" value="" id="document_id">
 
-
+                                @can('approve or decline service application documents')
                                 @if ($document->approval_status == 0)
                                     {!! Form::button('Decline', [
                                         'type' => 'button',
@@ -53,6 +53,7 @@
                                         'onclick' => "setSelectedStatusSingleDocument('approve', $document->id)",
                                     ]) !!}
                                 @endif
+                                @endcan
 
                             </div>
                             {!! Form::close() !!}
@@ -80,13 +81,14 @@
         ]) !!}
         <div class="form-group col-sm-6 mb-5">
             {!! Form::label('mse_document_verification_comment', 'Comments:') !!}
-            {!! Form::textarea('mse_document_verification_comment', $serviceApplication->mse_document_verification_comment, [
+            {!! Form::textarea('mse_document_verification_comment', null, [
                 'class' => 'form-control',
                 'id' => 'mse_document_verification_comment',
             ]) !!}
         </div>
         <input type="hidden" name="selected_status" id="selected_status_input">
         <div class='btn-group'>
+            @can('approve or decline service application documents')
             {!! Form::button('Approve', [
                 'type' => 'button',
                 'class' => 'btn btn-success btn-xs',
@@ -97,6 +99,7 @@
                 'class' => 'btn btn-danger btn-xs',
                 'onclick' => "setSelectedStatus('decline')",
             ]) !!}
+            @endcan
         </div>
         {!! Form::close() !!}
     </div>

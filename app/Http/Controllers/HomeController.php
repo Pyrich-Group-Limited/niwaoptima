@@ -24,6 +24,7 @@ use App\Repositories\RoleRepository;
 use App\Models\Service;
 //use App\Models\Level;
 use App\Models\ServiceApplication;
+use Modules\DTARequests\Models\DTARequests;
 
 
 class HomeController extends Controller
@@ -49,6 +50,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
     public function index()
     {
 
@@ -765,20 +767,256 @@ class HomeController extends Controller
         }
         //for the vendor applicant section
         $pendingvendors = Employer::where('status', '1')->where(function ($query) {
-            $query->where('user_type', 'e-promta');
+            $query->where('user_type', 'e-promota');
         })->get();
         $pendingcount = Employer::where('status', '1')->where(function ($query) {
-            $query->where('user_type', 'e-promta');
+            $query->where('user_type', 'e-promota');
         })->count();
         $approvecount = Employer::where('status', '2')->where(function ($query) {
-            $query->where('user_type', 'e-promta');
+            $query->where('user_type', 'e-promota');
         })->count();
         // dd($pendingvendors);
         $approvedvendors = Employer::where('status', '2')->where(function ($query) {
-            $query->where('user_type', 'e-promta');
+            $query->where('user_type', 'e-promota');
         })->get();
 
-        return view('am', compact('branch', 'approvecount', 'pendingcount', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
+        $dta_requests = DTARequests::where('branch_id', auth()->user()->staff->branch_id)->paginate(10);
+
+        return view('am', compact('dta_requests', 'branch', 'approvecount', 'pendingcount', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
+    }
+
+    public function P2erevenuegenerated(Request $request)
+    {
+        $id=$request->data;
+        $data=DB::table('payments')
+        ->select(DB::raw('MONTH(paid_at) AS year'),DB::raw('SUM(amount) as total_amount'))
+        ->where('branch_id',$id)
+        ->groupBy(DB::raw('MONTH(paid_at)'))
+        ->orderBy('year')
+        ->get()
+        ;
+        
+      
+       
+        return $data;
+    }
+    public function P2edemandnotice(Request $request)
+    {
+        //shehu said the demand notice you can use payment table  where payment_type ==5
+        $id=$request->data;
+        $datas=DB::table('payments')
+        ->where('payment_type',5)
+        
+        // ->select(DB::raw('YEAR(paid_at) AS year'),DB::raw('SUM(amount) as total_amount'))
+        ->where('branch_id',$id)
+        ->groupBy(DB::raw('YEAR(paid_at)'))
+        ->orderBy('year')
+        ->get()
+        ;
+        
+      
+        // dd($datas);
+        return $datas;
+    }
+
+    public function p2e()
+    {
+        $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
+        //for the demand notices 
+
+        $branch = Branch::all();
+
+        $branchesopt= new Branch();
+
+        $branchesopt->id=0;
+        $branchesopt->branch_name= 'Select Area Office';
+        $branch->prepend($branchesopt);
+        
+        $services = Service::where('branch_id', Auth()->user()->staff->branch_id)->get();
+
+        // =ServiceApplication::get();
+        $demandnotice = DB::table('service_applications')
+            ->where('equipment_fees_list', '!=', null)
+            ->get(['id', 'created_at'])
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'created_at' => date('M, Y', strtotime($item->created_at))
+                ];
+            })
+            ->pluck('created_at', 'id');
+        // dd($demandnotice);
+        $services = $services->pluck('name', 'id'); // Pluck the values and assign it back to $services variable
+        // $services->prepend('Select Service', 0); // Add an empty option with label 'Select Service'
+        $documents1vv = \App\Models\IncomingDocuments::query()
+            ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+            ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+            ->select(
+                'incoming_documents_categories.id as category_id',
+                'incoming_documents_categories.name as category_name',
+                'incoming_documents_manager.created_at as document_created_at',
+                'incoming_documents_manager.id as d_id',
+                'incoming_documents_manager.title',
+                'incoming_documents_manager.full_name as sender_full_name',
+                'incoming_documents_manager.email as sender_email',
+                'incoming_documents_manager.phone as sender_phone',
+                'incoming_documents_manager.document_url',
+                'incoming_documents_categories.description as doc_description',
+                'incoming_documents_manager.status',
+                'incoming_documents_categories.name as cat_name',
+                'departments.name as dep_name',
+                //'incoming_documents_has_users.user_id',
+                //'incoming_documents_has_users.assigned_by',
+                //DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name')
+            )
+            ->where('incoming_documents_manager.status', '!=', '0')
+            // ->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)
+            ->latest('incoming_documents_manager.created_at')
+            ->groupBy('departments.name', 'incoming_documents_manager.status', 'incoming_documents_manager.phone', 'incoming_documents_manager.email', 'incoming_documents_manager.full_name', 'incoming_documents_categories.description', 'incoming_documents_manager.document_url', 'incoming_documents_manager.title', 'incoming_documents_categories.id', 'incoming_documents_categories.name', 'incoming_documents_manager.created_at', 'incoming_documents_manager.id') // Include the nonaggregated column in the GROUP BY clause
+            ->limit(10)
+            ->get();
+
+        // atp look at this document1, so that all letter of intent will display here
+
+        // $documents1 = DB::table('incoming_documents_has_users')
+        //     ->join('incoming_documents_manager', 'incoming_documents_manager.id', '=', 'incoming_documents_has_users.document_id')
+        //     ->join('departments', 'departments.id', '=', 'incoming_documents_manager.department_id')
+        //     ->join('users', 'incoming_documents_has_users.user_id', '=', 'users.id')
+        //     ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+        //     ->select(
+        //         'incoming_documents_manager.category_id',
+        //         'incoming_documents_categories.id',
+        //         'incoming_documents_manager.title',
+        //         'incoming_documents_manager.full_name as sender_full_name',
+        //         'incoming_documents_manager.email as sender_email',
+        //         'incoming_documents_manager.phone as sender_phone',
+        //         'incoming_documents_has_users.created_at as createdAt',
+        //         'incoming_documents_categories.name as category_name',
+        //         'incoming_documents_has_users.start_date',
+        //         'incoming_documents_has_users.end_date',
+        //         'incoming_documents_has_users.allow_share',
+        //         'incoming_documents_has_users.is_download',
+        //         'incoming_documents_has_users.user_id',
+        //         'incoming_documents_has_users.assigned_by',
+        //         'incoming_documents_manager.document_url as document_url',
+        //         'incoming_documents_manager.id as d_id',
+        //         'incoming_documents_categories.id as d_m_c_id',
+        //         'incoming_documents_categories.name as cat_name',
+        //         'departments.name as dep_name',
+
+        //         DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.user_id) AS assigned_to_name'),
+        //         DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_has_users.assigned_by) AS assigned_by_name'),
+        //         DB::raw('(SELECT CONCAT(first_name, " ", last_name) FROM users WHERE users.id = incoming_documents_manager.created_by) AS created_by_name')
+        //     )
+        //     ->latest('incoming_documents_has_users.created_at')
+        //     ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
+        //     ->groupBy(
+        //         'incoming_documents_manager.category_id',
+        //         'incoming_documents_categories.id',
+        //         'incoming_documents_has_users.start_date',
+        //         'incoming_documents_has_users.end_date',
+        //         'incoming_documents_manager.id',
+        //         'incoming_documents_manager.title',
+        //         'incoming_documents_manager.document_url',
+        //         'incoming_documents_has_users.id',
+        //         'incoming_documents_has_users.created_at',
+        //         'incoming_documents_categories.name',
+        //         'incoming_documents_has_users.allow_share',
+        //         'incoming_documents_has_users.is_download',
+        //         'incoming_documents_has_users.user_id',
+        //         'incoming_documents_has_users.assigned_by',
+        //         'incoming_documents_manager.created_by',
+        //         'departments.name',
+        //         'incoming_documents_manager.status',
+        //         'incoming_documents_manager.phone',
+        //         'incoming_documents_manager.email',
+        //         'incoming_documents_manager.full_name',
+        //     )
+        //     ->get();
+
+        $intents = DB::table('incoming_documents_manager')
+            // ->join('incoming_documents_categories', 'incoming_documents_manager.category_id', '=', 'incoming_documents_categories.id')
+
+            ->get();
+
+
+        $dept = Department::get();
+        $deptData = $dept->map(function ($dept1) {
+            return [
+                'id' => $dept1->id,
+                'name' => $dept1->name,
+            ];
+        });
+
+        $departments_data = $deptData->pluck('name', 'id');
+        $departments_data->prepend('Select Department', '');
+
+        $departments_data1 = $deptData->pluck('name', 'id');
+        //$departments_data1->prepend('Select Department', '');
+
+        $users1 = DB::select('
+        SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
+        FROM users
+        JOIN staff ON users.id = staff.user_id
+        ');
+        // WHERE users.level_id = 20
+
+        //         $users2 = DB::select('
+        //     SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
+        //     FROM users
+        //     JOIN staff ON users.id = staff.user_id
+        //     WHERE staff.branch_id = ?
+        // ', [auth()->user()->staff->branch_id]
+        // );
+        $users2 = DB::select(
+            '
+    SELECT users.id as id, users.first_name as first_name, users.last_name as last_name
+    FROM users
+    JOIN staff ON users.id = staff.user_id
+
+    '
+        );
+        //i deleted that restriction of branch_id
+
+
+
+        // Combine the results of all queries into one collection
+        $userData = collect($users1)
+            ->merge($users2)
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                ];
+            });
+
+
+
+
+
+        $users123 = $userData->pluck('name', 'id');
+
+        // if (Auth()->user()->hasRole('super-admin')) {
+        $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->get();
+        // } else {
+        //     $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
+        // }
+        //for the vendor applicant section
+        $pendingvendors = Employer::where('status', '1')->where(function ($query) {
+            $query->where('user_type', 'e-promota');
+        })->get();
+        $pendingcount = Employer::where('status', '1')->where(function ($query) {
+            $query->where('user_type', 'e-promota');
+        })->count();
+        $approvecount = Employer::where('status', '2')->where(function ($query) {
+            $query->where('user_type', 'e-promota');
+        })->count();
+        // dd($pendingvendors);
+        $approvedvendors = Employer::where('status', '2')->where(function ($query) {
+            $query->where('user_type', 'e-promota');
+        })->get();
+
+        return view('p2e', compact('branch', 'demandnotice', 'approvecount', 'pendingcount', 'services', 'intents', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
     }
 
     //secretary dashboard
@@ -1040,7 +1278,10 @@ class HomeController extends Controller
             $service_applications = ServiceApplication::orderBy('id', 'desc')->where('current_step', '=', '110')->where('branch_id', '=', Auth::user()->staff->branch_id)->get();
         }
 
-        return view('gm_dashboard', compact('branch', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications'));
+        $dta_requests = DTARequests::where('branch_id', auth()->user()->staff->branch_id)->where('department_id', auth()->user()->staff->department_id)->paginate(10);
+
+
+        return view('gm_dashboard', compact('dta_requests', 'branch', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications'));
     }
 
     //From level 6 to 14 dashboard

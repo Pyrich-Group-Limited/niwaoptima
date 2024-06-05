@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\EmployerManager\Models\Employer;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Shared\Models\Branch;
 
 class ServiceApplication extends Model
 {
@@ -40,6 +41,8 @@ class ServiceApplication extends Model
         'demand_total',
         'axis_id',
         'expiry_date',
+        'assigned_user_id',
+        'inspection_report',
     ];
 
     protected $casts = [
@@ -85,7 +88,7 @@ class ServiceApplication extends Model
 
     public function axis()
     {
-        return $this->belongsTo(Axis::class,'axis_d', 'id');
+        return $this->belongsTo(Axis::class,'axis_id', 'id');
     }
 
     public function payment(){
@@ -97,7 +100,7 @@ class ServiceApplication extends Model
         return $employer;
     } */
     public function applicant(){
-        return $this->belongsTo(Employer::class,'applicant_code','id');
+        return $this->belongsTo(Employer::class,'applicant_code','applicant_code');
     }
 
      public function employer(){
@@ -117,5 +120,10 @@ class ServiceApplication extends Model
     public function processingType()
     {
         return $this->belongsTo(ProcessingType::class, 'service_type_id');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
     }
 }

@@ -13,7 +13,7 @@
         </div>
     </section>
 
-    <div class="content px-3">
+    <div class="content px-3" style="margin-bottom: 100px;">
 
         @include('adminlte-templates::common.errors')
 
@@ -28,20 +28,7 @@
             </div>
 
             <div class="card-footer">
-                @if(isset($unit_head_data))
-                {!! Form::submit('Approve & Send To HOD', ['class' => 'btn btn-primary']) !!}
-                @endif
-                @if(isset($department_head_data))
-                {!! Form::submit('Approve & Send To MD', ['class' => 'btn btn-primary']) !!}
-                @endif
-                @role('MD')
-                {!! Form::submit('Approve & Send To ED FINANCE & ACCOUNT', ['class' => 'btn btn-primary']) !!}
-                @endrole
-                @role('ED FINANCE & ACCOUNT')
-                {!! Form::submit('Approve', ['class' => 'btn btn-primary']) !!}
-                @endrole
-                {!! Form::submit('Reject', ['class' => 'btn btn-danger']) !!}
-                {{-- <a href="{{ route('dtarequests.index') }}" class="btn btn-default"> Reject </a> --}}
+                {!! Form::submit('SUBMIT', ['class' => 'btn btn-primary']) !!}
             </div>
 
             {!! Form::close() !!}
