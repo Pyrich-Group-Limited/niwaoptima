@@ -628,7 +628,7 @@ class HomeController extends Controller
     public function areamanager()
     {
         $branch = Branch::all();
-        $services = Service::where('branch_id', Auth()->user()->staff->branch_id)->get();
+        $services = Service::where('branch_id', 1)->get();
 
         $services = $services->pluck('name', 'id'); // Pluck the values and assign it back to $services variable
         // $services->prepend('Select Service', 0); // Add an empty option with label 'Select Service'
@@ -1421,28 +1421,24 @@ class HomeController extends Controller
         $month = request()->input('month');
         $year = request()->input('year');
 
-        $pending_application_forms = ServiceApplication::whereMonth('created_at', $month)
-            ->whereYear('created_at', $year)
+        $pending_application_forms = ServiceApplication::whereYear('created_at', $year)
             ->where('service_id', $id)
             ->where('current_step', 4)
             ->where('branch_id', Auth()->user()->staff->branch->id)
             ->count();
 
-        $pending_inspections = ServiceApplication::whereMonth('created_at', $month)
-            ->whereYear('created_at', $year)
+        $pending_inspections = ServiceApplication::whereYear('created_at', $year)
             ->where('service_id', $id)
             ->where('current_step', 8)
             ->where('branch_id', Auth()->user()->staff->branch->id)
             ->count();
 
-        $total_amount = Payment::whereMonth('created_at', $month)
-            ->whereYear('created_at', $year)
+        $total_amount = Payment::whereYear('created_at', $year)
             ->where('service_id', $id)
             ->where('branch_id', Auth()->user()->staff->branch->id)
             ->sum('amount');
 
-        $total_permit = ServiceApplication::whereMonth('created_at', $month)
-            ->whereYear('created_at', $year)
+        $total_permit = ServiceApplication::whereYear('created_at', $year)
             ->where('service_id', $id)
             ->where('current_step', 15)
             ->where('branch_id', Auth()->user()->staff->branch->id)
