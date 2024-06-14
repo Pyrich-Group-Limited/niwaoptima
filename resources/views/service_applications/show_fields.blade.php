@@ -160,13 +160,13 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
 @if ($serviceApplication->current_step == 8)
     <div class="col-sm-12">
         <!-- Documents Approval -->
-        <h3>Inspection Fee Payment Approval</h3>
+        <h3>Set inspection Date & Comments</h3>
         {!! Form::open([
             'route' => ['application.inspectionfee.approval', $serviceApplication->id],
             'method' => 'post',
             'id' => 'approvalForm',
         ]) !!}
-<p>Amount Paid: <b>{{ $insp_fee->amount ?? '' }} </b></p>
+{{-- <p>Amount Paid: <b>{{ $insp_fee->amount ?? '' }} </b></p> --}}
         <!-- Date Of Inspection Field -->
         <div class="form-group col-sm-6">
             {!! Form::label('date_of_inspection', 'Date Of Inspection:') !!}
@@ -256,7 +256,7 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
     <div class="form-group col-sm-3">
         {!! Form::label('monitoring_fees1', 'Select Monitoring Fee') !!}
         <select class="form-control" name="monitoring_fees1" id="monitoring_fees1" required>
-<option name="" >Select Monitoring Fee</option>
+<option value="" >Select Monitoring Fee</option>
 @foreach ($monitoring_fees as $monitoring_fee)
     <option value="{{ $monitoring_fee->amount }}" >{{ $monitoring_fee->name }}</option>
 @endforeach
