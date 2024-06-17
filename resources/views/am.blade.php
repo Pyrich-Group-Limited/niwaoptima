@@ -359,7 +359,7 @@
                                             {!! Form::select('service_id', $services, null, ['class' => 'form-select', 'id' => 'serviceSelect']) !!}
                                         </div>
 
-                                        <div class="col-3">
+                                        {{-- <div class="col-3">
                                             <select class="form-select" id="monthSelect" name="month">
                                                 <option value="1">January</option>
                                                 <option value="2">February</option>
@@ -374,12 +374,12 @@
                                                 <option value="11">November</option>
                                                 <option value="12">December</option>
                                             </select>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-3">
                                             <select class="form-select" id="yearSelect" name="year">
                                                 @php
                                                     $currentYear = date('Y');
-                                                    $startYear = 2024; // Adjust as needed
+                                                    $startYear = 2022; // Adjust as needed
                                                     $endYear = $currentYear; // Adjust as needed
                                                 @endphp
                                                 @for ($year = $startYear; $year <= $endYear; $year++)
@@ -488,7 +488,7 @@
                                 </div>
                                 <div class="col-xl-3">
                                     <!--begin::Statistics Widget 5-->
-                                    <a href="#" class="card hoverable card-xl-stretch mb-xl-8">
+                                    <a href="#" class="card bg-success card-xl-stretch mb-xl-8">
                                         <!--begin::Body-->
                                         <div class="card-body">
                                             <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm008.svg-->

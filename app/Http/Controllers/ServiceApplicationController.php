@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
 use App\Models\DeclinedDocument;
+use App\Mail\EmployerDocumentEmail;
+use Illuminate\Support\Facades\Mail;
 
 class ServiceApplicationController extends AppBaseController
 {
@@ -406,6 +408,27 @@ DeclinedDocument::create($documents);
         $serviceApplication->mse_document_verification_comment = $request->mse_document_verification_comment;
         $serviceApplication->save();
 
+        $client = DB::table('employers')
+            ->where('id', $serviceApplication->user_id)
+            ->first();
+            
+            $client_documents = DB::table('declined_documents')
+            ->join('service_applications_documents', 'declined_documents.service_id', '=', 'service_applications_documents.service_application_id')
+            ->where('declined_documents.service_id', $serviceApplication->id)
+            ->where('declined_documents.user_id', $serviceApplication->user_id)
+            ->select('service_applications_documents.name', 'service_applications_documents.path')
+            ->get();
+
+        try {
+             
+            Mail::to($client->company_email)->send(new EmployerDocumentEmail($client_documents, $client,$selected_status,$serviceApplication));
+
+            //return redirect('/dashboard')->with('success', 'Invoice notification sent successfully.');
+        } catch (\Exception $e) {
+            // Handle the exception
+            //return redirect('/dashboard')->with('error', 'Failed to send invoice notification: ' . $e->getMessage());
+        }
+
 
         return redirect()->back();
     }
@@ -476,7 +499,7 @@ DeclinedDocument::create($documents);
         if ($selected_status == 'decline') {
             $serviceApplication->finance_is_inspection_fee_verified = 0;
             $serviceApplication->status_summary = 'Inspection fee has been declined';
-            Flash::success('Payment has been declined.');
+            Flash::success('Inspection date and comment saved.');
         } else if ($selected_status == 'approve') {
             $serviceApplication->finance_is_inspection_fee_verified = 1;
             $serviceApplication->current_step = 9;
@@ -488,7 +511,7 @@ DeclinedDocument::create($documents);
             $pay->approval_status = 1;
             $pay->save();
 
-            Flash::success('Payment has been approved');
+            Flash::success('Inspection date and comment saved');
         }
 
         $serviceApplication->save();
