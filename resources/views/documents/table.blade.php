@@ -5,7 +5,7 @@
 </style>
 
 <div class="card-body p-5">
-    <div class="table-responsive1">
+    <div class="table-responsive">
         <table class="table align-middle gs-0 gy-4" id="order-listing">
             <thead>
                 <tr>

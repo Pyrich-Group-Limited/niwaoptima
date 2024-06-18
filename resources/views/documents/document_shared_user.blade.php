@@ -179,22 +179,25 @@ aria-hidden="true" data-backdrop="false">
         <div class="modal-body">
 
             <div class="form-group">
-                <table class="table" id="document-table-history">
-                    <thead>
+                <div class="table-responsive">
+                    <table class="table" id="document-table-history">
+                        <thead>
+                            <tr>
+                                <th>Created By</th>
+                                <th>Document URL <span id="curr"></span> </th>
+                                <th>Created Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                         <tr>
-                            <th>Created By</th>
-                            <th>Document URL <span id="curr"></span> </th>
-                            <th>Created Date</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-                </table>
+                    </tbody>
+                    </table>
+                </div>
+                
             </div>
 
             
@@ -222,32 +225,34 @@ aria-hidden="true" data-backdrop="false">
             </button>
         </div>
         <div class="modal-body">
-
-            <div class="form-group">
-                <table class="table" id="document-table-comment" style="display:none;">
-                    <thead>
+            <div class="table-responsive">
+                <div class="form-group">
+                    <table class="table" id="document-table-comment" style="display:none;">
+                        <thead>
+                            <tr>
+                                <th>Comment</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                         <tr>
-                            <th>Comment</th>
-                            <th>Created Date</th>
-                            <th>Created By</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-                </table>
-                {!! Form::label('comment', 'Type your comment:') !!}
-                <div class="input-group">
-                    <div class="custom-comment">
-                        {!! Form::textarea('comment', null, ['class' => 'form-control']) !!}
+                    </tbody>
+                    </table>
+                    {!! Form::label('comment', 'Type your comment:') !!}
+                    <div class="input-group">
+                        <div class="custom-comment">
+                            {!! Form::textarea('comment', null, ['class' => 'form-control']) !!}
+                        </div>
                     </div>
+                    {!! Form::hidden('comment_id', null, ['id' => 'comment_id']) !!}
                 </div>
-                {!! Form::hidden('comment_id', null, ['id' => 'comment_id']) !!}
             </div>
+            
 
             
 
@@ -352,28 +357,31 @@ aria-hidden="true" data-backdrop="false">
             <p><span id="share1"></span></p>
 
             <div class="form-group">
-                <table class="table" id="document-table-share">
-                    <thead>
-                        <tr>
-                            <th>Type</th>
-                            <th>Allow Download</th>
-                            <th>User/Role Name</th>
-                            <th>Email</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table" id="document-table-share">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Allow Download</th>
+                                <th>User/Role Name</th>
+                                <th>Email</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
             </div>
 
             

@@ -43,74 +43,76 @@
             <div class="card-body p-5">
                 <h5>Request For Approval For:: {{ $request->type->name }}</h5>
                 <hr>
-
-                <table class="table table-bordered align-middle gs-0 gy-4">
-                    <thead class="fw-bold text-muted bg-light">
-                        <tr>
-                            <th class="px-2">Staff</th>
-                            <th>Request</th>
-                            <th>Current Step</th>
-                            <th>Status</th>
-                            <th>Next Step</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="px-2">{{-- {{ $request->staff->user->first_name }}
-                                {{ $request->staff->user->last_name }} --}}
-                                {{
-                                    !empty($request->staff->user) ?
-                                    $request->staff->user->first_name.' '.$request->staff->user->last_name :
-                                    optional(Modules\EmployerManager\Models\Employer::find($request->staff_id))->contact_firstname.' '.
-                                    optional(Modules\EmployerManager\Models\Employer::find($request->staff_id))->contact_surname ??
-                                    'Unknown Contact'
-                                    
-                                }}
-                            </td>
-                            <td>{{ $request->type->name }}</td>
-                            <td>{{ $request->order }} of {{ $request->type->flows->count() }}</td>
-                            <td>{{ Modules\Approval\Models\Action::find($request->action_id)->status }}</td>
-                            <td>
-                                {{-- {{$request->type->flows()->where('status', 1)->max('approval_order')}} --}}
-                                @if ($request->next_step)
-                                    Step:: {{ $request->next_step }} -
-                                @endif
-
-                                @php
-                                    if (
-                                        $request->order ==
-                                        $request->type
-                                            ->flows()
-                                            ->where('status', 1)
-                                            ->max('approval_order')
-                                    ) {
-                                        if ($request->status == 5) {
-                                            echo 'Declined';
-                                        } elseif ($request->status == 1) {
-                                            echo 'Approved';
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle gs-0 gy-4">
+                        <thead class="fw-bold text-muted bg-light">
+                            <tr>
+                                <th class="px-2">Staff</th>
+                                <th>Request</th>
+                                <th>Current Step</th>
+                                <th>Status</th>
+                                <th>Next Step</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="px-2">{{-- {{ $request->staff->user->first_name }}
+                                    {{ $request->staff->user->last_name }} --}}
+                                    {{
+                                        !empty($request->staff->user) ?
+                                        $request->staff->user->first_name.' '.$request->staff->user->last_name :
+                                        optional(Modules\EmployerManager\Models\Employer::find($request->staff_id))->contact_firstname.' '.
+                                        optional(Modules\EmployerManager\Models\Employer::find($request->staff_id))->contact_surname ??
+                                        'Unknown Contact'
+                                        
+                                    }}
+                                </td>
+                                <td>{{ $request->type->name }}</td>
+                                <td>{{ $request->order }} of {{ $request->type->flows->count() }}</td>
+                                <td>{{ Modules\Approval\Models\Action::find($request->action_id)->status }}</td>
+                                <td>
+                                    {{-- {{$request->type->flows()->where('status', 1)->max('approval_order')}} --}}
+                                    @if ($request->next_step)
+                                        Step:: {{ $request->next_step }} -
+                                    @endif
+    
+                                    @php
+                                        if (
+                                            $request->order ==
+                                            $request->type
+                                                ->flows()
+                                                ->where('status', 1)
+                                                ->max('approval_order')
+                                        ) {
+                                            if ($request->status == 5) {
+                                                echo 'Declined';
+                                            } elseif ($request->status == 1) {
+                                                echo 'Approved';
+                                            } else {
+                                                echo 'Pending';
+                                            }
                                         } else {
                                             echo 'Pending';
                                         }
-                                    } else {
-                                        echo 'Pending';
-                                    }
-                                @endphp
-                            </td>
-                            <td>
-                                @if($request->requestable::class == 'Modules\DTARequests\Models\DTARequests')
-                                    <a href="/dtarequests/dtarequests/{{$request->requestable->id}}" target="_blank" class="btn">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                @elseif($request->requestable::class == 'Modules\HumanResource\Models\LeaveRequest')
-                                    <a href="/leave_request/leave_request/{{$request->requestable->id}}" target="_blank" class="btn">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                @endif
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    @endphp
+                                </td>
+                                <td>
+                                    @if($request->requestable::class == 'Modules\DTARequests\Models\DTARequests')
+                                        <a href="/dtarequests/dtarequests/{{$request->requestable->id}}" target="_blank" class="btn">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    @elseif($request->requestable::class == 'Modules\HumanResource\Models\LeaveRequest')
+                                        <a href="/leave_request/leave_request/{{$request->requestable->id}}" target="_blank" class="btn">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    @endif
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
             </div>
             <div class="card-foot pb-5">{{-- {{ $types->links() }} --}}</div>
         </div>
@@ -122,69 +124,71 @@
                 <h2>Request Timeline</h2>
                 <h6>Completed Steps:: {{ $request->order }} of {{ $request->type->flows->count() }}</h6>
                 <hr>
-
-                <table class="table table-bordered align-middle gs-0 gy-4">
-                    <thead class="fw-bold text-muted bg-light">
-                        <tr>
-                            <th class="px-2">Step</th>
-                            <th>Staff</th>
-                            <th>Action</th>
-                            <th>Date</th>
-                            <th>Comments</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($request->timelines as $timeline)
+                <div class="responsive">
+                    <table class="table table-bordered align-middle gs-0 gy-4">
+                        <thead class="fw-bold text-muted bg-light">
                             <tr>
-                                <td class="px-2">Step {{ $timeline->flow->approval_order }}</td>
-                                <td>
-                                    {{ $timeline->staff->user->first_name }} {{ $timeline->staff->user->last_name }}
-                                    <br />
-                                    <small>
-                                        {{ $timeline->staff->user->roles->pluck('name') }}
-                                    </small> </td>
-                                <td>
-                                    <span
-                                        class="badge bg-{{ $timeline->action->name == 'Approve' ? 'success' : ($timeline->action->name == 'Decline' ? 'danger' : ($timeline->action->name == 'Return' ? 'warning' : ($timeline->action->name == 'Modify' ? 'info' : 'primary'))) }}  text-white fs-6">{{ $timeline->action->status }}</span>
-                                </td>
-                                <td>{{ date('F jS, Y', strtotime($timeline->created_at)) }}</td>
-                                <td>
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-target="#modal{{ $timeline->id }}">
-                                        <i class="fa fa-comment"></i>
-                                    </button>
-
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="modal{{ $timeline->id }}" tabindex="-1" role="dialog"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">
-                                                        Comments</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p class="fs-5">
-                                                        {{ $timeline->comments }}
-                                                    </p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Close</button>
+                                <th class="px-2">Step</th>
+                                <th>Staff</th>
+                                <th>Action</th>
+                                <th>Date</th>
+                                <th>Comments</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($request->timelines as $timeline)
+                                <tr>
+                                    <td class="px-2">Step {{ $timeline->flow->approval_order }}</td>
+                                    <td>
+                                        {{ $timeline->staff->user->first_name }} {{ $timeline->staff->user->last_name }}
+                                        <br />
+                                        <small>
+                                            {{ $timeline->staff->user->roles->pluck('name') }}
+                                        </small> </td>
+                                    <td>
+                                        <span
+                                            class="badge bg-{{ $timeline->action->name == 'Approve' ? 'success' : ($timeline->action->name == 'Decline' ? 'danger' : ($timeline->action->name == 'Return' ? 'warning' : ($timeline->action->name == 'Modify' ? 'info' : 'primary'))) }}  text-white fs-6">{{ $timeline->action->status }}</span>
+                                    </td>
+                                    <td>{{ date('F jS, Y', strtotime($timeline->created_at)) }}</td>
+                                    <td>
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#modal{{ $timeline->id }}">
+                                            <i class="fa fa-comment"></i>
+                                        </button>
+    
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modal{{ $timeline->id }}" tabindex="-1" role="dialog"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">
+                                                            Comments</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="fs-5">
+                                                            {{ $timeline->comments }}
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                
             </div>
         </div>
 

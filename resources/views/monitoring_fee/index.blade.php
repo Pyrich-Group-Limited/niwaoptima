@@ -12,7 +12,7 @@
     {{-- <div class="components-preview wide-md mx-auto"> --}}
     <div class="nk-block-head nk-block-head-sm">
         <div class="nk-block-between">
-            <div class="nk-block-head-content">
+            <div class="nk-block-head-content mb-3">
                 <h3 class="nk-block-title page-title">List Of Monitoring Fees</h3>
                 <div class="nk-block-des text-soft">
                     
@@ -26,7 +26,7 @@
         <a href="{{ route('monitoring_fee.create') }}" class="btn btn-primary"><em class="fa fa-plus"></em><span>Add New Fees</span></a>
     </div>
 </div>
-<div class="content px-3" style="margin-bottom: 30px;">
+<div class="content px-3" style="margin-bottom: 40px;">
     <div class="clearfix"></div>
    <div class="card">
     <div class="card-body p-5">

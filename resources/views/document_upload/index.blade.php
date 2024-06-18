@@ -10,7 +10,7 @@
 @section('content')
 
     {{-- <div class="components-preview wide-md mx-auto"> --}}
-    <div class="nk-block-head nk-block-head-sm">
+    <div class="nk-block-head nk-block-head-sm mb-3">
         <div class="nk-block-between">
             <div class="nk-block-head-content">
                 <h3 class="nk-block-title page-title">Document Upload Names</h3>

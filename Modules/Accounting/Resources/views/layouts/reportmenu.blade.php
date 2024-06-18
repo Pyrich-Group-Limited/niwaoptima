@@ -6,7 +6,7 @@
         <i class="menu-arrow"></i>
     </a>
     <ul class="nav flex-column sub-menu">
-        @can('read account statement')
+        @can('read account statement') 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('report.account.statement') }}">Account Statement</a>
             </li>

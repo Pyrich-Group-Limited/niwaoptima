@@ -10,6 +10,15 @@
         .nav-link:hover {
             color: green !important;
         }
+
+        .scrollmenu {
+            overflow: scroll;
+            white-space: nowrap !important;
+        }
+        .scrollmenu a{
+            display: inline-block !important;
+        }
+
     </style>
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
@@ -29,34 +38,37 @@
 
                 </div>
                 <div class=" justify-content-between">
-                    <ul class="nav nav-tabs bg-primary" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="letter-tab" data-toggle="tab" href="#letter" role="tab"
-                                aria-controls="letter" aria-selected="true">Internal Correspondences</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="demand-tab" data-toggle="tab" href="#demand" role="tab"
-                                aria-controls="demand" aria-selected="false">Demand Notice</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="revenue-tab" data-toggle="tab" href="#revenue" role="tab"
-                                aria-controls="revenue" aria-selected="false">Revenue Update</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="letter1-tab" data-toggle="tab" href="#letter1" role="tab"
-                                aria-controls="letter1" aria-selected="true">Letters Of Intent</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="vendor-tab" data-toggle="tab" href="#vendor" role="tab"
-                                aria-controls="vendor" aria-selected="true">E-promoter </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="dta_request-tab" data-toggle="tab" href="#dta_request" role="tab"
-                                aria-controls="dta_request" aria-selected="false">DTA Requests</a>
-                        </li>
-
-                    </ul>
-                    <div class="tab-content" id="myTabContent">
+                    <div class="scrollmenu">
+                        <ul class="nav nav-tabs bg-primary" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="letter-tab" data-toggle="tab" href="#letter" role="tab"
+                                    aria-controls="letter" aria-selected="true">Internal Correspondences</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="demand-tab" data-toggle="tab" href="#demand" role="tab"
+                                    aria-controls="demand" aria-selected="false">Demand Notice</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="revenue-tab" data-toggle="tab" href="#revenue" role="tab"
+                                    aria-controls="revenue" aria-selected="false">Revenue Update</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="letter1-tab" data-toggle="tab" href="#letter1" role="tab"
+                                    aria-controls="letter1" aria-selected="true">Letters Of Intent</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="vendor-tab" data-toggle="tab" href="#vendor" role="tab"
+                                    aria-controls="vendor" aria-selected="true">E-promoter </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="dta_request-tab" data-toggle="tab" href="#dta_request" role="tab"
+                                    aria-controls="dta_request" aria-selected="false">DTA Requests</a>
+                            </li>
+    
+                        </ul>
+                    </div>
+                    
+                    <div class="tab-content" id="myTabContent" style="margin-bottom: 60px;">
                         <div class="tab-pane fade" id="dta_request" role="tabpanel" aria-labelledby="dta_request-tab">
                             <div class="row grid-margin stretch-card">
                                     
@@ -348,13 +360,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="revenue" role="tabpanel" aria-labelledby="revenue-tab">
+                        <div class="tab-pane fade " id="revenue" role="tabpanel" aria-labelledby="revenue-tab">
                             <div class="row g-5 g-xl-10 mb-5 mb-xl-10 justify-content-end" style="">
                                 <div class="col-5">
                                     <div class="row">
                                         <!-- <div class="col-3">
-                                                                                                {!! Form::label('', 'Filter By', ['class' => 'form-label mt-2']) !!}
-                                                                                            </div> -->
+                                            {!! Form::label('', 'Filter By', ['class' => 'form-label mt-2']) !!}
+                                         </div> -->
                                         <div class="col-3">
                                             {!! Form::select('service_id', $services, null, ['class' => 'form-select', 'id' => 'serviceSelect']) !!}
                                         </div>
@@ -375,7 +387,7 @@
                                                 <option value="12">December</option>
                                             </select>
                                         </div> --}}
-                                        <div class="col-3">
+                                        <div class="col-3 mr-2">
                                             <select class="form-select" id="yearSelect" name="year">
                                                 @php
                                                     $currentYear = date('Y');
@@ -391,7 +403,7 @@
                                             </select>
 
                                         </div>
-                                        <div class="col-3"> <button type="button" id="searchBtn"
+                                        <div class="col-3 mr-4"> <button type="button" id="searchBtn"
                                                 class="btn btn-primary">SEARCH</button>
                                         </div>
                                     </div>

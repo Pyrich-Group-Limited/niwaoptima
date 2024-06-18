@@ -59,27 +59,30 @@
 
                 <div class="table mt-4">
                     <span class="text-center  text-success my-4">REQUESITION DETAILS</span>
-                    <table class=" table-bordered">
-                        <thead>
-                            <tr>
-                                <th>ITEMS</th>
-                                <th>QUANTITY</th>
-                                <th>RATE</th>
-                                <th>AMOUNT</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($req as $item)
+                    <div class="table-responsive">
+                        <table class=" table-bordered">
+                            <thead>
                                 <tr>
-                                    <td>{{ json_decode($item->item) }}</td>
-                                    <td>{{ json_decode($item->quantity) }} </td>
-                                    <td>{{ json_decode($item->rate) }}</td>
-                                    <td>{{ json_decode($item->amount) }}</td>
+                                    <th>ITEMS</th>
+                                    <th>QUANTITY</th>
+                                    <th>RATE</th>
+                                    <th>AMOUNT</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($req as $item)
+                                    <tr>
+                                        <td>{{ json_decode($item->item) }}</td>
+                                        <td>{{ json_decode($item->quantity) }} </td>
+                                        <td>{{ json_decode($item->rate) }}</td>
+                                        <td>{{ json_decode($item->amount) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+    
+                        </table>
+                    </div>
+                    
                 </div>
             </div>
             @php

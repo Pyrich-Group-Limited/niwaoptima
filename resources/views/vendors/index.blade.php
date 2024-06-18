@@ -21,7 +21,7 @@
     @endphp
         <div class=" container-fluid float-end">
             <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary float-end"><i
-                    class="bi bi-plus"></i>
+                    class="bi bi-plus text-center"></i>
                 </a>
 
         </div>
@@ -29,57 +29,60 @@
         <h1>{{ trans('Total Registered Vendors:') }}(<?php echo $ven; ?>)</h1>
 
         <div class="col-md-12 mt-4">
-            <table id="document-table" class="table table-bordered table-striped">
-                <thead>
-
-                    <th>{{ trans('SL No') }}</th>
-                    <th>{{ trans('Company Name') }}</th>
-                    <th>{{ trans('Address') }}</th>
-                    <th>{{ trans('Phone Number') }}</th>
-                    <th>{{ trans('Email') }}</th>
-
-                    {{-- <th class="text-center hidden-print not-exported">{{ trans('Option') }}</th> --}}
-                </thead>
-                <tbody>
-                    @foreach ($data as $key => $document)
-                        <td>{{ $document->id }}</td>
-                        <td>{{ $document->name }}</td>
-                        <td>{{ $document->address }}</td>
-
-                        <td>{!! $document->phone_number !!}</td>
-                        <td>{{ $document->email }}</td>
-                        {{-- <td class="text-center hidden-print">
-
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default">{{ trans('Action') }}</button>
-                                <button type="button" class="btn btn-default dropdown-toggle three-column" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-default pull-right" role="menu">
-                                    <li><a title = "View" href="{{route('vendors.show',[$document->id])}}><i class="fa fa-eye"
-                                                aria-hidden="true"></i>
-                                            {{ trans('View') }}</a></li>
-                                    <li class="divider"></li>
-                                    <li><a title = "View" href="{{route('vendors.edit',[$document->id])}}><i class="fa fa-eye"
-                                                aria-hidden="true"></i>
-                                            {{ trans('Edit') }}</a></li>
-                                    <li class="divider"></li>
-
-                                    <li><a title = "Delete"
-                                            href="{{route('vendors.destroy',[$document->id])}}"
-                                            onclick='return confirmDelete()'><i class="fa fa-trash" aria-hidden="true"></i>
-                                            {{ trans('Delete') }}</a></li>
-                                    <li class="divider"></li>
-
-                                </ul>
-                            </div>
-                        </td> --}}
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table id="document-table" class="table table-bordered table-striped">
+                    <thead>
+    
+                        <th>{{ trans('SL No') }}</th>
+                        <th>{{ trans('Company Name') }}</th>
+                        <th>{{ trans('Address') }}</th>
+                        <th>{{ trans('Phone Number') }}</th>
+                        <th>{{ trans('Email') }}</th>
+    
+                        {{-- <th class="text-center hidden-print not-exported">{{ trans('Option') }}</th> --}}
+                    </thead>
+                    <tbody>
+                        @foreach ($data as $key => $document)
+                            <td>{{ $document->id }}</td>
+                            <td>{{ $document->name }}</td>
+                            <td>{{ $document->address }}</td>
+    
+                            <td>{!! $document->phone_number !!}</td>
+                            <td>{{ $document->email }}</td>
+                            {{-- <td class="text-center hidden-print">
+    
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default">{{ trans('Action') }}</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle three-column" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-default pull-right" role="menu">
+                                        <li><a title = "View" href="{{route('vendors.show',[$document->id])}}><i class="fa fa-eye"
+                                                    aria-hidden="true"></i>
+                                                {{ trans('View') }}</a></li>
+                                        <li class="divider"></li>
+                                        <li><a title = "View" href="{{route('vendors.edit',[$document->id])}}><i class="fa fa-eye"
+                                                    aria-hidden="true"></i>
+                                                {{ trans('Edit') }}</a></li>
+                                        <li class="divider"></li>
+    
+                                        <li><a title = "Delete"
+                                                href="{{route('vendors.destroy',[$document->id])}}"
+                                                onclick='return confirmDelete()'><i class="fa fa-trash" aria-hidden="true"></i>
+                                                {{ trans('Delete') }}</a></li>
+                                        <li class="divider"></li>
+    
+                                    </ul>
+                                </div>
+                            </td> --}}
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            
         </div>
     </div>
     <!--Document List End-->

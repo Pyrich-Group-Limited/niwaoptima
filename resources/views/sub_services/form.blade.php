@@ -2,11 +2,11 @@
   
    
     <div class="row gy-4">
-        <div class="col-lg-4 col-sm-6">
+        <div class="col-lg-4 col-10">
             <div class="form-group">
-                <div class="form-control-wrap">
+                <div class="form-control-wrap mt-3">
                     <label class="form-label-outlined" for="outlined-select">Select Service:</label>
-                    <select class="form-control" name="service_id" id="service_id">
+                    <select class="form-control " name="service_id" id="service_id">
                         <option value="">Select Service</option>
                         @foreach($services as $service)
                         <option value="{{ $service->id }}">
@@ -21,7 +21,7 @@
     </div>
    
 <div class="row gy-4">
-    <div class="col-lg-4 col-sm-6">
+    <div class="col-lg-4 col-10">
         <div class="form-group">
             <div class="form-control-wrap">
                 <div class="form-icon form-icon-right">
@@ -37,9 +37,9 @@
 </div>
     <hr class="preview-hr">
     <div class="row g-4">
-        <div class="col-2">
+        <div class="col-3">
             <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-primary btn-block"><em
+                <button type="submit" class="btn btn-lg btn-primary"><em
                         class="icon ni ni-save me-2"></em> SUBMIT</button>
             </div>
         </div>

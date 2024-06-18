@@ -20,7 +20,7 @@
 
 
 @section('content')
-    <div class="container mx-4">
+    <div class="container-fluid ">
         <div class=" container-fluid float-end">
             <a href="#" data-size="md" data-url="{{ route('clients.create') }}" data-ajax-popup="true"
                 data-bs-toggle="tooltip" title="{{ __('Create') }}" class="btn btn-sm btn-primary float-end">
@@ -31,7 +31,7 @@
             <div class="col-xxl-12">
                 <div class="row">
                     @foreach ($clients as $client)
-                        <div class="col-md-3">
+                        <div class="col-sm-4 col-md-3">
                             <div class="card text-center">
                                 <div class="card-header float-end border-0 pb-0">
 

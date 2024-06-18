@@ -1096,6 +1096,7 @@ class HomeController extends Controller
                 'incoming_documents_has_users.id',
                 'incoming_documents_has_users.created_at',
                 'incoming_documents_categories.name',
+                'incoming_documents_categories.description',
                 'incoming_documents_has_users.allow_share',
                 'incoming_documents_has_users.is_download',
                 'incoming_documents_has_users.user_id',
@@ -1195,6 +1196,7 @@ class HomeController extends Controller
             )
             ->latest('incoming_documents_has_users.created_at')
             ->groupBy(
+                'incoming_documents_categories.description',
                 'incoming_documents_categories.id',
                 'incoming_documents_has_users.start_date',
                 'incoming_documents_has_users.end_date',
@@ -1334,6 +1336,7 @@ class HomeController extends Controller
                 'incoming_documents_has_users.id',
                 'incoming_documents_has_users.created_at',
                 'incoming_documents_categories.name',
+                'incoming_documents_categories.description',
                 'incoming_documents_has_users.allow_share',
                 'incoming_documents_has_users.is_download',
                 'incoming_documents_has_users.user_id',

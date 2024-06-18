@@ -2,7 +2,7 @@
    
     <div class="row gy-4">
         <div class="col-md-12">
-            <div class="col-lg-4 col-sm-6 ml-3">
+            <div class="col-lg-4 col-10 ml-3">
                 <div class="form-group">
                     <div class="form-control-wrap">
                         <div class="form-icon form-icon-right">
@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-sm-6 ml-4">
+        <div class="col-lg-4 col-10 ml-4">
             <div class="form-group">
                 <div class="form-control-wrap">
                     <div class="form-icon form-icon-right">
@@ -38,9 +38,9 @@
     </div>
    
     <div class="row g-4 ml-4">
-        <div class="col-2">
+        <div class="col-3">
             <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-primary btn-block"><em
+                <button type="submit" class="btn btn-lg btn-primary "><em
                         class="icon ni ni-save me-2"></em> SUBMIT</button>
             </div>
         </div>

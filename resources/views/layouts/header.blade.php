@@ -59,7 +59,7 @@ public\assets\media\logos\
              <img alt="Logo" src="{{ asset('assets/media/logos/niwalogo.jpeg') }}" class="h-30px" />
          </a>
      </div> --}}
-     <div class="text-center navbar-menu-wrapper d-flex align-items-stretch">
+     <div class="text-center navbar-menu-wrapper d-flex align-items-stretch justify-content-end">
          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
              <span class="fas fa-bars"></span>
          </button>
@@ -149,7 +149,7 @@ public\assets\media\logos\
                      <div class="dropdown-item">
                          <p class="mb-0 font-weight-normal float-left">You have 7 unread mails
                          </p>
-                         <span class="badge badge-info badge-pill float-right">View all</span>
+                         <span class="badge badge-info badge-pill float-right"><button class="border-0" style="background:#0B94F7; color:#ffffff;">View all</button></span>
                      </div>
                      <div class="dropdown-divider"></div>
                      <a class="dropdown-item preview-item">

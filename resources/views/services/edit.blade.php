@@ -14,7 +14,7 @@
         <div class="nk-block-between">
             <div class="nk-block-head-content">
                 <h3 class="nk-block-title page-title">Edit Service</h3>
-                <div class="nk-block-des text-soft">
+                <div class="nk-block-des text-soft mt-3 px-3">
                     <p>Edit Service details</p>
                 </div>
             </div><!-- .nk-block-head-content -->

@@ -6,7 +6,7 @@
                     <table class="table datatable">
                         <thead>
                             <tr>
-                                <th scope="col">{{ __('Name') }}</th>
+                                <th scope="col">{{ __('Name of') }}</th>
                                 <th scope="col">{{ __('Stage') }}</th>
                                 <th scope="col">{{ __('Priority') }}</th>
                                 <th scope="col">{{ __('End Date') }}</th>

@@ -128,7 +128,7 @@ class RoleController extends AppBaseController
      *
      * @return Response
      */
-    public function edit($id)
+    public function edit($id) 
     {
         $role = $this->roleRepository->find($id);
 

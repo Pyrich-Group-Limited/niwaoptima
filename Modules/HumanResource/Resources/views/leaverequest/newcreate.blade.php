@@ -30,7 +30,7 @@
                                 ]) !!}
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
 
                             <div class="form-group">
                                 {!! Form::label('daystaken', 'ENTER NUMBER OF DAYS FOR LEAVE', ['class' => 'form-label']) !!}
@@ -46,11 +46,11 @@
                         <div class="col-6">
 
                             <div class="form-group">
-                                {!! Form::label('date_start_new', 'PICK THE DATE YOU WANT TO COMMERCE LEAVE', ['class' => 'form-label']) !!}
+                                {!! Form::label('date_start_new', 'DATE YOU WANT TO COMMERCE LEAVE', ['class' => 'form-label']) !!}
                                 {!! Form::date('date_start_new', null, ['class' => 'form-control form-date date', 'id' => 'date_start_newid']) !!}
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
 
                             <div class="form-group">
                                 {!! Form::label('end_date', 'EXPECTED DATE OF RESUMETION', ['class' => 'form-label']) !!}

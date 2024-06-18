@@ -29,16 +29,16 @@
         {{-- </center> --}}
 
         <div class="row g-5 g-xl-10 mb-5 mb-xl-10 justify-content-end">
-            <div class="col-4">
+            <div class="col-lg-6">
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-sm-3">
                         {!! Form::label('', 'Filter By', ['class'=>'form-label mt-2']) !!}
                     </div>
-                    <div class="col-3">
+                    <div class="col-sm-3">
                        {!! Form::select('branch_id', $branch->pluck('branch_name','id'), null, ['class'=>' form-select']) !!}
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-sm-3">
                         <select class="form-select" id="monthSelect">
                             <option value="1">January</option>
                             <option value="2">February</option>
@@ -54,7 +54,7 @@
                             <option value="12">December</option>
                         </select>
                     </div>
-                    <div class="col-3">
+                    <div class="col-sm-3">
                         <select class="form-select" id="yearSelect">
                             @php
                                 $currentYear = date('Y');

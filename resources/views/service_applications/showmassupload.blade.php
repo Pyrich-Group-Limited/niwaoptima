@@ -4,10 +4,10 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col-6">
                     <h4 class="card-title">Service Applications History</h4>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-6">
                     <a href="{{ route('serviceupload') }}" class="btn btn-success float-end"> Upload Record</a>
                 </div>
             </div>
