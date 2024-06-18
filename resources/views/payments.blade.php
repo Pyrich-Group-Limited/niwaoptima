@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h4 class="card-title">NIWA Payments </h4>
+                    <h4 class="card-title">NIWA Payments</h4>
                 </div>
 
             </div>

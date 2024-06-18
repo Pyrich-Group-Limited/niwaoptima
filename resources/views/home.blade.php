@@ -56,13 +56,13 @@
                                             <br>
                                             <center>
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    <div class="col-6">
                                                         <button type="button" id="clock_in" class="btn btn-success"
                                                             @if (auth()->user()->hasClockedInToday()) disabled @endif
                                                             onclick="hideCards()">CLOCK IN</button>
                                                     </div>
 
-                                                    <div class="col-md-6">
+                                                    <div class="col-6">
                                                         <button type="button" id="clock_out" class="btn btn-danger"
                                                             disabled>CLOCK OUT</button>
                                                     </div>

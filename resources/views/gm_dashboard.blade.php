@@ -32,7 +32,7 @@
                                 aria-controls="dta_request" aria-selected="false">DTA Requests</a>
                         </li>
                     </ul>
-                    <div class="tab-content " id="myTabContent">
+                    <div class="tab-content " id="myTabContent" style="margin-bottom: 55px;">
                         <div class="tab-pane fade" id="dta_request" role="tabpanel" aria-labelledby="dta_request-tab">
                             <div class="row grid-margin stretch-card">
                                     

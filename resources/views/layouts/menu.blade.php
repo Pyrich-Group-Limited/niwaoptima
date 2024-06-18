@@ -470,7 +470,7 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
                     </li>
                 @endif
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('procurement.index') }}">MY REQUISITION</a>
+                    <a class="nav-link" href="{{ route('procurement.index') }}">MY REQUISITION</a> 
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('unit.proc') }}">SUPER.REQUISITION</a>

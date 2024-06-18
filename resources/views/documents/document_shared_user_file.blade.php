@@ -19,9 +19,9 @@
         <div class="clearfix"></div>
 
         <div class="card">
-            <div class="card-body p-5">
-                <div class="table-responsive1" style="overflow-y: auto;">
-                    <table class="table align-middle gs-0 gy-4" id="order-listing">
+            <div class="card-body p-5 ">
+                <div class="table-responsive1" style="overflow-y: auto; min-height: 60vh; position: relative;">
+                    <table class="table align-middle gs-0 gy-4"style="" id="order-listing">
                         <thead>
                             <tr>
                                 <th>S/N</th>
@@ -65,7 +65,7 @@
                                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 View options
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-right" style="z-index: 9999;" aria-labelledby="dropdownMenuButton">
+                                            <div class="dropdown-menu dropdown-menu-right" style="z-index: 9999; position: absolute;" aria-labelledby="dropdownMenuButton">
                                                 <a target="_blank" href="{{ asset($document->document_url) }}"
                                                     class='btn btn-default btn-xs dropdown-item'>
                                                     <i class="far fa-eye"></i> View

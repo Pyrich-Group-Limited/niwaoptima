@@ -1,7 +1,7 @@
 <div class="preview-block ml-4 mt-4">
 
     <div class="row gy-4">
-        <div class="col-lg-4 col-sm-6">
+        <div class="col-lg-4 col-10">
             <div class="form-group">
                 <div class="form-control-wrap">
                     <div class="form-icon form-icon-right">
@@ -50,9 +50,9 @@
     </div>
 
     <div class="row g-4">
-        <div class="col-2">
+        <div class="col-3">
             <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-primary btn-block"><em class="icon ni ni-save me-2"></em>
+                <button type="submit" class="btn btn-lg btn-primary"><em class="icon ni ni-save me-2"></em>
                     SUBMIT</button>
             </div>
         </div>

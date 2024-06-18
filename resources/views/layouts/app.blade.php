@@ -34,14 +34,20 @@
     </style> --}}
 
     {{-- adding the fullcalender css here, the js is inside the main file, e.g dash for documenr --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.css"
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.css"
+        integrity="sha512-Aa1748paT82yMtcPGgMq/zDsqZwwGFSYhKrWsO5nv74pShnz/Y4si5ip6GE/6ce/tePBlm2GwyomKp1NFyJgYA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+    <link rel="stylesheet" href="{{ asset('assets/fullcalender/fullcalender.3.10.0.min.css') }}"
         integrity="sha512-Aa1748paT82yMtcPGgMq/zDsqZwwGFSYhKrWsO5nv74pShnz/Y4si5ip6GE/6ce/tePBlm2GwyomKp1NFyJgYA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     @stack('dar_css')
 
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+        integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+        crossorigin="anonymous" /> --}}
+    <link rel="stylesheet" href="{{ asset('assets/new/fontawesome/font-awesome.5.14.0.min.css') }}"
         integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
         crossorigin="anonymous" />
     {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
@@ -51,10 +57,14 @@
 
     <!-- Adding the apex chart -->
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.44.0/apexcharts.min.css"
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.44.0/apexcharts.min.css"
+        integrity="sha512-nnNXPeQKvNOEUd+TrFbofWwHT0ezcZiFU5E/Lv2+JlZCQwQ/ACM33FxPoQ6ZEFNnERrTho8lF0MCEH9DBZ/wWw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+    <link rel="stylesheet" href="{{ asset('assets/apexcharts/css/apexcharts.3.44.0.min.css') }}"
         integrity="sha512-nnNXPeQKvNOEUd+TrFbofWwHT0ezcZiFU5E/Lv2+JlZCQwQ/ACM33FxPoQ6ZEFNnERrTho8lF0MCEH9DBZ/wWw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.44.0/apexcharts.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.44.0/apexcharts.min.js"></script> --}}
+    <script src="{{ asset('assets/apexcharts/js/apexcharts.3.44.0.min.js') }}"></script>
 
     <!-- Custom Asset Start -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
@@ -75,7 +85,9 @@
     {{-- for the document management system --}}
 
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
+    <link href="{{ asset('assets/dist/select2.min.css') }}" rel="stylesheet" />
+
     <!-- Custom Asset end -->
     {{-- all the assets --}}
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.9/pdfmake.min.js" integrity="sha512-5wC3oH3tojdOtHBV6B4TXjlGc0E2uk3YViSrWnv1VUmmVlQDAs1lcupsqqpwjh8jIuodzADYK5xCL5Dkg/ving==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
@@ -472,8 +484,10 @@
     {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js"></script> --}}
 
-<link rel="stylesheet" href="//cdn.datatables.net/2.0.5/css/dataTables.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+{{-- <link rel="stylesheet" href="//cdn.datatables.net/2.0.5/css/dataTables.dataTables.min.css"> --}}
+<link rel="stylesheet" href="{{ asset('assets/new/dataTables/dataTables.min.css') }}">
+{{-- <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script> --}}
+<script src="{{ asset('assets/jquery/jquery-3.7.1.min.js') }}" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 {{-- <script src="//cdn.datatables.net/2.0.5/js/dataTables.min.js"></script> --}}
 <script src="{{ asset('assets/js/simple-datatables.js') }}"></script>
 {{-- <script>
@@ -696,17 +710,28 @@
     <!--begin::Vendors Javascript(used for this page only)-->
     {{-- <script src="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script> --}}
     <script src="{{ asset('js/events.js') }}"></script>
-    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/radar.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/geodata/continentsLow.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/geodata/usaLow.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
+    {{-- <script src="https://cdn.amcharts.com/lib/5/index.js"></script> --}}
+    <script src="{{ asset('assets/amcharts/index.js') }}"></script>
+    {{-- <script src="https://cdn.amcharts.com/lib/5/xy.js"></script> --}}
+    <script src="{{ asset('assets/amcharts/xy.js') }}"></script>
+    {{-- <script src="https://cdn.amcharts.com/lib/5/percent.js"></script> --}}
+    <script src="{{ asset('assets/amcharts/percent.js') }}"></script>
+    {{-- <script src="https://cdn.amcharts.com/lib/5/radar.js"></script> --}}
+    <script src="{{ asset('assets/amcharts/radar.js') }}"></script>
+    {{-- <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script> --}}
+    <script src="{{ asset('assets/amcharts/Animated.js') }}"></script>
+    {{-- <script src="https://cdn.amcharts.com/lib/5/map.js"></script> --}}
+    <script src="{{ asset('assets/amcharts/map.js') }}"></script>
+    {{-- <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script> --}}
+    <script src="{{ asset('assets/amcharts/worldLow.js') }}"></script>
+    {{-- <script src="https://cdn.amcharts.com/lib/5/geodata/continentsLow.js"></script> --}}
+    <script src="{{ asset('assets/amcharts/continentsLow.js') }}"></script>
+    {{-- <script src="https://cdn.amcharts.com/lib/5/geodata/usaLow.js"></script> --}}
+    <script src="{{ asset('assets/amcharts/usaLow.js') }}"></script>
+    {{-- <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script> --}}
+    <script src="{{ asset('assets/amcharts/worldTimeZonesLow.js') }}"></script>
+    {{-- <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script> --}}
+    <script src="{{ asset('assets/amcharts/worldTimeZoneAreasLow.js') }}"></script>
     {{-- removed datatables --}}
     {{-- <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script> --}}
     <!--end::Vendors Javascript-->

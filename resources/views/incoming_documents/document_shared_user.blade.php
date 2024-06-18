@@ -191,7 +191,7 @@ aria-hidden="true" data-backdrop="false">
         </div>
         <div class="modal-body">
 
-            <div class="form-group">
+            <div class="form-group table-responsive">
                 <table class="table" id="document-table-history">
                     <thead>
                         <tr>

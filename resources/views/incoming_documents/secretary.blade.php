@@ -8,7 +8,7 @@
                     <h1>Incoming Letters</h1>
                 </div>
                {{--  @if(Auth::user()->hasRole('super-admin')) --}}
-                <div class="col-sm-6">
+                <div class="col-sm-6 mt-3">
                     <a class="btn btn-primary float-end"
                        href="{{ route('incoming_documents_manager.create') }}">
                         Add New Incoming Letter

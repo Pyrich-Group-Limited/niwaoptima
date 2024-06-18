@@ -25,11 +25,11 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
-                    <div class="row">
-                        <div class="col-lg-6">
+                    <div class="row w-25">
+                        <div class="col-9 mt-4 p-0">
                             <h5>{{ __('Calendar') }}</h5>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-2 p-0">
                             @if (isset($setting['google_calendar_enable']) && $setting['google_calendar_enable'] == 'on')
                                 <select class="form-control" name="calender_type" id="calender_type" style="float: right;width: 150px;" onchange="get_data()">
                                     <option value="goggle_calender">{{__('Google Calender')}}</option>
@@ -40,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body mt-0">
                     <div id='calendar' class='calendar'>
 
                     </div>

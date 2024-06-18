@@ -7,12 +7,12 @@
 		<div class="row">
 			<div class="col-lg-12 col-md-11">
 				 <div class="card">
-					<div class="header">
+					<div class="header p-3">
 						<h4 class="title"><?php echo trans('lang.all_reports');?></h4>
 						<hr>
 					</div>
 					<div class="content">
-						<div class="row">
+						<div class="row p-3">
 							<div class="col-lg-6" style="border-right: 1px solid #f0f0f0;">
 								@if(Auth::check())
 									

@@ -20,7 +20,7 @@
             {{ Form::text('title', null, ['class' => 'form-control', 'required' => 'required']) }}
             @error('title')
                 <span class="invalid-title" role="alert">
-                    <strong class="text-danger">{{ $message }}</strong </span>
+                    <strong class="text-danger">{{ $message }}</strong> </span>
                 @enderror
         </div>
         <div class="form-group  col-md-6">

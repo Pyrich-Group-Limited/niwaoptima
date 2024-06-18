@@ -17,7 +17,7 @@
                                 src="<?php echo asset('images/icon-asset.png')?>" />
                                 </div>
                             </div>
-                            <div class="col-xs-7 home-detail" >
+                            <div class="col-xs-7 home-detail pl-4 pb-2" >
                                 <div class="numbers">
                                     <p><?php echo trans('lang.totalasset');?></p>
                                     <span class="totalhead totalasset"></span>
@@ -44,7 +44,7 @@
                                 src="<?php echo asset('images/icon-component.png')?>" />
                                 </div>
                             </div>
-                            <div class="col-xs-7 home-detail" >
+                            <div class="col-xs-7 home-detail pl-4 pb-2" >
                                 <div class="numbers">
                                     <p><?php echo trans('lang.totalcomponent');?></p>
                                     <span class="totalhead totalcomponent"></span>
@@ -71,7 +71,7 @@
                                 src="<?php echo asset('images/icon-maintenance.png')?>" />
                                 </div>
                             </div>
-                            <div class="col-xs-7 home-detail" >
+                            <div class="col-xs-7 home-detail pl-4 pb-2" >
                                 <div class="numbers">
                                     <p><?php echo trans('lang.totalmaintenance');?></p>
                                     <span class="totalhead totalmaintenance"></span>
@@ -99,7 +99,7 @@
                                 src="<?php echo asset('images/icon-employee.png')?>" />
                                 </div>
                             </div>
-                            <div class="col-xs-7 home-detail" >
+                            <div class="col-xs-7 home-detail pl-4 pb-2" >
                                 <div class="numbers">
                                     <p><?php echo trans('lang.totalemployees');?></p>
                                     <span class="totalhead totalemployee"></span>
@@ -119,7 +119,7 @@
 
         </div>
 
-        <div class="row">
+        <div class="row my-2">
             <div class="col-lg-6 col-sm-6">
                 <div class="card">
                     <div class="header">
@@ -142,7 +142,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row" style="margin-bottom: 50px;">
             <div class="col-md-6">
                 <div class="card">
                     <div class="header">

@@ -46,15 +46,15 @@
 
                 <form action="{{ route('type.store') }}" method="POST">
                     @csrf
-                    <div class="row mb-5">
-                        <div class="col-6">
+                    <div class="row mb-3">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <label for="name">Name</label>
                                 <input type="text" name="name" id="name" value="{{ old('name') }}"
                                     class="form-control @error('name') is-invalid @enderror" required>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <label for="cycle">Cycle</label>
                                 <select name="cycle" id="cycle"
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                     <div class="row mb-5">
-                        <div class="col-6">
+                        <div class="col-md-6 col-12 mb-3">
                             <label for="metric">Duration Metric</label>
                             <select name="metric" id="metric" class="form-control">
                                 <option value="">- Select Duration Metric -</option>
@@ -79,7 +79,7 @@
                                 <option @selected(old('metric') == 'Years')>Years</option>
                             </select>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-12">
                             <label for="duration">Duration Period</label>
                             <input type="number" name="duration" id="duration" value="{{ old('duration', 1) }}"
                                 class="form-control" min="1">

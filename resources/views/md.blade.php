@@ -49,7 +49,7 @@
                 </li>
 
             </ul>
-            <div class="tab-content" id="myTabContent">
+            <div class="tab-content" id="myTabContent" style="margin-bottom: 50px;">
                 <div class="tab-pane fade show active" id="revenue" role="tabpanel" aria-labelledby="revenue-tab">
 
                     <div class="col-12 float-right">
@@ -94,7 +94,7 @@
                                 </select>
 
                             </div>
-                            <div class="col-2"> <button type="button" id="searchBtn"
+                            <div class="col-2 "> <button type="button" id="searchBtn"
                                     class="btn btn-primary">SEARCH</button>
                             </div>
 

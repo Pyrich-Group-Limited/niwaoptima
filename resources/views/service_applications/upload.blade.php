@@ -22,7 +22,7 @@
                     <input type="file" name="file" class=" form-control file col-8" id="">
                 </div>
 
-                <div class="form-group col-6 mt-2">
+                <div class="form-group col-6 d-flex justify-content-end">
                     <a href="{{ route('savapdownload') }}" class="btn  btn-secondary  btn-sm "> <i
                             class=" bi bi-download"></i>
                         DOWNLOAD A SAMPLE</a>

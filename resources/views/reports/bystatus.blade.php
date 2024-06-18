@@ -29,7 +29,7 @@
                                             <option value="6"><?php echo trans('lang.outofrepair');?></option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-2" style="padding-top:33px;">
+                                    <div class="form-group col-md-2" style="padding-top:17.8px; padding-bottom:0px;">
                                         <button type="submit" class="form-control btn btn-sm btn-fill btn-info"><i class="fa fa-search"></i> <?php echo trans('lang.search');?></button>
                                     </div>
                             </div>

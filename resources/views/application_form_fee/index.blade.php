@@ -10,7 +10,7 @@
 @section('content')
 
     {{-- <div class="components-preview wide-md mx-auto"> --}}
-    <div class="nk-block-head nk-block-head-sm">
+    <div class="nk-block-head nk-block-head-sm mb-3">
         <div class="nk-block-between">
             <div class="nk-block-head-content">
                 <h3 class="nk-block-title page-title">Application Form Fees</h3>
@@ -21,12 +21,12 @@
             
         </div><!-- .nk-block-between -->
     </div><!-- .nk-block-head -->
-<div class="row">
-    <div class="col-md-12 text-right" style="padding-right: 30px;">
-        <a href="{{ route('application_form_fee.create') }}" class="btn btn-primary"><em class="fa fa-plus"></em><span>Add New Fees</span></a>
+    <div class="row">
+        <div class="col-md-12 text-right" style="padding-right: 30px;">
+            <a href="{{ route('application_form_fee.create') }}" class="btn btn-primary"><em class="fa fa-plus"></em><span>Add New Fees</span></a>
+        </div>
     </div>
-</div>
-<div class="content px-3" style="margin-bottom: 30px;">
+<div class="content px-3" style="margin-bottom: 40px;">
     <div class="clearfix"></div>
    <div class="card">
     <div class="card-body p-5">

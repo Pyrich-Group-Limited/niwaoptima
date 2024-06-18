@@ -29,7 +29,7 @@
     <div class="content px-3">
     <div class="clearfix"></div>
    <div class="card">
-    <div class="card-body p-5">
+    <div class="card-body p-5 mb-4">
         <form method="GET" action="{{ route('services.index') }}">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Search..." name="search" value="{{ request('search') }}">

@@ -51,7 +51,7 @@
                         class="fa fa-file"></i> {{ trans('file.Import Document') }}</a>
             </div>
 
-            <div class="col-md-12">
+            <div class="col-md-12 table-responsive">
                 <table id="document-table" class="table table-bordered table-striped">
                     <thead>
                         <th class="not-exported"></th>

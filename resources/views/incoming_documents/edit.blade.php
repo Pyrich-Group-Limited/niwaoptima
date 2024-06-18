@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <div class="card-footer" style="margin-bottom: 30px;">
+            <div class="card-footer" style="margin-bottom: 50px;">
                 {!! Form::submit('SUBMIT', ['class' => 'btn btn-primary']) !!}
                 <a href="{{ route('incoming_documents_manager.index') }}" class="btn btn-default"> Cancel </a>
             </div>

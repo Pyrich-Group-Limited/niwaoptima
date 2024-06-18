@@ -26,7 +26,7 @@
             <a href="{{ route('sub-services.create') }}" class="btn btn-primary"><em class="fa fa-plus"></em><span> Add New</span></a>
         </div>
     </div>
-    <div class="content px-3">
+    <div class="content px-3 mb-5">
         <div class="clearfix"></div>
        <div class="card">
         <div class="card-body p-5">

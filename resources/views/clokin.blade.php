@@ -1,7 +1,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-6" id="clockInCard">
+        <div class="col-md-6" id="clockInCard">
             <div class="card" style="padding-top: 10px;">
                 <div class="card-header">
                     <h4 class="card-title">Mark Attendance</h4>
@@ -11,11 +11,12 @@
                     <br>
                     <center>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-6">
                                 <button type="button" id="clock_in" class="btn btn-success" @if(auth()->user()->hasClockedInToday()) disabled @endif onclick="hideCards()">CLOCK IN</button>
+                                {{-- <button type="button" id="clock_out" class="btn btn-danger" disabled>CLOCK OUT</button> --}}
                             </div>
                             
-                            <div class="col-md-6">
+                            <div class="col-6">
                                 <button type="button" id="clock_out" class="btn btn-danger" disabled>CLOCK OUT</button>
                             </div>
                         </div>
@@ -24,7 +25,7 @@
             </div>
         </div>
 
-        <div class="col-6" id="announcementCard">
+        <div class="col-md-6" id="announcementCard">
             <div class="card list_card" style="padding-top: 10px;">
                 <div class="card-header">
                     <h4 class="card-title">{{__('Announcement List')}}</h4>
