@@ -511,6 +511,21 @@ DeclinedDocument::create($documents);
             $pay->approval_status = 1;
             $pay->save();
 
+            $client = DB::table('employers')
+            ->where('id', $serviceApplication->user_id)
+            ->first();
+            
+
+        try {
+             
+            Mail::to($client->company_email)->send(new InspectionNoticeEmail($client,$serviceApplication));
+
+            //return redirect('/dashboard')->with('success', 'Invoice notification sent successfully.');
+        } catch (\Exception $e) {
+            // Handle the exception
+            //return redirect('/dashboard')->with('error', 'Failed to send invoice notification: ' . $e->getMessage());
+        }
+
             Flash::success('Inspection date and comment saved');
         }
 
