@@ -42,7 +42,7 @@ class ProcessingTypeController extends Controller
     public function create()
     {
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         return view('processing_type.create', compact(['services', 'branches']));
     }
 
@@ -77,7 +77,7 @@ class ProcessingTypeController extends Controller
     public function edit(ProcessingType $processing_type)
     {
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         return view('processing_type.edit', compact(['processing_type', 'services', 'branches']));
     }
 

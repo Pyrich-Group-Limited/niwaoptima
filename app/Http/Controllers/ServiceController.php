@@ -81,7 +81,7 @@ class ServiceController extends Controller
     {
         $states = State::all();
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         return view('services.create', compact(['states', 'branches']));
     }
 
@@ -147,7 +147,7 @@ class ServiceController extends Controller
     {
         $states = State::all();
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         return view('services.edit', compact(['service', 'states', 'branches']));
     }
 

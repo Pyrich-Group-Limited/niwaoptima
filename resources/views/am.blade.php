@@ -64,6 +64,10 @@
                                 <a class="nav-link" id="dta_request-tab" data-toggle="tab" href="#dta_request" role="tab"
                                     aria-controls="dta_request" aria-selected="false">DTA Requests</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="clients-tab" data-toggle="tab" href="#clients" role="tab"
+                                    aria-controls="clients" aria-selected="false">Clients</a>
+                            </li>
     
                         </ul>
                     </div>
@@ -547,7 +551,7 @@
                                         <div class="row g-5 g-xl-8">
                                             <table class="table">
                                                 <thead>
-                                                    <th>Applicant Code</th>
+                                                    <th>Epromota Code</th>
                                                     <th>Email </th>
                                                     <th>Name</th>
                                                     <th>Phone Number</th>
@@ -578,7 +582,7 @@
                                         <div class="row g-5 g-xl-8">
                                             <table class="table">
                                                 <thead>
-                                                    <th>Applicant Code</th>
+                                                    <th>Epromota Code</th>
                                                     <th>Email </th>
                                                     <th>Name</th>
                                                     <th>Phone Number</th>
@@ -596,6 +600,8 @@
                                                             <td>
                                                                 <a href="{{ route('viewapplicant', [$pendingvendor->id]) }}"
                                                                     class="btn btn-success">View</a>
+                                                                <a href="{{ route('raise.demand.notice', ['id' => $pendingvendor->id]) }}" class="btn btn-danger">Demand Notice</a>
+
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -609,7 +615,36 @@
                             </div>
                         </div>
 
+                                       
+                                    <div class="tab-pane fade" id="clients" role="tabpanel" aria-labelledby="clients-tab">
+                                        <div class="row g-5 g-xl-8">
+                                            <h3>List of clients</h3>
+                                            <table class="table">
+                                                <thead>
+                                                    <th>Email </th>
+                                                    <th>Name</th>
+                                                    <th>Phone Number</th>
+                                                    <th>Action</th>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ( $approvedvendors1 as $pendingvendor)
+                                                        <tr>
+                                                             <td>{{ $pendingvendor->company_email }}</td>
+                                                            <td>{{ $pendingvendor->contact_firstname . '  ' . $pendingvendor->contact_surname }}
+                                                            </td>
+                                                            <td>{{ $pendingvendor->company_phone }}</td>
+                                                            <td>
+                                                                  <a href="{{ route('raise.demand.notice', ['id' => $pendingvendor->id]) }}" class="btn btn-danger">Demand Notice</a>
 
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                
 
 
                         <!-- where i end   all the tables -->

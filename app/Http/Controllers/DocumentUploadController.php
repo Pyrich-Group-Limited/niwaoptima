@@ -42,7 +42,7 @@ class DocumentUploadController extends Controller
     public function create()
     {
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         return view('document_upload.create', compact(['services','branches']));
     }
 
@@ -77,7 +77,7 @@ class DocumentUploadController extends Controller
     public function edit(DocumentUpload $document_upload)
     {
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         return view('document_upload.edit', compact(['document_upload', 'services', 'branches']));
     }
 

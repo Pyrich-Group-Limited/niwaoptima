@@ -43,7 +43,7 @@ class InspectionFeeController extends Controller
     {
         
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         $processing_types = ProcessingType::where('branch_id', 1)->get();
         return view('inspection_fee.create', compact(['services', 'processing_types', 'branches']));
     }
@@ -83,7 +83,7 @@ class InspectionFeeController extends Controller
     public function edit(InspectionFee $inspection_fee)
     {
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         $processing_types = ProcessingType::where('branch_id', 1)->get();
         return view('inspection_fee.edit', compact(['inspection_fee', 'services', 'processing_types', 'branches']));
     }

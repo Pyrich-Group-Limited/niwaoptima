@@ -25,6 +25,8 @@ use App\Models\Service;
 //use App\Models\Level;
 use App\Models\ServiceApplication;
 use Modules\DTARequests\Models\DTARequests;
+use App\Models\Axis;
+use App\Models\ProcessingType;
 
 
 class HomeController extends Controller
@@ -628,7 +630,7 @@ class HomeController extends Controller
     public function areamanager()
     {
         $branch = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
 
         $services = $services->pluck('name', 'id'); // Pluck the values and assign it back to $services variable
         // $services->prepend('Select Service', 0); // Add an empty option with label 'Select Service'
@@ -779,10 +781,27 @@ class HomeController extends Controller
         $approvedvendors = Employer::where('status', '2')->where(function ($query) {
             $query->where('user_type', 'e-promota');
         })->get();
+        $approvedvendors1 = Employer::where('status', '2')->where('user_type','!=' ,'e-promota')->get();
 
         $dta_requests = DTARequests::where('branch_id', auth()->user()->staff->branch_id)->paginate(10);
 
-        return view('am', compact('dta_requests', 'branch', 'approvecount', 'pendingcount', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
+        return view('am', compact('approvedvendors1','dta_requests', 'branch', 'approvecount', 'pendingcount', 'services', 'documents1', 'departments_data1', 'departments_data', 'users123', 'service_applications', 'pendingvendors', 'approvedvendors'));
+    }
+    public function raiseDemandNotice($id)
+    {
+        $branches = Branch::all();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
+        $client = Employer::find($id);
+        $axis = Axis::all();
+     //   $equipment_and_fees = EquipmentAndFee::where('service_id', $serviceApplication->service_id)->where('processing_type_id', $serviceApplication->service_type_id)->pluck('name', 'price');
+
+        return view('raise_demand_notice', compact('client', 'branches', 'services', 'axis'));
+    }
+
+    public function getProcessingTypes($id)
+    {
+        $processingTypes = ProcessingType::where('service_id', $id)->get();
+        return response()->json($processingTypes);
     }
 
     public function P2erevenuegenerated(Request $request)
@@ -1216,6 +1235,7 @@ class HomeController extends Controller
                 'incoming_documents_manager.phone',
                 'incoming_documents_manager.email',
                 'incoming_documents_manager.full_name',
+                'incoming_documents_manager.category_id',
             )
             ->where('incoming_documents_has_users.user_id', '=', auth()->user()->id)
             //->where('incoming_documents_manager.branch_id', auth()->user()->staff->branch_id)

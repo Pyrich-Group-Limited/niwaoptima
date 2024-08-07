@@ -41,7 +41,7 @@ class MonitoringFeeController extends Controller
     public function create()
     {
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         return view('monitoring_fee.create', compact(['services','branches']));
     }
 
@@ -76,7 +76,7 @@ class MonitoringFeeController extends Controller
     public function edit(MonitoringFee $monitoring_fee)
     {
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         return view('monitoring_fee.edit', compact(['monitoring_fee', 'services', 'branches']));
     }
 

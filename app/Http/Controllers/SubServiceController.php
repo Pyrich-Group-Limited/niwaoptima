@@ -33,7 +33,7 @@ class SubServiceController extends Controller
     {
         
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
     return view('sub_services.create', compact('services', 'branches'));
     }
 
@@ -65,7 +65,7 @@ class SubServiceController extends Controller
         $subservices = SubService::findOrFail($id);
         
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         return view('sub_services.edit', compact(['services', 'subservices', 'branches']));
     }
 

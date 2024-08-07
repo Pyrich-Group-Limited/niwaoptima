@@ -545,7 +545,7 @@
     </script>
 
      {{-- <div class="col-md-4 col-sm-6 grid-margin stretch-card"> --}}
-    <div class="loader-demo-box1">
+    <div class="loader-demo-box1" id="loader">
         <div class="dot-opacity-loader">
           <span></span>
           <span></span>

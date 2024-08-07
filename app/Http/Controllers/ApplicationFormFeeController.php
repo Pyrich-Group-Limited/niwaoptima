@@ -42,7 +42,7 @@ class ApplicationFormFeeController extends Controller
     {
         
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         return view('application_form_fee.create', compact(['services','branches']));
     }
 
@@ -77,7 +77,7 @@ class ApplicationFormFeeController extends Controller
     public function edit(ApplicationFormFee $application_form_fee)
     {
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         return view('application_form_fee.edit', compact(['application_form_fee', 'services', 'branches']));
     }
 

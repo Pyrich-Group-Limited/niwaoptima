@@ -26,7 +26,11 @@ use Spatie\Permission\Models\Role;
 use App\Models\User;
 use App\Models\DeclinedDocument;
 use App\Mail\EmployerDocumentEmail;
+use App\Mail\NotifyAreaManagerEmail;
+use App\Mail\ClientDemandNoticeEmail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\Notification;
 
 class ServiceApplicationController extends AppBaseController
 {
@@ -152,6 +156,19 @@ public function assignPermissions(Request $request)
         Flash::success('Service Application saved successfully.');
 
         return redirect(route('serviceApplications.index'));
+    }
+
+    public function demand_notice_store(Request $request)
+    {
+        $input = $request->all();
+        
+
+        $serviceApplication = $this->serviceApplicationRepository->create($input);
+
+        Flash::success('Service Application saved successfully.');
+
+        // Redirect to the show route of the created service application
+         return Redirect::route('serviceApplications.show', [$serviceApplication->id]);
     }
 
     /**
@@ -399,9 +416,22 @@ DeclinedDocument::create($documents);
 
                 return redirect()->back();
             } */
-            $serviceApplication->current_step = 6;
+           // Retrieve the selected service_id from the request
+$serviceId = $serviceApplication->service_id;
+
+// Allowed service IDs for document uploads and demand notice only -- no other steps
+$allowedServiceIdsDocDemand = [14, 15, 16, 20, 21, 22, 23, 24, 13, 29];
+
+// Check if selected service_id is in the allowed list
+if (in_array($serviceId, $allowedServiceIdsDocDemand)) {
+    $serviceApplication->current_step = 10;
+} else{
+    $serviceApplication->current_step = 6;
+}
+            
             $serviceApplication->status_summary = 'Your documents have been approved';
             $serviceApplication->mse_document_verification_comment = $request->mse_document_verification_comment;
+            
             Flash::success('Documents have been approved');
         }
 
@@ -516,7 +546,7 @@ DeclinedDocument::create($documents);
             ->first();
             
 
-        try {
+        /* try {
              
             Mail::to($client->company_email)->send(new InspectionNoticeEmail($client,$serviceApplication));
 
@@ -524,7 +554,7 @@ DeclinedDocument::create($documents);
         } catch (\Exception $e) {
             // Handle the exception
             //return redirect('/dashboard')->with('error', 'Failed to send invoice notification: ' . $e->getMessage());
-        }
+        } */
 
             Flash::success('Inspection date and comment saved');
         }
@@ -650,7 +680,26 @@ $sum_total = $sum ? $sum : $total;
                 $serviceApplication->demand_total = $demand_total;
                 $serviceApplication->save();
             }
+
+            
         }
+
+        $area_manager = DB::table('staff')
+            ->join('users', 'staff.user_id', '=', 'users.id')
+            ->where('staff.branch_id', $serviceApplication->branch_id)
+            ->where('users.level_id', 3)
+            ->select('users.first_name', 'users.email') // Select both first_name and email
+            ->first();
+            
+            try {
+             
+                Mail::to($area_manager->email)->send(new NotifyAreaManagerEmail($serviceApplication, $serviceApplication->employer, $area_manager));
+    
+                //return redirect('/dashboard')->with('success', 'Invoice notification sent successfully.');
+            } catch (\Exception $e) {
+                // Handle the exception
+                //return redirect('/dashboard')->with('error', 'Failed to send invoice notification: ' . $e->getMessage());
+            }
 
         return redirect()->back();
     }
@@ -673,6 +722,21 @@ $sum_total = $sum ? $sum : $total;
         $serviceApplication->status_summary = "Payment of equipment fees required, Invoice has been sent to you";
         //$serviceApplication->equipment_fees_list = $equipment;
         $serviceApplication->save();
+
+        $client = DB::table('employers')
+            ->where('id', $serviceApplication->user_id)
+            ->first();
+            
+            
+        try {
+             
+            Mail::to($client->company_email)->send(new ClientDemandNoticeEmail($serviceApplication, $serviceApplication->employer));
+
+            //return redirect('/dashboard')->with('success', 'Invoice notification sent successfully.');
+        } catch (\Exception $e) {
+            // Handle the exception
+            //return redirect('/dashboard')->with('error', 'Failed to send invoice notification: ' . $e->getMessage());
+        }
         Flash::success('Demand notice approved');
 
         return redirect()->back();

@@ -157,7 +157,7 @@ class ESSPPaymentController extends AppBaseController
             ]);
 
 
-            Flash::success('Payment Reference Generated! ');
+            Flash::success('Demand Notice Generated And Sent To Both Area Manager Email Address And Their Dashboard For Approval');
             return true;
         /* } else {
             Flash::error('Problems encountered in generating RRR');

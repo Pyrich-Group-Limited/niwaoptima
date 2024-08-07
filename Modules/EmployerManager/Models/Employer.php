@@ -83,7 +83,7 @@ class Employer extends Model implements Auditable
     ]; */
 
     public static array $rules = [
-        'applicant_code'=>'required'
+        'applicant_code'=>'nullable'
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\HasOne

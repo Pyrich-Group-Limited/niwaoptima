@@ -39,6 +39,7 @@ use Modules\Accounting\Http\Controllers\ReportController;
 use Modules\Accounting\Http\Controllers\ExpenseController;
 use Modules\Accounting\Http\Controllers\PaymentController;
 use Modules\EmployerManager\Http\Controllers\EmployerController;
+use App\Http\Controllers\CronJobController;
 
 
 /*
@@ -53,13 +54,19 @@ use Modules\EmployerManager\Http\Controllers\EmployerController;
 */
 
 //LARAVEL DEFAULT Auth::routes();
-Auth::routes();
+//Auth::routes();
+Route::get('/send-expiry-emails', [CronJobController::class, 'sendExpiryEmails'])->name('send.expiry.emails');
+
 Route::group(['middleware' => ['auth']], function () {
 
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::post('/home/clock-in', [HomeController::class, 'clockIn'])->name('clock-in');
     Route::post('/home/clock-out', [HomeController::class, 'clockOut'])->name('clock-out');
+    Route::get('/raise/demand/notice/{id}', [HomeController::class, 'raiseDemandNotice'])->name('raise.demand.notice');
+    Route::get('/services/{service}/service-processing-types', 'App\Http\Controllers\HomeController@getProcessingTypes');
+    Route::post('/demand/notice/store/', 'App\Http\Controllers\ServiceApplicationController@demand_notice_store')->name('demand.notice.store');
+
     Route::get('/document/index', 'App\Http\Controllers\EmployerDocumentController@index')->name('document.index');
     Route::patch('/approve-document/{id}', [EmployerDocumentController::class, 'approveDocument'])
         ->name('approveDocument');

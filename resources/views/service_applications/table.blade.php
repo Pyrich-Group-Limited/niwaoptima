@@ -21,7 +21,8 @@
                     @if (auth()->user()->staff && auth()->user()->staff->branch_id == 1)
                     <th class="">Zone/Units/Axis</th>
                     @endif
-                    <th class="">Created</th>
+                    <th class="">Created At</th>
+                    <th>Expired At</th>
                     <th class="" colspan="1">Action</th>
                     <th class="text-end rounded-end"></th>
                 </tr>
@@ -39,7 +40,8 @@
                         @if (auth()->user()->staff && auth()->user()->staff->branch_id == 1)
                         <td>{{ $serviceApplication->axis ? $serviceApplication->axis->name : '' }}</td>
                         @endif
-                        <td>{{ $serviceApplication->created_at }}</td>
+                        <td>{{ date('d M, Y', strtotime($serviceApplication->created_at)); }}</td>
+                        <td>{{ $serviceApplication->expiry_date ? date('d M, Y', strtotime($serviceApplication->expiry_date)) : 'NILL'; }}</td>
                         <td style="width: 120px">
                             <div class='btn-group'>
                                 <a href="{{ route('serviceApplications.show', [$serviceApplication->id]) }}"

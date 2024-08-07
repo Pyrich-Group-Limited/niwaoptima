@@ -194,6 +194,7 @@ function enum_equipment_fees_metrics()
     $option[17] = '/location';
     $option[18] = '/M3';
     $option[19] = '/Metre /Annum';
+    $option[20] = '/Sheet';
 
 	
     return $option;
@@ -207,7 +208,8 @@ function enum_payment_types()
     $option[3] = 'Inspection Fee';
     $option[4] = 'Application Form Fee + Processing Fee';
     $option[5] = 'Equipment and Monitoring Fee';
-    $option[23] = 'Processing Fee and Inspection Fee';
+    $option[6] = 'Service Application Renewal';
+    $option[23] = 'Processing Fee and Inspection Fee';    
 
     return $option;
 }

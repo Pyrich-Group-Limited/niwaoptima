@@ -47,15 +47,16 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
                         <img src="{{ asset('storage/' . auth()->user()->staff->profile_picture) }}"
                             alt="{{ auth()->user()->staff->profile_picture }}">
                     @else
-                        <img src="assets/media/avatars/images.jpeg" alt="image" />
+                        <img src="{{ asset('assets/media/avatars/images.jpeg') }}" alt="image" />
                     @endif
                 </div>
                 <div class="profile-name">
                     <p class="name" style="font-size: small !important;">
                         {{ 'Welcome,' . ' ' . $user->first_name . ' ' . $user->last_name }}
                     </p>
-                    <p class="designation text-uppercase">
-                        {{ auth()->user()->staff->rank ? auth()->user()->staff->rank->name : 'NILL' }}
+                    <p class="designation text-uppercase" style="font-size: smaller !important;">
+                        {{ auth()->user()->staff->rank ? auth()->user()->staff->rank->name : 'NILL' }}<br/>
+                      <span style="text-transform: capitalize;">  {{ auth()->user()->staff->department ? auth()->user()->staff->department->name : 'NILL' }} </span>
                     </p>
                 </div>
             </div>
@@ -68,6 +69,35 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
 
             </a>
         </li>
+        @if(Auth::check() && Auth::user()->hasRole('super-admin'))
+        {{-- <li class="nav-item" id="myTask">
+            <a class="nav-link" href="#">
+                <i class="fas fa-wallet menu-icon"></i>
+                <span class="menu-title">All Dashboards</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">MD Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Area Manager Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Secretary Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">GMs Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Higher Cadre Dashboard (16-14)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Lower Cadre Dashboard (13-4)</a>
+                </li>
+            </ul>
+            </li> --}}
+        @endif
 
 
         @can('view user managment module')
@@ -698,7 +728,7 @@ if (Auth::check() && Auth::user()->hasRole('super-admin')) {
 
                 @can('view document audit trail')
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('incoming_documents_manager.audits') }}">Document Audit
+                        <a class="nav-link" href="{{ route('incoming_documents_manager.audits') }}">Incoming Document Audit
                             Trail</a>
                     </li>
                 @endcan

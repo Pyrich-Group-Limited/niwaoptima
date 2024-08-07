@@ -166,7 +166,7 @@ class UserController extends AppBaseController
         $users = $usersQuery->paginate(10);
         $norole = $noroleQuery->paginate(10);
 // dd( $users);
-        return view('users.index', compact('users', 'norole'));
+      return view('users.index', compact('users', 'norole'));
 
     } else {
         flash::success('oops!....,you are not allowed ');

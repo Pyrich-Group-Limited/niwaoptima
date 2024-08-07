@@ -44,7 +44,7 @@ class ProcessingFeeController extends Controller
     {
         
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         $processing_types = ProcessingType::where('branch_id', 1)->get();
         return view('processing_fee.create', compact(['services', 'processing_types', 'branches']));
     }
@@ -91,7 +91,7 @@ public function getServices(Request $request, Service $service, $id)
     public function edit(ProcessingFee $processing_fee)
     {
         $branches = Branch::all();
-        $services = Service::where('branch_id', 1)->get();
+        $services = Service::where('status', 1)->where('branch_id', 1)->get();
         $processing_types = ProcessingType::where('branch_id', 1)->get();
         return view('processing_fee.edit', compact(['processing_fee', 'services', 'processing_types', 'branches']));
     }

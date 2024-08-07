@@ -253,17 +253,24 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
         /* 'class' => 'repeater', */
         'id' => 'approvalFormData',
     ]) !!}
-    <div class="form-group col-sm-3">
+    <h4>Equipment Fees</h4><br/>
+    <div class="form-group col-sm-6">
         {!! Form::label('monitoring_fees1', 'Select Monitoring Fee') !!}
         <select class="form-control" name="monitoring_fees1" id="monitoring_fees1" required>
-<option value="" >Select Monitoring Fee</option>
-@foreach ($monitoring_fees as $monitoring_fee)
-    <option value="{{ $monitoring_fee->amount }}" >{{ $monitoring_fee->name }}</option>
-@endforeach
+            <option value="0">Select Monitoring Fee</option>
+            @forelse ($monitoring_fees as $monitoring_fee)
+                <option value="{{ $monitoring_fee->amount }}">{{ $monitoring_fee->name }}</option>
+            @empty
+                <option value="0">No Monitoring Fee</option>
+            @endforelse
         </select>
-        </div>
-    <h3>Monitoring Fee:₦<span id="monitoring_fees2"></span></h3>
-    <h3>Equipment Fees</h3>
+    </div>
+    
+    <div class="form-group col-sm-6">
+        <label>Custom Amount (Optional)</label>
+        <input class="form-control" id="custom_amount" name="custom_amount" type="number" value="">
+ </div>
+    
     <div class="form-group col-sm-6">
         {!! Form::label('expiry_date', 'Expiry Date:') !!}
         {!! Form::date('expiry_date', null, ['class' => 'form-control', 'id' => 'expiry_date', 'required' => 'required']) !!}
@@ -288,6 +295,17 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
             
         </div>
     </div>
+    <div class="form-group row col-sm-12" style="">
+        <div class="row col-sm-12">
+            <div class="form-group col-sm-3 dd3">
+                <input class="form-control" required="" id="custom_amount3" name="price[]" type="hidden" value="">
+         </div>
+            <div class="form-group col-sm-3 dd4">
+                <input class="form-control" required="" name="qty[]" type="hidden" value="1">
+             </div>
+            
+        </div>
+    </div>
     <div class="row col-sm-12" id="equipment-list">
         <!-- Existing equipment fields will be appended here -->
     </div>
@@ -295,11 +313,13 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
     <!-- Add Button -->
     @can('generate equipment invoice')
     <div class="form-group col-sm-3 mt-5">
-        <button type="button" class="btn btn-success" id="add-new-btn">Add New</button>
+        <button type="button" class="btn btn-primary" id="add-new-btn">Add New</button>
     </div>
     @endcan
 
     <div class="form-group col-sm-3 mt-5">
+        <span>Monitoring Fee: ₦<span id="monitoring_fees2"></span></span><br/><br/>
+        <span>Custom Amount: ₦<span id="custom_amount2">0.00</span></span><br/><br/>
         <span class="total-price"></span>
         <input type="hidden" class="total-price-input" name="total_price" id="total_price">
     </div>
@@ -327,9 +347,9 @@ $insp_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_sta
             </div>
         </div>
         <!-- Delete Button -->
-        <div class="form-group col-sm-3">
+        {{-- <div class="form-group col-sm-3">
             <button type="button" class="btn btn-danger delete-btn">Delete</button>
-        </div>
+        </div> --}}
     </div>
 </div>
 @endif
@@ -461,26 +481,37 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
         var monitoring_fee1 = $(this).val();
         $('#monitoring_fees2').html(monitoring_fee1);
         $('#m_amount').val(monitoring_fee1);
-
-        
-
+        updatePrice();
             });
+            $('#custom_amount').on('keyup', function() {
+        var custom_amount = $(this).val();
+        
+        $('#custom_amount2').html(custom_amount);  // Update HTML content
+        $('#custom_amount3').val(custom_amount);   // Update input field value
+        updatePrice();
+    });
+
             // Function to update the price and quantity data
             function updateEquipmentData() {
     var equipmentData = [];
     
     // Iterate through each equipment item
     $('.equipment-item').each(function () {
-        var $equipmentItem = $(this);
-        var price = parseFloat($equipmentItem.find('.price-select').val()) || 0;
-        var qty = parseFloat($equipmentItem.find('.qty-input').val()) || 0;
-        var m_rice = $('#m_amount').val();
-        // Add m_rice to the price
-        price += parseFloat(m_rice);
+    var $equipmentItem = $(this);
+    var price = parseFloat($equipmentItem.find('.price-select').val()) || 0;
+    var qty = parseFloat($equipmentItem.find('.qty-input').val()) || 0;
+    var m_price = parseFloat($('#m_amount').val()) || 0; // Assuming m_amount is a numeric input
+    var c_price = parseFloat($('#custom_amount3').val()) || 0; // Assuming custom_amount3 is a numeric input
 
-        // Push price and quantity values to the equipmentData array
-        equipmentData.push({ price: price, qty: qty });
-    });
+    // Calculate total price
+    var all_price = c_price + m_price;
+
+    // Add all_price to the price
+    price += all_price;
+
+    // Push price and quantity values to the equipmentData array
+    equipmentData.push({ price: price, qty: qty });
+});
 
     return equipmentData;
 }
@@ -492,7 +523,7 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
     });
 
     // Listen for changes in the select and number elements
-    $('#equipment-list').on('change', 'select, input[type="number"]', function() {
+    $('#equipment-list').on('input', 'select, input[type="number"]', function() {
         updatePrice();
 
         // Remove all existing equipment-template elements
@@ -536,8 +567,12 @@ $equip_fee = \App\Models\Payment::where('payment_status', 1)->where('approval_st
 });
 
 function updatePrice() {
-    var m_rice = $('#m_amount').val();
-    var totalPrice = parseFloat(m_rice);//0;
+    var m_price = $('#m_amount').val() || 0;
+    var c_price = $('#custom_amount3').val() || 0;
+    var totalPrice = parseFloat(m_price);//0;
+    var totalcPrice = parseFloat(c_price);
+
+    var totalPrices = totalPrice + totalcPrice;
 
     // Iterate through each equipment item
     $('#equipment-list .equipment-item').each(function() {
@@ -549,12 +584,12 @@ function updatePrice() {
         $(this).find('.sub-price').text('Price: ₦' + subPrice);
 
         // Add the sub-price to the total
-        totalPrice += subPrice;
+        totalPrices += subPrice;
     });
 
     // Update the total price
-    $('.total-price').text('Total Price: ₦' + totalPrice);
-    $('.total-price-input').val(totalPrice);
+    $('.total-price').text('Total Price: ₦' + totalPrices);
+    $('.total-price-input').val(totalPrices);
 }
 
     </script>

@@ -219,6 +219,9 @@ class RoleController extends AppBaseController
 
         $input =  $request->all();
         $role = $this->roleRepository->update($input, $id);
+        // Delete all previously assigned permissions
+        $role->syncPermissions([]);
+        // Update new permissions
         $role->syncPermissions($request->get('permissions') ?? []);
 
         Flash::success('Role updated successfully.');

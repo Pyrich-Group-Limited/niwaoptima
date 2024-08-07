@@ -322,16 +322,42 @@ class EmployerController extends AppBaseController
         $input = $request->all();
         $input['created_by'] =  Auth::user()->id;
 
+        // Validate that the company email does not already exist
+    $existingEmployer = Employer::where('company_email', $request->input('company_email'))->first();
+    
+    if ($existingEmployer) {
+        // Redirect back with an error message if email already exists
+        return redirect()->back()->withErrors(['company_email' => 'The company email has already been taken.'])->withInput();
+    }
         // $document_url = $path . "/" . $file;
-        $file = $request->file('certificate_of_incorporation');
-        $path = "employer/";
-        $title = str_replace(' ', '', $input['company_name']);
-        $fileName = $title . 'v1' . rand() . '.' . $file->getClientOriginalExtension();
+        // Check if the file is present in the request and is not empty
+if ($request->hasFile('certificate_of_incorporation') && $request->file('certificate_of_incorporation')->isValid()) {
+    // Get the uploaded file
+    $file = $request->file('certificate_of_incorporation');
+    
+    // Define the upload path
+    $path = "employer/";
+    
+    // Create a sanitized title from the company name
+    $title = str_replace(' ', '', $request->input('company_name'));
+    
+    // Generate a unique file name
+    $fileName = $title . 'v1' . rand() . '.' . $file->getClientOriginalExtension();
+    
+    // Move the file to the desired location
+    $file->move(public_path($path), $fileName);
+    
+    // Optionally, store the file path in the database or do other processing
+    $filePath = $path . $fileName;
+    // Store $filePath in the database or perform other operations
+    
+} 
 
         // Upload the file to the S3 bucket
         // $documentUrl = Storage::disk('s3')->putFileAs($path, $file, $fileName);
 
         $input['certificate_of_incorporation'] =  "0"; //$documentUrl;
+        $input['status'] =  "2";
         $last_ecs = Employer::get()->last();
 
         if ($last_ecs) {
@@ -350,7 +376,7 @@ class EmployerController extends AppBaseController
 
         Flash::success('Employer saved successfully.');
 
-        return redirect(route('employers.index'));
+        return redirect()->back();
     }
 
     /**
